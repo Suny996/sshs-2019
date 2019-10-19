@@ -9,7 +9,6 @@ import com.sshs.core.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -57,15 +56,17 @@ public class CustomiseController extends BaseController {
      * @throws Exception
      */
     @DeleteMapping("/{pageId}/{customiseName}")
-    public Mono<Message> deleteCustomise(@PathVariable("pageId") String pageId, @PathVariable("customiseName") String customiseName) throws Exception {
+    public Message deleteCustomise(@PathVariable("pageId") String pageId, @PathVariable("customiseName") String customiseName) throws Exception {
         try {
+            QueryWrapper wrapper = new QueryWrapper<Customise>();
             Customise customise = new Customise();
             customise.setPageId(pageId);
             customise.setCustomiseName(customiseName);
-            int cnt = customiseMapper.deleteByCustomiseName(customise);
-            return Mono.justOrEmpty(new Message("100000"));
+            wrapper.setEntity(customise);
+            int cnt = customiseMapper.delete(wrapper);
+            return Message.success(cnt);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("删除失败pageId:{},customiseName:{}", pageId, customiseName);
             throw new BusinessException("SY0001");
         }
     }
@@ -77,7 +78,7 @@ public class CustomiseController extends BaseController {
      * @return
      */
     @GetMapping("/{pageId}")
-    public List<Customise> getCustomiseByPageId(@PathVariable("pageId") String pageId) {
+    public Message getCustomiseByPageId(@PathVariable("pageId") String pageId) {
         QueryWrapper wrapper = new QueryWrapper<Customise>();
         Customise customise = new Customise();
         customise.setPageId(pageId);
@@ -89,6 +90,6 @@ public class CustomiseController extends BaseController {
 
         //Page<Customise> page = new Page<>();
         //customiseMapper.getCustomises(page, wrapper);
-        return customises;
+        return Message.success(customises);
     }
 }

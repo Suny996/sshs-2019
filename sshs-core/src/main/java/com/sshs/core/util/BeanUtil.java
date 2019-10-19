@@ -1,4 +1,4 @@
-package com.scai.core.util;
+package com.sshs.core.util;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
