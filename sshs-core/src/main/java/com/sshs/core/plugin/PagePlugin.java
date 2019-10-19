@@ -115,7 +115,7 @@ public class PagePlugin implements Interceptor {
                         count = page.getTotalCount();
                     }
                     page.setTotalCount(count);
-                    page.getUserdata().put("sys.count", count);
+                    //page.getUserdata().put("sys.count", count);
                     String pageSql = generatePageSql(sql, page);
                     // 将分页sql语句反射回BoundSql.
                     ReflectHelper.setValueByFieldName(boundSql, "sql", pageSql);
@@ -242,15 +242,15 @@ public class PagePlugin implements Interceptor {
         IDialect dialect1 = null;
         try {
             dialect1 = (IDialect) Class.forName(dialect).newInstance();
-            if (page != null && page.getVariables() != null && !page.getVariables().isEmpty() && page.getOperators() != null && !page.getOperators().isEmpty()) {
+            /*if (page != null && page.getVariables() != null && !page.getVariables().isEmpty() && page.getOperators() != null && !page.getOperators().isEmpty()) {
                 for (String name : page.getOperators().keySet()) {
-                    String operator = (String) page.getOperators().get(name);
-                    String variable = (String) page.getVariables().get(name);
-                    if ("like".equalsIgnoreCase(operator) && StringUtils.isNotEmpty(variable)) {
-                        page.getVariables().put(name, dialect1.getLikedVariable(variable));
-                    }
+                    //String operator = (String) page.getOperators().get(name);
+                    //String variable = (String) page.getVariables().get(name);
+                    //if ("like".equalsIgnoreCase(operator) && StringUtils.isNotEmpty(variable)) {
+                        //page.getVariables().put(name, dialect1.getLikedVariable(variable));
+                    //}
                 }
-            }
+            }*/
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

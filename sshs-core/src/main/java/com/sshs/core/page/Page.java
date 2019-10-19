@@ -1,17 +1,14 @@
 package com.sshs.core.page;
 
-import com.alibaba.fastjson.JSONObject;
-import com.sshs.core.util.ReflectHelper;
 import com.sshs.core.constant.Global;
+import com.sshs.core.util.ReflectHelper;
 import org.apache.commons.lang.StringUtils;
 import org.apache.ibatis.type.Alias;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 分页类
@@ -20,12 +17,12 @@ import java.util.Map;
  * @date 2017年9月28日
  */
 @Alias("Page")
-public class Page<T> {
+public class Page<T> extends com.baomidou.mybatisplus.extension.plugins.pagination.Page {
     private static Logger logger = LoggerFactory.getLogger(Page.class);
     /**
      * 每页显示记录数
      */
-    @Value("${page.pageSize}")
+    @Value("${sshs.page.size}")
     private int pageSize;
     /**
      * 总页数
@@ -57,41 +54,16 @@ public class Page<T> {
     private String sort, order = "";
     private String orderBy = "";
     List<T> rows;
-    Map<String, Object> variables = new HashMap<String, Object>(20);
-    Map<String, Object> userdata = new HashMap<String, Object>(10);
-    Map<String, Object> operators = new HashMap<String, Object>(20);
 
     public Page() {
-        /*try {
-            if (this.pageSize == 0) {
-                this.pageSize = 10;
-            }
-            this.limit = this.pageSize;
-            if (this.currentPage > 1) {
-                this.offset = (this.currentPage - 1) * this.pageSize;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            this.pageSize = 10;
-            this.limit = this.pageSize;
-        }
-*/
+        super();
     }
 
-    public Page(int limit, int offset, Map<String, Object> variables) {
+    public Page(int limit, int offset) {
         this.setLimit(limit);
         this.setOffset(offset);
-        if (this.operators == null || this.operators.isEmpty()) {
-            Map<String, Object> operators = null;
-            Object operator = variables.get("operators");
-            if (operator instanceof String) {
-                operators = (Map<String, Object>) JSONObject.parse((String) operator);
-            }
-            if (operators != null && !operators.isEmpty()) {
-                this.setOperators(operators);
-            }
-        }
-        this.setVariables(variables);
+        super.setCurrent(offset);
+        super.setSize(limit);
     }
 /*
 	public void getPage(HttpServletRequest request) {
@@ -207,30 +179,6 @@ public class Page<T> {
 
     public void setRows(List<T> rows) {
         this.rows = rows;
-    }
-
-    public Map<String, Object> getVariables() {
-        return variables;
-    }
-
-    public void setVariables(Map<String, Object> variables) {
-        this.variables = variables;
-    }
-
-    public Map<String, Object> getUserdata() {
-        return userdata;
-    }
-
-    public void setUserdata(Map<String, Object> userdata) {
-        this.userdata = userdata;
-    }
-
-    public Map<String, Object> getOperators() {
-        return operators;
-    }
-
-    public void setOperators(Map<String, Object> operators) {
-        this.operators = operators;
     }
 
     public String getSort() {

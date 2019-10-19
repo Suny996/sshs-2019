@@ -176,7 +176,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
         /**
          * 加入数据权限过滤条件
          */
-        page.getVariables().put("_orgAuth", SystemUtil.getOrgAuthStatement());
+        //page.getVariables().put("_orgAuth", SystemUtil.getOrgAuthStatement());
         page.setRows(sqlSessionTemplate.selectList(sqlId, page));
         return Message.success(page);
     }

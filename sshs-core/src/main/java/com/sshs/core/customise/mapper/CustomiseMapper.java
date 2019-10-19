@@ -3,7 +3,9 @@ package com.sshs.core.customise.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.customise.model.Customise;
+import com.sshs.core.page.Page;
 
 import java.util.List;
 
@@ -46,5 +48,14 @@ public interface CustomiseMapper extends BaseMapper<Customise> {
      * @return
      */
     List<Customise> getCustomises(Customise customise);
+
+    /**
+     * 分页查询示例，该功能不需要
+     *
+     * @param page
+     * @param customise
+     * @return
+     */
+    IPage<Customise> getCustomises(Page<Customise> page, Wrapper<Customise> customise);
 
 }

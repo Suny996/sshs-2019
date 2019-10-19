@@ -6,7 +6,6 @@ import com.sshs.core.customise.mapper.CustomiseMapper;
 import com.sshs.core.customise.model.Customise;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
-import com.sshs.core.util.UuidUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -37,13 +36,13 @@ public class CustomiseController extends BaseController {
      * @throws Exception
      */
     @PostMapping
-    public Mono<Message> saveCustomise(@RequestBody Customise customise) throws Exception {
+    public Message saveCustomise(@RequestBody Customise customise) throws Exception {
         try {
-            customise.setCustomiseId(UuidUtil.get32UUID());
+            //customise.setCustomiseId(UuidUtil.get32UUID());
             customise.setUserCode("admin");
             customise.setCrtDate(new Date());
             customiseMapper.save(customise);
-            return Mono.justOrEmpty(new Message("100000", customise));
+            return Message.success(customise);
         } catch (Exception e) {
             e.printStackTrace();
             throw new BusinessException("SY0001");
@@ -84,7 +83,12 @@ public class CustomiseController extends BaseController {
         customise.setPageId(pageId);
         customise.setUserCode("admin");
         wrapper.setEntity(customise);
+
         List<Customise> customises = customiseMapper.selectList(wrapper);
+        //return customises;
+
+        //Page<Customise> page = new Page<>();
+        //customiseMapper.getCustomises(page, wrapper);
         return customises;
     }
 }

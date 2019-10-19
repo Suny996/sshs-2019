@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration scan="true" scanPeriod="5"  info="true" >
-	<property name="LOG_PATH" value="logs/" />
+<configuration scan="true" scanPeriod="5" info="true">
+    <property name="LOG_PATH" value="logs/"/>
 
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <encoder charset="UTF-8"> <!-- encoder 可以指定字符集，对于中文输出有意义 -->
@@ -8,7 +8,7 @@
         </encoder>
     </appender>
     <!--日常日志-->
-    <appender  name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="INFO_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>info</level>
             <!--<onMatch>ACCEPT</onMatch>-->
@@ -24,9 +24,9 @@
         </rollingPolicy>
         <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>
-            	%-5level scai %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %logger{36} - %msg%n
+                %-5level scai %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %logger{36} - %msg%n
             </Pattern>
-           <!-- <charset>UTF-8</charset>-->
+            <!-- <charset>UTF-8</charset>-->
         </layout>
     </appender>
 
@@ -47,9 +47,9 @@
         </rollingPolicy>
         <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>
-            	%-5level scai %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %logger{36} - %msg%n
+                %-5level scai %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %logger{36} - %msg%n
             </Pattern>
-          <!-- <<charset>UTF-8</charset>-->
+            <!-- <<charset>UTF-8</charset>-->
         </layout>
     </appender>
 
@@ -77,10 +77,12 @@
         </layout>
     </appender>
 
-    <root level="debug">
+    <root level="info">
         <!--<appender-ref ref="DEBUG_FILE" />-->
-        <appender-ref ref="INFO_FILE" />
-        <appender-ref ref="ERROR_FILE" />
-        <appender-ref ref="stdout" />
+        <appender-ref ref="INFO_FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+        <appender-ref ref="stdout"/>
     </root>
+
+    <logger name="com.baomidou" level="debug"></logger>
 </configuration>

@@ -74,7 +74,7 @@
 		<include refid="Field"></include>
 		from
 		<include refid="tableName"></include>
-		where page_id=#{pageId} and user_code=#{userCode}
+		<!-- where page_id=#{pageId} and user_code=#{userCode} -->
 		order by crt_date
 	</select>
 

@@ -1,37 +1,39 @@
-batch:
-  appKey: SigmaTestCredit
-  sigmaUrl: http://localhost:8080/sigma/api/
-core:
-  page:
-    pageSize: 15
-  server:
-    runMode: debug
-  view:
-    cached: false
-file:
-  uploadFolder: C:/varfiles
-ignore-unresolvable: '"true"'
-mybatis:
-  config-location: classpath:mybatis-config.xml
-  table:
-    auto: update
-#restart:
-#  include:
-#    companycommonlibs: tk/mybatis.*
 server:
   ip: '*'
   port: 8099
   servlet:
     session:
       timeout: 600s
+logging:
+  level:
+    com:
+      sshs:
+        core:
+          customise:
+            mapper: debug
 spring:
   application:
     name: sshs
   datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    password: rootroot
     url: jdbc:mysql://localhost:3306/sshs?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
     username: root
+    password: rootroot
+    druid:
+      initialSize: 10
+      minIdle: 10
+      maxActive: 100
+      # 配置获取连接等待超时的时间
+      maxWait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
   resources:
     staticLocations: 'classpath:'
   security:
@@ -40,11 +42,15 @@ spring:
     multipart:
       maxFileSize: 5MB
       maxRequestSize: 10MB
+#bean别名配置
+mybatis-plus:
+  type-aliases-package: com.sshs
+  mapper-locations: classpath:com.sshs.**.mapper
+#    companycommonlibs: tk/mybatis.*
+
+#代码生成路径配置
 toolkit:
   coder:
     path:
       java: d:/coder/scais/src/main/java
       view: d:/coder/scaiui/src/main/view
-urule:
-  repository:
-    dir: c:/urule/
