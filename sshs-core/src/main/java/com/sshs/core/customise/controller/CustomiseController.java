@@ -78,7 +78,7 @@ public class CustomiseController extends BaseController {
      * @return
      */
     @GetMapping("/{pageId}")
-    public Message getCustomiseByPageId(@PathVariable("pageId") String pageId) {
+    public Message<List<Customise>> getCustomiseByPageId(@PathVariable("pageId") String pageId) {
         QueryWrapper wrapper = new QueryWrapper<Customise>();
         Customise customise = new Customise();
         customise.setPageId(pageId);

@@ -6,7 +6,7 @@ apply plugin: 'application'
 
 apply plugin: "eclipse"
 //war包时用
-apply plugin: "war"
+//apply plugin: "war"
 
 /**
  * weblogic部署问题：1、删除tomcat-embed-websocket-9.0.12.jar等冲突的jar包；
@@ -40,7 +40,7 @@ dependencies {
 
 allprojects {
     apply plugin: 'java'
-    apply plugin: "war"
+    //apply plugin: "war"
     ext {
         junitVersion = "4.12"
         springBootVersion = "2.1.0.RELEASE"

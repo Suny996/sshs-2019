@@ -1,7 +1,6 @@
 package com.sshs.core.message;
 
 import com.sshs.core.constant.Global;
-import com.sshs.core.util.SystemUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,12 +17,12 @@ import java.util.jar.JarFile;
 /**
  * @author Suny
  */
-public class Message {
+public class Message<T> {
     final private static String SUCCESS_CODE = "000000";
     private static Logger logger = LoggerFactory.getLogger(Message.class);
     String code;
     String msg;
-    Object data;
+    T data;
     /**
      * 国际化资源文件集
      */
@@ -97,7 +96,7 @@ public class Message {
         this.msg = msg;
     }
 
-    public Message(String code, Object data) {
+    public Message(String code, T data) {
         this.code = code;
         this.msg = Message.getMessage(code);
         if (SUCCESS_CODE.equals(this.code) && StringUtils.isEmpty(this.msg)) {
@@ -129,7 +128,7 @@ public class Message {
     public static String getMessage(String code, String defaultMessage) {
         try {
             Locale locale = null;
-            String local = SystemUtil.getLocale();
+            String local = "";//SystemUtil.getLocale();
             if (StringUtils.isNotEmpty(local) && local.contains(Global.CHARACTER_UNDERLINE)) {
                 locale = new Locale(local.split(Global.CHARACTER_UNDERLINE)[0],
                         local.split(Global.CHARACTER_UNDERLINE)[1]);
@@ -183,7 +182,7 @@ public class Message {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(T data) {
         this.data = data;
     }
 
