@@ -1,5 +1,6 @@
 package com.sshs.core.base.service;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.sshs.core.message.Message;
 import com.sshs.core.page.Page;
 
@@ -56,7 +57,7 @@ public interface IBaseService<T> {
      * @return
      * @throws Exception
      */
-    Message delete(T model) throws Exception;
+    Message delete(Wrapper<T> model) throws Exception;
 
     /**
      * 根据主键批量删除

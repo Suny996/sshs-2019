@@ -1,12 +1,14 @@
 package com.sshs.core.base.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.mapper.Mapper;
 import com.sshs.core.base.service.IBaseService;
 import com.sshs.core.message.Message;
 import com.sshs.core.page.Page;
 import com.sshs.core.util.SystemUtil;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import tk.mybatis.mapper.common.Mapper;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
@@ -23,7 +25,7 @@ import java.util.Map;
  */
 public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     @Autowired
-    private Mapper<T> dao;
+    private BaseMapper<T> dao;
 
     @Resource(name = "sqlSessionTemplate")
     protected SqlSessionTemplate sqlSessionTemplate;
@@ -80,7 +82,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     @Override
     public Message update(T model) throws Exception {
         setUpdProperties(model);
-        if (dao.updateByPrimaryKey(model) > 0) {
+        if (dao.updateById(model) > 0) {
             return Message.success(model);
         } else {
             return Message.failure("-20001");
@@ -99,7 +101,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
         int i = 0;
         for (T model : models) {
             setUpdProperties(model);
-            i += dao.updateByPrimaryKey(model);
+            i += dao.updateById(model);
         }
         return i;
     }
@@ -111,7 +113,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
      * @return
      */
     @Override
-    public Message delete(T model) {
+    public Message delete(Wrapper<T> model) {
         if (dao.delete(model) > 0) {
             return Message.success(model);
         } else {
@@ -128,7 +130,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
      */
     @Override
     public Message deleteById(String id) throws Exception {
-        if (dao.deleteByPrimaryKey(id) > 0) {
+        if (dao.deleteById(id) > 0) {
             return Message.success(id);
         } else {
             return Message.failure("-30001");
@@ -143,10 +145,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
      */
     @Override
     public Message deleteByIds(List<String> ids) {
-        int i = 0;
-        for (String id : ids) {
-            i += dao.deleteByPrimaryKey(id);
-        }
+        int i = dao.deleteBatchIds(ids);
         if (i > 0) {
             return Message.success(ids);
         } else {
@@ -162,7 +161,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
      */
     @Override
     public T getById(String id) {
-        return dao.selectByPrimaryKey(id);
+        return dao.selectById(id);
     }
 
     /**

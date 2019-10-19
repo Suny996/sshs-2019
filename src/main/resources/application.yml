@@ -1,0 +1,50 @@
+batch:
+  appKey: SigmaTestCredit
+  sigmaUrl: http://localhost:8080/sigma/api/
+core:
+  page:
+    pageSize: 15
+  server:
+    runMode: debug
+  view:
+    cached: false
+file:
+  uploadFolder: C:/varfiles
+ignore-unresolvable: '"true"'
+mybatis:
+  config-location: classpath:mybatis-config.xml
+  table:
+    auto: update
+#restart:
+#  include:
+#    companycommonlibs: tk/mybatis.*
+server:
+  ip: '*'
+  port: 8099
+  servlet:
+    session:
+      timeout: 600s
+spring:
+  application:
+    name: sshs
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: rootroot
+    url: jdbc:mysql://localhost:3306/sshs?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    username: root
+  resources:
+    staticLocations: 'classpath:'
+  security:
+    maximum-sessions: 2
+  servlet:
+    multipart:
+      maxFileSize: 5MB
+      maxRequestSize: 10MB
+toolkit:
+  coder:
+    path:
+      java: d:/coder/scais/src/main/java
+      view: d:/coder/scaiui/src/main/view
+urule:
+  repository:
+    dir: c:/urule/

@@ -1,8 +1,9 @@
 package com.sshs.core.customise.mapper;
 
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.sshs.core.customise.model.Customise;
-import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * @author Suny
  * @date 2017-10-15
  */
-public interface CustomiseMapper extends Mapper<Customise> {
+public interface CustomiseMapper extends BaseMapper<Customise> {
     /**
      * 新增
      *
@@ -28,8 +29,7 @@ public interface CustomiseMapper extends Mapper<Customise> {
      * @param customise
      * @return
      */
-    @Override
-    int delete(Customise customise);
+    int delete(Wrapper<Customise> customise);
 
     /**
      * 根据名称删除

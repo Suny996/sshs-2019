@@ -1,5 +1,6 @@
 package com.sshs.core.customise.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.customise.mapper.CustomiseMapper;
 import com.sshs.core.customise.model.Customise;
@@ -41,7 +42,7 @@ public class CustomiseController extends BaseController {
             customise.setCustomiseId(UuidUtil.get32UUID());
             customise.setUserCode("admin");
             customise.setCrtDate(new Date());
-            customiseMapper.save(customise) ;
+            customiseMapper.save(customise);
             return Mono.justOrEmpty(new Message("100000", customise));
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,11 +78,13 @@ public class CustomiseController extends BaseController {
      * @return
      */
     @GetMapping("/{pageId}")
-    public Mono<List<Customise>> getCustomiseByPageId(@PathVariable("pageId") String pageId) {
+    public List<Customise> getCustomiseByPageId(@PathVariable("pageId") String pageId) {
+        QueryWrapper wrapper = new QueryWrapper<Customise>();
         Customise customise = new Customise();
         customise.setPageId(pageId);
         customise.setUserCode("admin");
-        List<Customise> customises = customiseMapper.getCustomises(customise);
-        return Mono.justOrEmpty(customises);
+        wrapper.setEntity(customise);
+        List<Customise> customises = customiseMapper.selectList(wrapper);
+        return customises;
     }
 }
