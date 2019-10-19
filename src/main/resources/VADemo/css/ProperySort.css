@@ -1,0 +1,68 @@
+
+.height-auto{
+	border:none;
+	height:auto;
+	margin-top:10px;
+}
+.cogs-icon {
+	color: #3080ff;
+	padding: 0 5px;
+	font-size: 12px;
+}
+
+.cogs-text {
+	padding: 0 5px;
+	font-size: 12px;
+}
+
+.cogs-text input {
+	outline: none;
+	border: none;
+	background-color: #e5e5e5;
+}
+.jscolor{
+	outline: none;
+	border: none;
+	background-color: #e5e5e5 ;
+}
+}
+
+.chart-name .active {
+	background-color: #1d41f5; ! important;
+	color: white;
+	border-radius: 5px;
+}
+
+.nav>li.active {
+	background: none !important;
+	border: none !important;
+	font-family: MicrosoftYaHei;
+	font-weight: normal;
+	font-stretch: normal;
+	letter-spacing: 0px;
+	color: #3080ff;
+}
+
+.basic-text-levt {
+	padding-left: 10px;
+	/* width: 2rem; */
+}
+
+.nav-pills li {
+	margin-left: 20px;
+	padding: 0 5px;
+}
+
+.basic-option {
+	margin-top: 5px;
+	width:50%;float:left;
+}
+ .basic-option input {
+	outline: none;
+	border: none;
+	background: #e5e5e5;
+	width: 10rem;
+}
+.basic-option .basic-text-levt{
+	font-size:12px;
+} 

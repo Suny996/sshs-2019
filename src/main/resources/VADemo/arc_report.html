@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>贷款产品自动决策</title> 
+</head>
+
+<style>
+body {
+	font: 30px arial;
+	font-size: 14px;
+	/*background: #0e131a;*/
+}
+#comtre{
+	margin:0px 30px 30px 30px;
+}
+.unselectable {
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.gauge .arc, .gauge .cursor {
+	opacity: 0;
+}
+
+.height-auto {
+	heigth: auto;
+	border: none;
+	margin-top: 5px;
+}
+
+/* 报表表格样式 */
+.report_td {
+	width: 954px;
+	height: 580px;
+	background: #fff;
+	color: #ffffff;
+	margin-left: 30px;
+	margin-top: 30px;
+	box-shadow: 2px 2px 10px #888888;
+}
+
+.report_td table {
+	text-align: center;
+	margin: 0 auto;
+}
+
+.report_td table td {
+	width: 280px;
+	height: 50px;
+	border: 1px solid #424562;
+	color:#666;
+}
+
+.all {
+	width: 1000px;
+	height: 600px;
+	margin-left: 0px;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+.first, .second, .third, .fouth, .fifth, .sixth {
+	float: left;
+	width: 300px;
+	min-height: 300px;
+	margin-top: 30px;
+	margin-left: 30px;
+	box-shadow: 2px 2px 10px #888888;
+}
+
+p {
+	color: #fff;
+	background: #2a3039;
+	width: 300px;
+	height: 30px;
+	text-indent: 2em;
+	font-size: 0.85em;
+	margin: 0px;
+	padding-top: 0.7em;
+	font-size: 14px;
+	color:white;
+	background-color: rgb(10, 24, 92);
+   border-top-left-radius: 5px;
+   border-top-right-radius: 5px;
+	/*margin-left:30px;*/
+	/*margin-right:30px;*/
+	/*padding:10px 0px;*/
+	text-align: left;
+	text-indent: 1em;
+}
+
+.tb_title {
+	color: #7a7b89;
+}
+</style>
+<body>
+
+	<div class="all">
+		<!--  油量图div -->
+
+		<div class="first">
+			<p>个人住房贷款</p>
+			<span id="speedometer1"></span>
+		</div>
+
+		<!--  油量图div -->
+		<div class="second">
+			<p>个人商用贷款</p>
+			<span id="speedometer2"></span>
+		</div>
+
+		<!--  油量图div -->
+		<div class="third">
+			<p>个人消费贷款</p>
+			<span id="speedometer3"></span>
+		</div>
+
+		<!--  油量图div -->
+		<div class="fouth">
+			<p>个人经营性贷款</p>
+			<span id="speedometer4"></span>
+		</div>
+
+		<!--  油量图div -->
+		<div class="fifth">
+			<p>小微企业贷款</p>
+			<span id="speedometer5"></span>
+		</div>
+
+		<!--  油量图div -->
+		<div class="sixth">
+			<p>传统业务贷款</p>
+			<span id="speedometer6"></span>
+		</div>
+	</div>
+	<br />
+	<br />
+
+	<div class="report_td">
+		<div
+			style="text-indent: 1em; padding-top: 10px; background-color: rgb(10, 24, 92); height: 40px">
+			产品自动审批情况</div>
+		<table style="margin-left: 59px" class="tb_title">
+			<tr>
+				<td>产品类别<br />Product Type
+				</td>
+				<td colspan="2">时间Date:2014.04</td>
+			</tr>
+			<tr>
+				<td>产品大类</td>
+				<td>产品小类</td>
+				<td>自动审批率自动审批率<br /> Auto-Assessing Ratio
+				</td>
+			</tr>
+			<tr>
+				<td rowspan="4">个人贷款<br />Personal Loan
+				</td>
+				<td>个人住房贷款</td>
+				<td style="color: #666">65%</td>
+			</tr>
+			<tr>
+				<td>个人商用房贷款</td>
+				<td style="color: #666">75%</td>
+			</tr>
+			<tr>
+				<td>个人消费贷款</td>
+				<td style="color: #666">85%</td>
+			<tr>
+				<td>个人经营性贷款</td>
+				<td style="color: #666">55%</td>
+			</tr>
+			<tr>
+				<td>小微企业贷款<br />SME
+				</td>
+				<td>小微贷款企业</td>
+				<td style="color: #666">45%</td>
+			</tr>
+			<tr>
+				<td>信用卡<br />Credit Card
+				</td>
+				<td>传统业务</td>
+				<td style="color: #666">36%</td>
+			</tr>
+			<tr>
+				<td>合计total</td>
+				<td>合计</td>
+				<td style="color: #666">62%</td>
+			</tr>
+		</table>
+	</div>
+
+
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/font-awesome.min.css">
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/img-common.css">
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="d3/iopctrl.js"></script>
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" >
+	var arc={arcColor: "#005EAA",
+			arcName: "AUTO_DECISION5",
+			arcWidth: 4,
+			backgroundColor: "#fff",
+			baseId: "4a0f5a62b23349d38837959ba0c5ecdf",
+			createTime: "2018-09-07 17:00:59",
+			createUser: "管理员",
+			digitcount: 6,
+			endAngle: 135,
+			endScale: 1,
+			fontFamily: "STKaiti",
+			fontWeight: "normal",
+			gauge: 140,
+			height: 250,
+			id: 30,
+			lScaleColor: "#005EAA",
+			lScaleWidth: 2,
+			lTicksize: 12,
+			needleColor: "#005EAA",
+			needlePoint: "#005EAA",
+			needleWidth: "2",
+			numColor: "#005EAA",
+			numSize: 8,
+			radius: 100,
+			sScaleColor: "#005EAA",
+			sScaleWidth: 1,
+			sTicksize: 8,
+			segdisplay: 1234.32,
+			startAngle: -135,
+			startScale: 0,
+			tickpadding: 5,
+			ticks: 12,
+			ticksubdivide: 5,
+			translateleft: 140,
+			translatetop: 150,
+			updateTime: "2018-09-17 11:26:45",
+			valueColor: "#005EAA",
+			valueColor1: "#005EAA",
+			valueDecimals: 2,
+			valueOpacity: 0.15,
+			valueWidth: 60,
+			width: 295}
+	var label1=["#speedometer1","#speedometer2","#speedometer3","#speedometer4","#speedometer5","#speedometer6"];
+	var data1=[0.00,0.75,0.85,0.55,0.45,0.36];
+	for(var i=0;i<data1.length;i++){
+		arcP(data1[i],arc,label1[i])
+	}
+	function arcP(data,arc,label){
+		d3.select(label).select("svg").remove();
+				var svg = d3.select(label).append("svg").attr("width",
+						arc.width).attr("height", arc.height).style(
+						"background-color", arc.backgroundColor);
+				var gauge = iopctrl.arcslider().radius(arc.radius)
+						.events(false).indicator(iopctrl.defaultGaugeIndicator);
+				gauge.axis().orient("in").normalize(true).ticks(arc.ticks)
+						.tickSubdivide(arc.ticksubdivide).tickSize(
+								arc.lTicksize, arc.sTicksize, 10)
+						.tickPadding(arc.tickpadding).scale(
+								d3.scale.linear().domain(
+										[ arc.startScale, arc.endScale ])
+										.range(
+												[
+														arc.startAngle / 180
+																* Math.PI,
+														arc.endAngle / 180
+																* Math.PI ]));
+
+				var segDisplay = iopctrl.segdisplay().width(arc.valueWidth)
+						.digitCount(arc.digitcount).negative(true).decimals(
+								arc.valueDecimals);
+
+				svg.append("g").attr("class", "segdisplay").attr(
+						"transform",
+						"translate(" + arc.translateleft + ","
+								+ arc.translatetop + ")").call(segDisplay);
+
+				svg.append("g").attr("class", "gauge").call(gauge);
+
+				segDisplay.value(data);
+				gauge.value(data);
+				// 添加样式
+				d3.selectAll(".gauge .domain").style({
+					"stroke-width" : arc.arcWidth,
+					"stroke" : arc.arcColor
+				});
+				d3.selectAll(".gauge line").style({
+					"stroke" : arc.sScaleColor,
+					"stroke-width" : arc.sScaleWidth
+				});
+				d3.selectAll(".gauge .tick line").style({
+					"stroke" : arc.lScaleColor,
+					"stroke-width" : arc.lScaleWidth
+				});
+
+				d3.selectAll(".gauge .major").style({
+					"fill" : arc.numColor,
+					"font-size" : arc.numSize,
+					"font-family" : arc.fontFamily,
+					"font-weight" : arc.fontWeight
+				});
+
+				d3.selectAll(".gauge .indicator").style({
+					"stroke" : arc.needleColor,
+					"fill" : arc.needlePoint,
+					"stroke-width" : arc.needleWidth
+				});
+				d3.selectAll(".segdisplay .on").style({
+					"fill" : arc.valueColor
+				});
+				d3.selectAll(".segdisplay .off").style({
+					"fill" : arc.valueColor1,
+					"opacity" : arc.valueOpacity
+				});
+		}
+</script>
+
+</body>
+</html>

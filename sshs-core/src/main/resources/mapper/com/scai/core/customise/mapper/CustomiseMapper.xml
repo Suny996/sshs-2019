@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sshs.core.customise.mapper.CustomiseMapper">
+	<!--表名 -->
+	<sql id="tableName">
+		CORE_CUSTOMISE_QUERY
+	</sql>
+
+	<!-- 字段 -->
+	<sql id="Field">
+		CUSTOMISE_ID,
+		USER_CODE,
+		ORG_CODE,
+		PAGE_ID,
+		CUSTOMISE_NAME,
+		FIELD_CONTENTS,
+		FIELD_ADDONS,
+		CRT_USER_CODE ,
+		CRT_ORG_CODE ,
+		CRT_DATE ,
+		UPD_USER_CODE ,
+		UPD_ORG_CODE ,
+		UPD_DATE
+	</sql>
+
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{customiseId},
+		#{userCode},
+		#{orgCode},
+		#{pageId},
+		#{customiseName},
+		#{fieldContents},
+		#{fieldAddons},
+		#{crtUserCode},
+		#{crtOrgCode},
+		#{crtDate},
+		#{updUserCode},
+		#{updOrgCode},
+		#{updDate}
+	</sql>
+	<!-- 自定义查询保存 -->
+	<insert id="save" parameterType="Customise">
+		insert into
+		<include refid="tableName"></include>
+		(
+		<include refid="Field"></include>
+		) values (
+		<include refid="FieldValue"></include>
+		)
+	</insert>
+	<!-- 自定义查询删除 -->
+	<delete id="delete" parameterType="Customise">
+		delete from
+		<include refid="tableName"></include>
+		where customise_id=#{customiseId}
+	</delete>
+	<!-- 自定义查询删除 -->
+	<delete id="deleteByCustomiseId" parameterType="String">
+		delete from
+		<include refid="tableName"></include>
+		where customise_id=#{_parameter}
+	</delete>
+	<!-- 自定义查询删除 -->
+	<delete id="deleteByCustomiseName" parameterType="Customise">
+		delete from
+		<include refid="tableName"></include>
+		where page_id=#{pageId} and customise_name=#{customiseName}
+	</delete>
+	<!-- 自定义查询-查询 -->
+	<select id="getCustomises" parameterType="Customise"
+			resultType="Customise">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		where page_id=#{pageId} and user_code=#{userCode}
+		order by crt_date
+	</select>
+
+</mapper>

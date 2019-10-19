@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <title>欺诈申请规则监控</title>
+</head>
+
+
+<style>
+    #content {
+        height: 100%;
+        width: 100%;
+        margin: 0 auto;
+        text-align: center;
+        background-color: #fff;
+        padding-top: 30px;
+    }
+
+    #barone, #moreLineChart, #bartwo {
+        background-color: #fff;
+        margin: 0px 30px 30px 30px;
+		box-shadow: 2px 2px 10px #888888;
+    }
+
+    .title {
+        font-size: 14px;
+        color: white;
+        background-color: rgb(10, 24, 92);
+        margin-left: 30px;
+        margin-right: 30px;
+        padding: 10px 0px;
+        text-align: left;
+        text-indent: 1em;
+		 border-top-left-radius: 5px;
+	  border-top-right-radius: 5px;
+    }
+
+    .list_box {
+        color: white;
+        margin: 0 auto;
+        text-align: center;
+        padding-bottom: 30px;
+    }
+
+    .list {
+        background-color: #fff;
+        margin-left: 30px;
+        margin-right: 30px;
+		box-shadow: 2px 2px 10px #888888;
+    }
+
+    .tb_title, #tb_title {
+        color: #7a7b89;
+    }
+
+    .tb_title {
+        width: 150px;
+    }
+
+    .tb_title {
+        height: 45px;
+    }
+
+    .tab {
+		margin:auto;
+        text-align: center;
+    }
+
+    table tr td {
+        border: 1px solid #424562;
+        width: 100px;
+        height: 30px;
+		color:#666
+    }
+
+    /* 坐标轴样式 */
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #666;
+        shape-rendering: crispEdges;
+    }
+
+    .axis text {
+        fill: #666;
+        font-family: sans-serif;
+        font-size: 11px;
+    }
+
+    .axis-x path,
+    .axis-x line {
+        fill: none;
+        stroke: #666;
+        shape-rendering: crispEdges;
+    }
+
+    .axis-x text {
+        fill: #666;
+        font-family: sans-serif;
+        font-size: 11px;
+    }
+
+    .axis-y path,
+    .axis-y line {
+        fill: none;
+        stroke: #666;
+        shape-rendering: crispEdges;
+    }
+
+    .axis-y text {
+        fill: #666;
+        font-family: sans-serif;
+        font-size: 11px;
+    }
+
+    .tooltip {
+        position: absolute;
+        width: auto;
+        padding: 0 5px;
+        height: auto;
+        font-size: 14px;
+        text-align: center;
+        opacity: 0;
+        background-color: #63676c;
+        font-family: MicrosoftYaHei;
+        font-size: 14px;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 0px;
+        color: #ffffff;
+        border-radius: 5px;
+    }
+
+    .tooltip:after {
+        /*content: '';*/
+        position: absolute;
+        bottom: 100%;
+        left: 20%;
+        margin-left: -8px;
+        width: 0;
+        height: 0;
+        border-bottom: 1px solid black;
+        border-right: 1px solid transparent;
+        border-left: 1px solid transparent;
+    }
+</style>
+
+
+<body>
+<div id="content">
+    <div class="chart_box">
+        <div class="title">规则命中率日报表</div>
+        <div id="barone"></div>
+    </div>
+    <div class="chart_box">
+        <div class="title">规则触发率日报表</div>
+        <div id="moreLineChart"></div>
+    </div>
+    <div class="chart_box">
+        <div class="title">欺诈拒绝原因日报表</div>
+        <div id="bartwo"></div>
+    </div>
+
+    <div class="list_box">
+        <div class="title">规则命中率日报表</div>
+        <div class="list">
+            <table class="tab">
+                <tr class="tb_title">
+                    <td class="tb_title">规则名称</td>
+                    <td>DAY1</td>
+                    <td>DAY2</td>
+                    <td>DAY3</td>
+                    <td>DAY4</td>
+                    <td>DAY5</td>
+                    <td>DAY6</td>
+                    <td>DAY7</td>
+                </tr>
+                <tr>
+                    <td class="tb_title">A01</td>
+                    <td>47%</td>
+                    <td>45%</td>
+                    <td>78%</td>
+                    <td>14%</td>
+                    <td>34%</td>
+                    <td>12v%</td>
+                    <td>93%</td>
+                </tr>
+                <tr>
+                    <td class="tb_title">A02</td>
+                    <td>75%</td>
+                    <td>72%</td>
+                    <td>43%</td>
+                    <td>46%</td>
+                    <td>37%</td>
+                    <td>73%</td>
+                    <td>40%</td>
+                </tr>
+                <tr>
+                    <td class="tb_title">A03</td>
+                    <td>77%</td>
+                    <td>63%</td>
+                    <td>10%</td>
+                    <td>75%</td>
+                    <td>16%</td>
+                    <td>17%</td>
+                    <td>58%</td>
+                </tr>
+                <tr>
+                    <td class="tb_title">A04</td>
+                    <td>62%</td>
+                    <td>91%</td>
+                    <td>22%</td>
+                    <td>60%</td>
+                    <td>97%</td>
+                    <td>56%</td>
+                    <td>46%</td>
+                </tr>
+                <tr>
+                    <td class="tb_title">A05</td>
+                    <td>27%</td>
+                    <td>11%</td>
+                    <td>91%</td>
+                    <td>88%</td>
+                    <td>36%</td>
+                    <td>88%</td>
+                    <td>21%</td>
+                </tr>
+                <tr>
+                    <td class="tb_title">上限</td>
+                    <td>14</td>
+                    <td>6%</td>
+                    <td>48%</td>
+                    <td>24%</td>
+                    <td>97%</td>
+                    <td>67%</td>
+                    <td>15%</td>
+                </tr>
+                <tr>
+                    <td class="tb_title">平均线（30天）</td>
+                    <td>9%</td>
+                    <td>36%</td>
+                    <td>42%</td>
+                    <td>84%</td>
+                    <td>10%</td>
+                    <td>63%</td>
+                    <td>71%</td>
+                </tr>
+                <tr>
+                    <td class="tb_title">下限</td>
+                    <td>55%</td>
+                    <td>1%</td>
+                    <td>80%</td>
+                    <td>97%</td>
+                    <td>31%</td>
+                    <td>88%</td>
+                    <td>77%</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="list_box">
+        <div class="title">规则触发率日报表</div>
+        <div class="list">
+            <table class="tab">
+                <tr class="tb_title">
+                    <td class="tb_title">渠道</td>
+                    <td>DAY1</td>
+                    <td>DAY2</td>
+                    <td>DAY3</td>
+                    <td>DAY4</td>
+                    <td>DAY5</td>
+                    <td>DAY6</td>
+                    <td>DAY7</td>
+                </tr>
+                <tr>
+                    <td class="tb_title">交易诈骗</td>
+                    <td>6%</td>
+                    <td>3%</td>
+                    <td>8%</td>
+                    <td>7%</td>
+                    <td>9%</td>
+                    <td>5%</td>
+                    <td>4%</td>
+                </tr>
+                <tr>
+                    <td class="tb_title">网络诈骗</td>
+                    <td>12%</td>
+                    <td>17%</td>
+                    <td>9%</td>
+                    <td>11%</td>
+                    <td>8%</td>
+                    <td>14%</td>
+                    <td>16%</td>
+                </tr>
+                <tr>
+                    <td class="tb_title">电话诈骗</td>
+                    <td>10%</td>
+                    <td>17%</td>
+                    <td>8%</td>
+                    <td>16%</td>
+                    <td>5%</td>
+                    <td>7%</td>
+                    <td>15%</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="list_box">
+        <div class="title">规则命中率日报表</div>
+        <div class="list">
+            <table class="tab">
+                <tr class="tb_title">
+                    <td class="tb_title">欺诈拒绝原因</td>
+                    <td>DAY1</td>
+                    <td>DAY2</td>
+                    <td>DAY3</td>
+                    <td>DAY4</td>
+                    <td>DAY5</td>
+                    <td>DAY6</td>
+                    <td>DAY7</td>
+                </tr>
+                <tr>
+                    <td class="tb_title">假证件</td>
+                    <td>21%</td>
+                    <td>33%</td>
+                    <td>86%</td>
+                    <td>5%</td>
+                    <td>4%</td>
+                    <td>76%</td>
+                    <td>2%</td>
+                </tr>
+                <tr>
+                    <td class="tb_title">可能的假文件</td>
+                    <td>19%</td>
+                    <td>68%</td>
+                    <td>39%</td>
+                    <td>2%</td>
+                    <td>1%</td>
+                    <td>93%</td>
+                    <td>45%</td>
+                </tr>
+                <tr>
+                    <td class="tb_title">假签名</td>
+                    <td>11%</td>
+                    <td>1%</td>
+                    <td>75%</td>
+                    <td>49%</td>
+                    <td>49%</td>
+                    <td>80%</td>
+                    <td>14%</td>
+                </tr>
+                <tr>
+                    <td class="tb_title">欺诈目的</td>
+                    <td>81%</td>
+                    <td>50%</td>
+                    <td>95%</td>
+                    <td>77%</td>
+                    <td>50%</td>
+                    <td>54%</td>
+                    <td>49%</td>
+                </tr>
+                <tr>
+                    <td class="tb_title">无意义买家</td>
+                    <td>37%</td>
+                    <td>81%</td>
+                    <td>76%</td>
+                    <td>9%</td>
+                    <td>82%</td>
+                    <td>46%</td>
+                    <td>91%</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="tooltip"></div>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/font-awesome.min.css">
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/img-common.css">
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" >
+	var data1=[
+				{x0: "DAY1", A01: 0.99, A02: 0.82, A03: 0.1, A04: 0.27, A05: 0.26, TOP_THREAD: 0.94,x0: "DAY1",下线: 0.72},
+				{x0: "DAY2", A01: 0.46, A02: 0.65, A03: 0.53, A04: 0.42, A05: 0.24, TOP_THREAD: 0.71,x0: "DAY2",下线: 0.06},
+				{x0: "DAY3", A01: 0.99, A02: 0.95, A03: 0.05, A04: 0.52, A05: 0.94, TOP_THREAD: 0.93,x0: "DAY3",下线: 0.62},
+				{x0: "DAY4", A01: 0.99, A02: 0.88, A03: 0.64, A04: 0.14, A05: 0.3, TOP_THREAD: 0.53,x0: "DAY4",下线: 0.91},
+				{x0: "DAY5", A01: 0.99, A02: 0.31, A03: 0.23, A04: 0.2, A05: 0.65, TOP_THREAD: 0.6,x0: "DAY5",下线: 0.52},
+				{x0: "DAY6", A01: 0.99, A02: 0.17, A03: 0.66, A04: 0.47, A05: 0.16, TOP_THREAD: 0.09,x0: "DAY6",下线: 0.7},
+				{x0: "DAY7", A01: 0.99, A02: 0.66, A03: 0.91, A04: 0.01, A05: 0.49, TOP_THREAD: 0.22,x0: "DAY7",下线: 0.02},
+			];
+	var bar1={	
+				axisColor: null,
+				axisLabelColor: null,
+				axisLabelFontFamily: null,
+				axisLabelFontSize: null,
+				axisRotate: null,
+				axisTickColor: null,
+				background: "#fff",
+				barName: "规则命中率日报表",
+				baseId: "7ae70d18830e4faa8122a7d7675adb64",
+				createTime: "2018-09-10 16:56:38",
+				createUser: "管理员",
+				fontColor: "#000",
+				fontFamily: "微软雅黑",
+				fontSize: 7,
+				fontWeight: "noraml",
+				height: 300,
+				hoverfill: "red",
+				hoverfillOpacity: 0.8,
+				id: 73,
+				legendDx: 0,
+				legendDy: 0,
+				legendFontColor: null,
+				legendFontSize: null,
+				legendSize: null,
+				marBottom: 450,
+				marLeft: 40,
+				marRight: 20,
+				marTop: 20,
+				padBottom: 30,
+				padLeft: 100,
+				padRight: 100,
+				padTop: 30,
+				rectPadding: 0.1,
+				rectWidth: 0.1,
+				rectfill: "#cf2c39,#cd7631,#30aace,#ed8a3b,#ae5da1,#c82caf,#009944,#3d62c6",
+				rectfillOpacity: 0.8,
+				stroke: "none",
+				strokeOpacity: 0.8,
+				titleDx: 1,
+				titleDy: 1,
+				updateTime: "2018-09-10 16:56:38",
+				width: 800,
+				x: 1,
+				xOrient: "bottom",
+				xTextAnchor: "middle",
+				xTickpadding: 5,
+				xTicks: 5,
+				xTicksize: 5,
+				xTitle: " ",
+				xTitleDx: 1,
+				xTitleDy: 1,
+				y: 1,
+				yOrient: "left",
+				yTextAnchor: "middle",
+				yTickpadding: 5,
+				yTicks: 5,
+				yTicksize: 5,
+				yTitle: " ",
+				yTitleDx: 2,
+				yTitleDy: 0
+			}
+	var data2=[
+				 {x0: "DAY1", 假证件: 0.76, 可能的假文件: 0.16, 假签名: 0.28, 欺诈目的: 0.09, 无意义买家: 0.96, 假绿皮书: 0.51},
+				 {x0: "DAY2", 假证件: 0.62, 可能的假文件: 0.36, 假签名: 0.97, 欺诈目的: 0.2, 无意义买家: 0, 假绿皮书: 0.41},
+				 {x0: "DAY3", 假证件: 0.11, 可能的假文件: 0.54, 假签名: 0.52, 欺诈目的: 0.58, 无意义买家: 0.8, 假绿皮书: 0.13},
+				 {x0: "DAY4", 假证件: 0.65, 可能的假文件: 0.7, 假签名: 0.86, 欺诈目的: 0.52, 无意义买家: 0.2, 假绿皮书: 0.53},
+				 {x0: "DAY5", 假证件: 0.27, 可能的假文件: 0.27, 假签名: 0.77, 欺诈目的: 0.85, 无意义买家: 0.66, 假绿皮书: 0.25},
+				 {x0: "DAY6", 假证件: 0.97, 可能的假文件: 0.22, 假签名: 0.49, 欺诈目的: 0.66, 无意义买家: 0.23, 假绿皮书: 0.53},
+				 {x0: "DAY7", 假证件: 0.41, 可能的假文件: 0.4, 假签名: 0.31, 欺诈目的: 0.02, 无意义买家: 0.26, 假绿皮书: 0.87}
+			]
+	var bar2={	axisColor: null,
+				axisLabelColor: null,
+				axisLabelFontFamily: null,
+				axisLabelFontSize: null,
+				axisRotate: null,
+				axisTickColor: null,
+				background: "#fff",
+				barName: "欺诈拒绝原因日报表",
+				baseId: "bd8681ea3af64736a69b925213cbc57d",
+				createTime: "2018-09-10 19:54:46",
+				createUser: "管理员",
+				fontColor: "#000",
+				fontFamily: "微软雅黑",
+				fontSize: 7,
+				fontWeight: "noraml",
+				height: 300,
+				hoverfill: "red",
+				hoverfillOpacity: 0.8,
+				id: 74,
+				legendDx: 0,
+				legendDy: 0,
+				legendFontColor: null,
+				legendFontSize: null,
+				legendSize: null,
+				marBottom: 450,
+				marLeft: 40,
+				marRight: 20,
+				marTop: 60,
+				padBottom: 30,
+				padLeft: 100,
+				padRight: 100,
+				padTop: 30,
+				rectPadding: 0.1,
+				rectWidth: 0.1,
+				rectfill: "#30aace,#ed8a3b,#ae5da1,#c82caf,#009944,#3d62c6",
+				rectfillOpacity: 0.8,
+				stroke: "none",
+				strokeOpacity: 0.8,
+				titleDx: 1,
+				titleDy: 1,
+				updateTime: "2018-09-27 14:42:37",
+				width: 800,
+				x: 1,
+				xOrient: "bottom",
+				xTextAnchor: "middle",
+				xTickpadding: 5,
+				xTicks: 5,
+				xTicksize: 5,
+				xTitle: " ",
+				xTitleDx: 1,
+				xTitleDy: 1,
+				y: 1,
+				yOrient: "left",
+				yTextAnchor: "middle",
+				yTickpadding: 5,
+				yTicks: 5,
+				yTicksize: 5,
+				yTitle: " ",
+				yTitleDx: 2,
+				yTitleDy: 0}
+	var label1="#barone";
+	var label2="#bartwo"
+	bar(data1,bar1,label1);
+	bar(data2,bar2,label2);
+	line();
+	function bar(datanum,bar,label){
+		            //数据
+            var da = datanum;
+            var colum = [];
+            Object.keys(da[0]).forEach(function (key, i, v) {
+                colum.push(key)
+            });
+            da.columns = colum;
+            //
+            var margin = {
+                top: bar.padTop,
+                right: bar.padRight,
+                bottom: bar.padBottom,
+                left: bar.padLeft
+            };
+            var width = bar.width;
+            var height = bar.height;
+
+            d3.select(label).select("svg").remove();
+            var svg = d3.select(label).append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .style("background-color", bar.background)
+                .style("border", "1px solid" + bar.stroke);
+
+
+            width = svg.attr("width") - margin.left - margin.right;
+            height = svg.attr("height") - margin.top - margin.bottom;
+            var g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            //color数组
+            var color = [];
+            color = bar.rectfill;
+            var color_ary = color.split(",");
+
+            var x0 = d3.scaleBand()
+                .rangeRound([0, width])
+                .paddingInner(bar.rectWidth);
+
+            var x1 = d3.scaleBand()
+                .padding(bar.rectPadding);
+
+            var y = d3.scaleLinear()
+                .rangeRound([height, 0]);
+
+            var z = d3.scaleOrdinal()
+                .range(color_ary);
+
+            var keys = da.columns.slice(1);
+
+            /*var yAxis=d3.svg.axis()
+                .scale(y)
+                .orient(bar.yOrient)
+                .ticks(2);*/
+            /*var xAxis=d3.svg.axis()
+            .scale(x0)
+            .orient(bar.xOrient)
+            .ticks(2);*/
+
+            x0.domain(da.map(function (d) {
+                return d.x0;
+            }));
+            x1.domain(keys).rangeRound([0, x0.bandwidth()]);
+            y.domain([0, d3.max(da, function (d) {
+                return d3.max(keys, function (key) {
+                    return d[key];
+                });
+            })]).nice();
+
+            g.append("g")
+                .selectAll("g")
+                .data(da)
+                .enter().append("g")
+                .attr("transform", function (d) {
+                    return "translate(" + x0(d.x0) + ",0)";
+                })
+                .selectAll("rect")
+                .data(function (d) {
+                    return keys.map(function (key) {
+                        return {key: key, value: d[key]};
+                    });
+                })
+                .enter().append("rect")
+                .attr("x", function (d) {
+                    return x1(d.key);
+                })
+                .attr("y", function (d) {
+                    return y(d.value);
+                })
+                .attr("width", x1.bandwidth())
+                .attr("height", function (d) {
+                    return height - y(d.value);
+                })
+                .attr("fill", function (d) {
+                    return z(d.key);
+                })
+                .attr("fill-opacity", bar.rectfillOpacity)
+                .on("mouseover", function (i) {
+                    d3.select('.tooltip').style('opacity', 1)
+                        .html(i.key+'<br/>'+i.value)
+                        .style("left", (d3.event.pageX) + "px")
+                        .style("top", (d3.event.pageY + 20) + "px")
+                })
+                .on("mousemove", function (i) {
+                    d3.select('.tooltip').style('opacity', 1)
+                        .html(i.key+'<br/>'+i.value)
+                        .style("left", (d3.event.pageX) + "px")
+                        .style("top", (d3.event.pageY + 20) + "px")
+                }) .on("mouseout", function (i) {
+                    d3.select('.tooltip').style('opacity', 0)
+                });
+
+            var rect = d3.selectAll("rect");
+
+            g.append("g")
+                .attr("class", "axis-x")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x0).ticks(bar.xTicks).tickSize(bar.xTicksize))
+                .append("text")
+                .attr("x", width + bar.padRight)
+                .attr("y", -2)
+                .attr("dy", bar.xTitleDy + "em")
+                .attr("dx", bar.xTitleDx + "em")
+                .attr("fill", "#000")
+                .style("font-size", bar.fontSize + "px")
+                .attr("font-weight", "bold")
+                .attr("text-anchor", bar.xTextAnchor)
+                .text(bar.xTitle);
+
+            g.append("g")
+                .attr("class", "axis-y")
+                .call(d3.axisLeft(y).ticks(bar.yTicks).tickSize(bar.yTicksize))
+                .append("text")
+                .attr("x", 2)
+                .attr("y", y(y.ticks().pop()) + 0.5)
+                .attr("dy", bar.yTitleDy + "em")
+                .attr("dx", bar.yTitleDx + "em")
+                .attr("fill", "#000")
+                .attr("font-weight", "bold")
+                .attr("text-anchor", bar.yTextAnchor)
+                .text(bar.yTitle)
+                .style("font-size", bar.fontSize + "px")
+                .style("font-fimaly", bar.fontFamily);
+
+
+            var legend = svg.append("g")
+                .attr("font-family", "sans-serif")
+                .attr("font-size", bar.fontSize)
+                .attr("text-anchor", "end")
+                .selectAll("g")
+                .data(keys.slice().reverse())
+                .enter().append("g")
+                .attr("transform", function (d, i) {
+                    return "translate(0," + i * 20 + ")";
+                })
+                .attr("dx", bar.legendDx + "em")
+                .attr("dy", bar.legendDy + "em");
+            ;
+
+            //图例方框
+            legend.append("rect")
+                .attr("x", width + 155)
+                .attr("width", 19)
+                .attr("height", 19)
+                .attr("fill", z)
+                .style("fill-opacity", bar.rectfillOpacity)
+                .attr("dx", bar.legendDx + "em")
+                .attr("dy", bar.legendDy + "em");
+            //图例文字
+            legend.append("text")
+                .attr("x", width - 24)
+                .attr("y", 9.5)
+                .attr("dx", "25em")
+                .attr("dy", "0.5em")
+                .attr("fill", "#666")
+                .text(function (d) {
+                    return d;
+                });
+
+            d3.selectAll(".axis-x text").style({"font-size": "20px"});
+	
+	}
+	function line(){
+			var datanum=[
+					{date:"DAY1",交易诈骗:0.06,网络诈骗:0.12,电话诈骗:0.1},
+					{date:"DAY2",交易诈骗:0.03,网络诈骗:0.17,电话诈骗:0.17},
+					{date:"DAY3",交易诈骗:0.08,网络诈骗:0.09,电话诈骗:0.08},
+					{date:"DAY4",交易诈骗:0.07,网络诈骗:0.11,电话诈骗:0.16},
+					{date:"DAY5",交易诈骗:0.09,网络诈骗:0.08,电话诈骗:0.05},
+					{date:"DAY6",交易诈骗:0.05,网络诈骗:0.14,电话诈骗:0.07},
+					{date:"DAY7",交易诈骗:0.04,网络诈骗:0.16,电话诈骗:0.15}
+				]
+			var moreLineChart={
+				background: "#fff",
+				baseId: "b8deb026c5b043d6998071290197b409",
+				createTime: null,
+				createUser: null,
+				drawTime: null,
+				height: 300,
+				id: 54,
+				ifCurvbasis: null,
+				lineNameFont: "sans-serif",
+				lineNameSize: 10,
+				lineNameStation: 3,
+				lineWidth: 1,
+				moreLineChartName: "规则触发率日报表",
+				padBottom: 30,
+				padLeft: 100,
+				padRight: 100,
+				padTop: 30,
+				updateTime: "2018-10-13 11:04:20",
+				width: 800,
+				xFontSize: null,
+				xGridColor: null,
+				xGridLucid: null,
+				xLableColor: null,
+				xLableSize: null,
+				xLineColor: null,
+				xNameColor: null,
+				xScaleColor: null,
+				xStation1: null,
+				xStation2: null,
+				xText: null,
+				yFontSize: null,
+				yGridColor: null,
+				yGridLucid: null,
+				yLableColor: null,
+				yLableSize: null,
+				yLineColor: null,
+				yNameColor: "#ffff",
+				yScaleColor: null,
+				yStation1: 0,
+				yStation2: -16,
+				yText: "命中率"
+			}
+			      //数据
+            var data = datanum;
+            var parseTime = d3.timeParse("%Y%m%d");
+            var colum = [];
+            Object.keys(data[0]).forEach(function (key, i, v) {
+                colum.push(key)
+            });
+            data.columns = colum;
+            d3.select("#moreLineChart svg").remove();
+            var svg1 = d3.select("#moreLineChart")
+                .append("svg")
+                .attr("width", moreLineChart.width)
+                .attr("height", moreLineChart.height)
+                .style("background-color", moreLineChart.background);
+
+            var svg = d3.select("#moreLineChart").select("svg"), margin = {
+                left: moreLineChart.padLeft,
+                right: moreLineChart.padRight,
+                top: moreLineChart.padTop,
+                bottom: moreLineChart.padBottom
+            }, width = +svg.attr("width") - margin.left - margin.right, height = +svg
+                    .attr("height")
+                - margin.top - margin.bottom, g = svg.append("g")
+                .attr(
+                    "transform",
+                    "translate(" + margin.left + ","
+                    + margin.top + ")");
+
+
+            var x = d3.scaleBand().rangeRound([0, width]),
+                y = d3.scaleLinear().range([height, 0]),
+                z = d3.scaleOrdinal(d3.schemeCategory10);
+
+            var line = d3.line()
+                .curve(d3.curveBasis)
+                .x(function (d) {
+                    return x(d.date);
+                })
+                .y(function (d) {
+                    return y(d.temperature);
+                });
+            var cities = data.columns.slice(1).map(function (id) {
+                return {
+                    id: id,
+                    values: data.map(function (d) {
+                        return {date: d.date, temperature: d[id]};
+                    })
+                };
+            });
+            x.domain(data.map(function (d) {
+                return d.date;
+            }));
+            y.domain([
+                d3.min(cities, function (c) {
+                    return d3.min(c.values, function (d) {
+                        return d.temperature;
+                    });
+                }),
+                d3.max(cities, function (c) {
+                    return d3.max(c.values, function (d) {
+                        return d.temperature;
+                    });
+                })
+            ]);
+
+            z.domain(cities.map(function (c) {
+                return c.id;
+            }));
+
+
+            g.append("g")
+                .attr("class", "axis axis--x")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x));
+
+            g.append("g")
+                .attr("class", "axis axis--y")
+                .call(d3.axisLeft(y))
+                .append("text")
+                .attr("transform", "rotate(" + moreLineChart.yStation1 + ")")
+                .attr("y", moreLineChart.yStation2)
+                .attr("dy", "0.71em")
+                .attr("fill", moreLineChart.yNameColor)
+                .text(moreLineChart.yText);
+
+            d3.selectAll("g.axis--y g.tick")
+                .append("line")
+                .classed("grid-line", true)
+                .attr("x1", 0)
+                .attr("y1", 0)
+                .attr("x2", moreLineChart.width - moreLineChart.padRight - moreLineChart.padLeft)
+                .attr("y2", 0)
+                .style("stroke", "#424562")
+                .style("stroke-opacity", "0.5");
+
+            d3.selectAll("g.axis--x g.tick")
+                .append("line")
+                .classed("grid-line", true)
+                .attr("x1", 0)
+                .attr("y1", 0)
+                .attr("x2", 0)
+                .attr("y2", -moreLineChart.height + moreLineChart.padTop + moreLineChart.padBottom)
+                .style("stroke", "#424562")
+                .style("stroke-opacity", "0.5");
+
+            var city = g.selectAll(".city")
+                .data(cities)
+                .enter().append("g")
+                .attr("class", "city");
+
+            city.append("path")
+                .attr("class", "line")
+                .attr("d", function (d, i) {
+                    return line(d.values);
+                })
+                .style("fill", 'none')
+                .style("stroke", function (d) {
+                    return z(d.id);
+                })
+                .style("stroke-width", moreLineChart.lineWidth)
+                .style("stroke-opacity", 0.9);
+
+
+            city.append("text")
+                .datum(function (d) {
+                    return {id: d.id, value: d.values[d.values.length - 1]};
+                })
+                .attr("transform", function (d) {
+                    return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")";
+                })
+                .attr("x", moreLineChart.lineNameStation)
+                .attr("dy", "0.35em")
+                .style("font-size", moreLineChart.lineNameSize + "px")//折线名称的字体大小
+                .style("font-family", moreLineChart.lineNameFont)//折线名称字体样式
+                .style("fill", function (d) {
+                    return z(d.id);
+                })
+                .text(function (d) {
+                    return d.id;
+                });
+
+            //在不知道折线的具体长度的时候可以动态添加动画属性。
+            var path = document.getElementsByClassName('line');
+            var length = [];
+            for (var h = 0; h < path.length; h++) {
+                length.push(path[h].getTotalLength());
+            }//获取class标签为line的元素
+            //获取第一个折线的总共的长度
+            d3.selectAll('.line')
+                .style('stroke-dasharray', function (d, i) {
+                    return length[i]
+                })					//根据上面获取的值来设置stroke-dasharray值
+                .style('stroke-dashoffset', function (d, i) {
+                    return length[i]
+                });
+
+            var rule = "@keyframes dash {0%{stroke-dashoffset:" + length + ";}100%{ stroke-dashoffset: 0;}  }";
+            var style = document.createElement('style');
+            style.type = 'text/css';
+            style.innerHTML = rule;
+            document.getElementsByTagName('head')[0].appendChild(style);
+            for (var i = 0; i < path.length; i++) {
+                path[i].style.animation = "dash 1s linear forwards";//加载动画时间
+
+            }
+
+            function type(d, _, columns) {
+                d.date = parseTime(d.date);
+                // console.log(d.date)
+                for (var i = 1, n = columns.length, c; i < n; ++i) d[c = columns[i]] = +d[c];
+                return d;
+            };
+	}
+</script>
+</body>
+</html>
+

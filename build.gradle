@@ -1,0 +1,90 @@
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+//jar时用
+apply plugin: 'application'
+
+apply plugin: "eclipse"
+//war包时用
+apply plugin: "war"
+
+/**
+ * weblogic部署问题：1、删除tomcat-embed-websocket-9.0.12.jar等冲突的jar包；
+ *                   2、修改mysql驱动版本与数据库一致，驱动类：com.mysql.cj.jdbc.Driver
+ * webshere部署问题：1、删除tomcat-embed-websocket-9.0.12.jar等冲突的jar包；
+ *                   2、建立共享库 加入validation-api-2.0.1.Final.jar；
+ */
+group = "com.sshs"
+version '0.0.1'
+mainClassName = "com.sshs.SshsApplication"
+archivesBaseName = 'SshsServer'
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.0.RELEASE")
+    }
+}
+
+dependencies {
+    compile project(":sshs-core")
+    //compile project(":scais-security")
+    //compile project(":scais-system")
+    //compile project(":scais-develop")
+    //compile project(":scais-report")
+    //compile project(":scais-toolkit")
+    //compile project(":scais-sigma")
+    //compile project(":scais-screen")
+}
+
+allprojects {
+    apply plugin: 'java'
+    apply plugin: "war"
+    ext {
+        junitVersion = "4.12"
+        springBootVersion = "2.1.0.RELEASE"
+        compileJava.options.encoding = 'UTF-8'
+        compileTestJava.options.encoding = 'UTF-8'
+    }
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    dependencies {
+        compile(
+                'org.springframework.boot:spring-boot-starter:2.1.0.RELEASE',
+                'org.springframework.boot:spring-boot-starter-webflux:2.1.0.RELEASE',
+                'org.springframework.boot:spring-boot-starter-test:2.1.0.RELEASE',
+                'org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.2',
+                'org.springframework.boot:spring-boot-starter-aop:2.1.0.RELEASE',
+                'tk.mybatis:mapper-spring-boot-starter:2.0.4',
+                //'mysql:mysql-connector-java:5.1.44',
+                'commons-lang:commons-lang:2.6',
+                'commons-io:commons-io:2.6',
+                'javax.persistence:persistence-api:1.0',
+                'com.alibaba:fastjson:1.2.52',
+                "com.alibaba:druid:1.1.14"
+        )
+        // https://mvnrepository.com/artifact/mysql/mysql-connector-java
+        compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.11'
+        // war deploy   
+        compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.3'
+        compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.1.0.RELEASE'
+
+        // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-eureka-client
+       //compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-client', version: '2.1.0.RELEASE'
+
+    }
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+}

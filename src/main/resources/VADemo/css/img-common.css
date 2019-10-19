@@ -1,0 +1,7 @@
+.panel .panel-body {
+	min-height: 523px;
+}
+
+.tab-content  .panel-body {
+	min-height: 260px!important;
+}

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sshs.core.customise.mapper.CommonMapper">
+    <insert id="saveLog" parameterType="SysLog">
+		INSERT INTO  SYS_LOG(LOG_ID, USER_CODE, USER_NAME, MODULE,ACTION,OPT_DATE,
+		CLIENT_IP, METHOD, PARAMS, OPT_DESC,LEGAL_ORG, CRT_USER_CODE,
+		 CRT_ORG_CODE, CRT_DATE)
+		  VALUES (#{logId}, #{userCode}, #{userName}, #{module},#{action},#{optDate},
+			#{clientIp},#{method} ,#{params},#{optDesc}, #{legalOrg},#{crtUserCode},
+		 	#{crtOrgCode}, #{crtDate})
+	</insert>
+    <!--查询下级机构-->
+    <select id="findOrgListByOrgCode" parameterType="String"
+            resultType="Map">
+		select
+		ORG_CODE,ORG_NAME,ORG_LEVEL
+		from
+		SYS_ORG
+		where PARENT_ORG_CODE=#{_parameter}
+	</select>
+    <!--查询上级机构-->
+    <select id="findParentOrgByOrgCode" parameterType="String"
+            resultType="Map">
+		select
+		P.ORG_CODE,P.ORG_NAME,P.ORG_LEVEL
+		from
+		SYS_ORG P,SYS_ORG O
+		where P.ORG_CODE=O.PARENT_ORG_CODE AND O.ORG_CODE=#{_parameter}
+	</select>
+
+    <select id="findOrgInfoByOrgCode" parameterType="String"
+            resultType="Map">
+		select
+		ORG_CODE,ORG_NAME,ORG_LEVEL
+		from
+		SYS_ORG
+		where ORG_CODE=#{_parameter}
+	</select>
+
+    <select id="findPosts"
+            resultType="Map">
+		select
+		POST_NO,POST_NAME,POST_DESC
+		from
+		SYS_POST
+	</select>
+
+    <select id="findUserMenus" parameterType="Map"
+            resultType="Map">
+		SELECT DISTINCT
+			M.MENU_CODE AS code,
+			IFNULL(I.MENU_LABEL, M.MENU_NAME) AS label,
+			MENU_URL AS name,
+			MENU_TYPE AS type,
+			MENU_ICON AS icon,
+			MENU_SEQ  AS seq
+		FROM
+			SYS_MENU M
+		LEFT JOIN (
+			SELECT
+				MENU_CODE,
+				MENU_LABEL,
+				MENU_TIP
+			FROM
+				SYS_MENU_I18N
+			WHERE
+				IS_START = '1'
+	  		AND LANGUAGE = IFNULL(#{language},'zh')
+			AND COUNTRY = IFNULL(#{country},'CN')
+		) I ON M.MENU_CODE = I.MENU_CODE,
+		 SYS_USER_ROLE UR,
+		 SYS_AUTHORIZE A
+		WHERE M.IS_START='1'
+		AND	M.MENU_CODE = A.RESOURCE_ID
+		AND A.ROLE_CODE = UR.ROLE_CODE
+		AND UR.USER_CODE = #{userCode}
+		AND M.PARENT_CODE = #{parentId}
+		ORDER BY
+			MENU_SEQ
+	</select>
+    <!--根据用户编号及资源ID查询数据权限-->
+    <select id="getDataAuthByUserCode" parameterType="String" resultType="String">
+		SELECT
+			MIN(A.DATA_AUTH_TYPE) AS DATA_AUTH
+		FROM
+			SYS_MENU M,
+			SYS_AUTHORIZE A,
+			SYS_ROLE R,SYS_USER_ROLE UR
+		WHERE
+			A.RESOURCE_ID = M.MENU_CODE
+		AND A.ROLE_CODE = R.ROLE_CODE
+		AND R.ROLE_CODE=UR.ROLE_CODE
+		AND M.MENU_URL = #{url}
+		AND UR.USER_CODE=#{userCode}
+	</select>
+    <!--根据用户ID修改用户密码信息-->
+    <select id="getPasswordByUserName" parameterType="String" resultType="String">
+		SELECT
+			password
+		FROM
+			SYS_USER
+		WHERE USER_CODE=#{username}
+	</select>
+    <!--根据用户ID修改用户密码信息-->
+    <update id="setNewPassword" parameterType="Object">
+		UPDATE SYS_USER
+			SET PASSWORD=#{password},UPD_USER_CODE=#{usercode},UPD_DATE=#{date}
+		WHERE USER_CODE=#{username}
+	</update>
+
+</mapper>

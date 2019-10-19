@@ -1,0 +1,28 @@
+apply plugin: 'application'	
+group = "com.sshs"
+version '0.2.0-SNAPSHOT'
+
+description = "框架基础组件包（不会独立运行）"
+archivesBaseName = 'sshs-core'
+ 
+dependencies {
+	compile fileTree(dir:'libs',include:['*.jar'])
+}
+sourceSets {
+		    main {
+		        java {
+		            srcDirs = ['src/main/java']
+		        }
+		        resources {
+		            srcDirs = ['src/main/resources/config', 'src/main/resources/mapper']
+		        }
+		    }
+		    test {
+		        java {
+		            srcDirs = ['src/test/java']
+		        }
+		        resources {
+		            srcDirs = ['src/test/resources']
+		        }
+		    }
+		}

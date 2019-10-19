@@ -1,0 +1,66 @@
+.el-table th, .el-table tr {
+    background-color: rgba(0,0,0,0);
+}
+
+.el-table, .el-table__expanded-cell {
+    background-color: rgba(0,0,0,0);
+}
+
+.el-table {
+    color: #fff;
+}
+
+.el-table thead {
+    color: rgb(189,190,192);
+}
+
+.el-table td, .el-table th.is-leaf {
+    border-color: rgb(43,48,56) !important;
+}
+
+.el-table .disabled-row td {
+    background-color: rgb(23,28,35) !important;
+}
+
+.el-table--striped .el-table__body tr.el-table__row--striped.current-row td, .el-table__body tr.current-row>td, .el-table__body tr.hover-row.current-row>td, .el-table__body tr.hover-row.el-table__row--striped.current-row>td, .el-table__body tr.hover-row.el-table__row--striped>td, .el-table__body tr.hover-row>td{
+    background-color: rgb(23,28,35) !important;
+}
+
+.el-table--enable-row-hover .el-table__body tr:hover>td{
+    background-color: rgb(23,28,35) !important;
+}
+
+.el-table--border::after, .el-table--group::after, .el-table::before {
+    background-color: rgb(43,48,56) !important;
+}
+
+.el-transfer-panel {
+    width: 40% !important;
+}
+
+.el-loading-mask {
+    background-color: rgba(32,37,45,.8)!important;
+}
+.el-pagination {
+    color: #fff!important;
+}
+
+.el-pagination__total {
+    color: #fff!important;
+}
+
+.el-pagination__jump {
+    color: #fff!important;
+}
+
+.el-pagination button:disabled {
+    background-color: rgb(32,37,45)!important;
+}
+
+.el-pager li {
+    background-color: rgb(32,37,45)!important;
+}
+.el-pagination .btn-next, .el-pagination .btn-prev {
+    color: #fff!important;
+    background-color: rgb(32,37,45) !important;
+}

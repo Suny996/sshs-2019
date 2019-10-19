@@ -1,0 +1,100 @@
+html { overflow-x:hidden; }
+.content-header {
+	position: relative;
+	padding: 0 0 3px 8px
+}
+
+.content-header>.breadcrumb {
+    position: relative;
+    top: 0;
+    right: 0;
+    float: none;
+    margin-top: 0px;
+    padding-left: 10px;
+    color:white;
+    background: #11171f;
+}
+
+.height-auto{
+	heigth:auto;
+	border:none;
+	margin-top:5px;
+	overflow: auto;
+}
+.main-footer {
+    padding: 7px;
+    color: #444;
+    border-top: 1px solid #eee;
+}
+
+.header-input .el-button--mini, .el-button--mini.is-round {
+	margin: 7px 0;
+}
+
+.header-input .el-form-item__label {
+	color: #fff;
+	font-weight: normal;
+}
+
+.header-input .el-input__inner {
+	background-color: #000;
+	border: 1px solid #4e4c4c;
+	color: #fff;
+}
+
+.el-pager li.btn-quicknext, .el-pager li.btn-quickprev {
+	color: #fff;
+}
+
+[v-cloak] {
+  display: none;
+}
+
+.panel {
+	min-height: calc(100vh - 100px );
+}
+
+
+.grid-btn{
+	margin-bottom:10px;
+}
+.grid-btn .btn{
+	margin-right:10px;
+}
+.pointer{cursor: pointer;}
+
+.ml-10 { margin-left:0 !important; }
+	@media (min-width: 768px) {
+		.ml-10 { margin-left:10px !important; }
+		.col-sm-10 {width: 70%;padding-left: 0px;}
+		.col-sm-2 {width: 24%;}
+	}
+	tbody > tr > th {font-weight: normal; }
+	.panel .table { margin:0 0; }
+	.panel .pagination { margin:0; }
+	.panel-default>.panel-heading {background-color: #f5f5f5;}
+	.row{
+		
+		margin:0;
+/* 		padding:20px 2px 0px 2px;
+ */	}
+	.col-xs-6{padding-left: 0px;padding-right: 0px;}
+	.form-horizontal .form-group {margin-left:0px;margin-right:0px;}
+	.form-horizontal{
+		width:550px;padding-top:20px;
+	}
+	/* 报表表格样式 */
+	.report_tb{
+	height:1300px;
+	background: #13163b;
+	color:#ffffff;
+	}
+	.report_tb table{
+	text-align: center;
+	margin: 0 auto;
+	}
+	.report_tb table td{
+	width:150px;
+	height:50px;
+	 border:1px solid #A6A6A6;
+	}
