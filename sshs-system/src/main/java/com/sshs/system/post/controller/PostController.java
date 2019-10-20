@@ -1,15 +1,15 @@
 package com.sshs.system.post.controller;
 
+import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
-import com.sshs.core.page.Page;
 import com.sshs.system.post.model.Post;
 import com.sshs.system.post.service.IPostService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-import com.sshs.core.base.controller.BaseController;
 import reactor.core.publisher.Mono;
+
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
@@ -119,20 +119,4 @@ public class PostController extends BaseController {
        }
    }
 
-
-   /**
-   * 分页查询系统管理->系统管理-岗位表信息
-   */
-   @PostMapping("/pageList")
-   public Mono<Message> queryPageList(@RequestBody Page<Post> page) {
-      try {
-          logger.debug("开始分页查询系统管理->系统管理-岗位表信息……");
-          Message message = postService.queryPageList(page);
-          return Mono.justOrEmpty(message);
-      } catch (Exception e) {
-          e.printStackTrace();
-          logger.error("分页查询系统管理->系统管理-岗位表信息异常！");
-          throw new BusinessException("SY0005");
-      }
-   }
 }

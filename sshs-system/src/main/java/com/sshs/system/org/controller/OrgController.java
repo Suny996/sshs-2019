@@ -3,7 +3,6 @@ package com.sshs.system.org.controller;
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
-import com.sshs.core.page.Page;
 import com.sshs.system.org.model.Org;
 import com.sshs.system.org.service.IOrgService;
 import org.apache.commons.lang.StringUtils;
@@ -123,22 +122,6 @@ public class OrgController extends BaseController {
         }
     }
 
-
-    /**
-     * 分页查询系统管理->系统管理-机构表信息
-     */
-    @PostMapping("/pageList")
-    public Mono<Message> queryPageList(@RequestBody Page<Org> page) {
-        try {
-            logger.debug("开始分页查询系统管理->系统管理-机构表信息……");
-            Message message = orgService.queryPageList(page);
-            return Mono.justOrEmpty(message);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("分页查询系统管理->系统管理-机构表信息异常！");
-            throw new BusinessException("SY0005");
-        }
-    }
 
     /**
      * 根据主键查找系统管理->系统管理-机构表信息

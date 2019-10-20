@@ -1,28 +1,23 @@
 package com.sshs.system.dictionary.controller;
 
-import com.sshs.core.customise.model.Customise;
+import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
-import com.sshs.core.page.Page;
-import com.sshs.core.util.UuidUtil;
 import com.sshs.system.dictionary.model.Dictionary;
 import com.sshs.system.dictionary.service.IDictionaryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.web.bind.annotation.*;
-import com.sshs.core.base.controller.BaseController;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
+
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.web.reactive.function.BodyExtractors.toMono;
 
 
 /**
@@ -127,23 +122,6 @@ public class DictionaryController extends BaseController {
        logger.error("查询系统管理->系统管理-数据字典表信息异常！");
        throw new BusinessException("SY0001");
        }
-   }
-
-
-   /**
-   * 分页查询系统管理->系统管理-数据字典表信息
-   */
-   @PostMapping("/pageList")
-   public Mono<Message> queryPageList(@RequestBody Page<Dictionary> page) {
-      try {
-          logger.debug("开始分页查询系统管理->系统管理-数据字典表信息……");
-          Message message = dictionaryService.queryPageList(page);
-          return Mono.justOrEmpty(message);
-      } catch (Exception e) {
-          e.printStackTrace();
-          logger.error("分页查询系统管理->系统管理-数据字典表信息异常！");
-          throw new BusinessException("SY0005");
-      }
    }
 
     /**

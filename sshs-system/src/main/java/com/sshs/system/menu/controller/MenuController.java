@@ -3,7 +3,6 @@ package com.sshs.system.menu.controller;
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
-import com.sshs.core.page.Page;
 import com.sshs.system.menu.model.Menu;
 import com.sshs.system.menu.service.IMenuService;
 import org.apache.commons.lang.StringUtils;
@@ -136,23 +135,6 @@ public class MenuController extends BaseController {
             e.printStackTrace();
             logger.error("查询系统管理->系统管理-菜单表信息异常！");
             throw new BusinessException("SY0001");
-        }
-    }
-
-
-    /**
-     * 分页查询系统管理->系统管理-菜单表信息
-     */
-    @PostMapping("/pageList")
-    public Mono<Message> queryPageList(@RequestBody Page<Menu> page) {
-        try {
-            logger.debug("开始分页查询系统管理->系统管理-菜单表信息……");
-            Message message = menuService.queryPageList(page);
-            return Mono.justOrEmpty(message);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("分页查询系统管理->系统管理-菜单表信息异常！");
-            throw new BusinessException("SY0005");
         }
     }
 }

@@ -1,16 +1,16 @@
 package com.sshs.system.user.controller;
 
+import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
-import com.sshs.core.page.Page;
 import com.sshs.system.user.model.User;
 import com.sshs.system.user.service.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.sshs.core.base.controller.BaseController;
 import reactor.core.publisher.Mono;
+
 import java.util.List;
 import java.util.Map;
 
@@ -131,19 +131,4 @@ public class UserController extends BaseController {
         }
     }
 
-    /**
-     * 分页查询用户信息
-     */
-    @PostMapping("/pageList")
-    public Mono<Message> queryPageList(@RequestBody Page<User> page) {
-        try {
-            logger.debug("开始分页查询用户信息……");
-            Message message = userService.queryPageList(page);
-            return Mono.justOrEmpty(message);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("分页查询用户信息异常！");
-            throw new BusinessException("SY0005");
-        }
-    }
 }
