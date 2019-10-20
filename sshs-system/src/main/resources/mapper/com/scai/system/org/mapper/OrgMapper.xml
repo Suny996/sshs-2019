@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sshs.system.org.mapper.OrgMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+		SYS_ORG
+	</sql>
+
+    <!-- 字段 -->
+    <sql id="Field">
+				ORG_ID,
+				STATUS,
+				COUNTRY,
+				EMAIL,
+				OFFICE_ADDR,
+				POST,
+				TEL,
+				CONTACT,
+				ORG_FI_NO,
+				ORG_PAY_NO,
+				ORG_CREDIT_NO,
+				ORG_CODE,
+				ORG_PERMIT_NO,
+				ORG_REG_NO,
+				ORG_ID_NUMBER,
+				ORG_TAX_NO,
+				ORG_CREATE_DATE,
+				ORG_START_DATE,
+				ORG_END_DATE,
+				ORG_HEADER,
+				NODE_NO,
+				IS_LEAF,
+				ORG_NAME,
+				BUSI_STATUS,
+				AREA_CODE,
+				ORDERS,
+				OWN_LINE,
+				VER_NO,
+				PROCESS_INSTANCE_ID,
+				REMARK,
+				CRT_USER_CODE,
+				CRT_ORG_CODE,
+				CRT_DATE,
+				ORG_BRIEF,
+				UPD_USER_CODE,
+				UPD_ORG_CODE,
+				UPD_DATE,
+				PARENT_ORG_CODE,
+				ORG_CATEGORY,
+				ORG_LEVEL,
+				ORG_GRADE,
+				PATH_NAME
+	</sql>
+
+    <!-- 字段值 -->
+    <sql id="FieldValue">
+				#{orgId},
+				#{status},
+				#{country},
+				#{email},
+				#{officeAddr},
+				#{post},
+				#{tel},
+				#{contact},
+				#{orgFiNo},
+				#{orgPayNo},
+				#{orgCreditNo},
+				#{orgCode},
+				#{orgPermitNo},
+				#{orgRegNo},
+				#{orgIdNumber},
+				#{orgTaxNo},
+				#{orgCreateDate},
+				#{orgStartDate},
+				#{orgEndDate},
+				#{orgHeader},
+				#{nodeNo},
+				#{isLeaf},
+				#{orgName},
+				#{busiStatus},
+				#{areaCode},
+				#{orders},
+				#{ownLine},
+				#{verNo},
+				#{processInstanceId},
+				#{remark},
+				#{crtUserCode},
+				#{crtOrgCode},
+				#{crtDate},
+				#{orgBrief},
+				#{updUserCode},
+				#{updOrgCode},
+				#{updDate},
+				#{parentOrgCode},
+				#{orgCategory},
+				#{orgLevel},
+				#{orgGrade},
+				#{pathName}
+	</sql>
+
+    <!-- 根据ORG_CODE查询系统管理->系统管理-机构表 org_code 空时查询跟节点 -->
+    <select id="findOrgById" parameterType="String"
+            resultType="Org">
+        SELECT
+        <include refid="Field"></include>
+        FROM
+        <include refid="tableName"></include>
+        WHERE
+        <choose>
+            <when test="_parameter != null and _parameter != ''">
+                ORG_CODE= #{_parameter}
+            </when>
+            <otherwise>PARENT_ORG_CODE IS NULL OR PARENT_ORG_CODE='0'</otherwise>
+        </choose>
+    </select>
+
+    <!-- 查询所有机构记录 -->
+    <select id="findOrgAll"
+            resultType="Org">
+        SELECT
+        <include refid="Field"></include>
+        FROM
+        <include refid="tableName"></include>
+        order by org_code
+    </select>
+
+    <!-- 根据ORG_CODE查询最后一个子节点 -->
+    <select id="findLastChildCodeById" parameterType="String"
+            resultType="String">
+        SELECT
+        max(org_code) as org_code
+        FROM
+        <include refid="tableName"></include>
+        WHERE PARENT_CODE= #{_parameter}
+    </select>
+
+    <!-- 分页查询系统管理->系统管理-机构表-查询列信息 -->
+    <select id="findForPageList" parameterType="Page"
+            resultType="Org">
+        SELECT
+        <include refid="Field"></include>
+        FROM
+        <include refid="tableName"></include>
+        WHERE 1=1
+        <if test="variables.orgId != null and variables.orgId != ''">
+            AND ORG_ID
+            <choose>
+                <when test="operators.orgId != null and operators.orgId != '' ">${operators.orgId}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.orgId}
+        </if>
+        <if test="variables.status != null and variables.status != ''">
+            AND STATUS
+            <choose>
+                <when test="operators.status != null and operators.status != '' ">${operators.status}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.status}
+        </if>
+        <if test="variables.country != null and variables.country != ''">
+            AND COUNTRY
+            <choose>
+                <when test="operators.country != null and operators.country != '' ">${operators.country}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.country}
+        </if>
+        <if test="variables.email != null and variables.email != ''">
+            AND EMAIL
+            <choose>
+                <when test="operators.email != null and operators.email != '' ">${operators.email}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.email}
+        </if>
+        <if test="variables.officeAddr != null and variables.officeAddr != ''">
+            AND OFFICE_ADDR
+            <choose>
+                <when test="operators.officeAddr != null and operators.officeAddr != '' ">${operators.officeAddr}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.officeAddr}
+        </if>
+        <if test="variables.post != null and variables.post != ''">
+            AND POST
+            <choose>
+                <when test="operators.post != null and operators.post != '' ">${operators.post}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.post}
+        </if>
+        <if test="variables.tel != null and variables.tel != ''">
+            AND TEL
+            <choose>
+                <when test="operators.tel != null and operators.tel != '' ">${operators.tel}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.tel}
+        </if>
+        <if test="variables.contact != null and variables.contact != ''">
+            AND CONTACT
+            <choose>
+                <when test="operators.contact != null and operators.contact != '' ">${operators.contact}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.contact}
+        </if>
+        <if test="variables.orgFiNo != null and variables.orgFiNo != ''">
+            AND ORG_FI_NO
+            <choose>
+                <when test="operators.orgFiNo != null and operators.orgFiNo != '' ">${operators.orgFiNo}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.orgFiNo}
+        </if>
+        <if test="variables.orgPayNo != null and variables.orgPayNo != ''">
+            AND ORG_PAY_NO
+            <choose>
+                <when test="operators.orgPayNo != null and operators.orgPayNo != '' ">${operators.orgPayNo}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.orgPayNo}
+        </if>
+        <if test="variables.orgCreditNo != null and variables.orgCreditNo != ''">
+            AND ORG_CREDIT_NO
+            <choose>
+                <when test="operators.orgCreditNo != null and operators.orgCreditNo != '' ">${operators.orgCreditNo}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.orgCreditNo}
+        </if>
+        <if test="variables.orgCode != null and variables.orgCode != ''">
+            AND ORG_CODE
+            <choose>
+                <when test="operators.orgCode != null and operators.orgCode != '' ">${operators.orgCode}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.orgCode}
+        </if>
+        <if test="variables.orgPermitNo != null and variables.orgPermitNo != ''">
+            AND ORG_PERMIT_NO
+            <choose>
+                <when test="operators.orgPermitNo != null and operators.orgPermitNo != '' ">${operators.orgPermitNo}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.orgPermitNo}
+        </if>
+        <if test="variables.orgRegNo != null and variables.orgRegNo != ''">
+            AND ORG_REG_NO
+            <choose>
+                <when test="operators.orgRegNo != null and operators.orgRegNo != '' ">${operators.orgRegNo}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.orgRegNo}
+        </if>
+        <if test="variables.orgIdNumber != null and variables.orgIdNumber != ''">
+            AND ORG_ID_NUMBER
+            <choose>
+                <when test="operators.orgIdNumber != null and operators.orgIdNumber != '' ">${operators.orgIdNumber}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.orgIdNumber}
+        </if>
+        <if test="variables.orgTaxNo != null and variables.orgTaxNo != ''">
+            AND ORG_TAX_NO
+            <choose>
+                <when test="operators.orgTaxNo != null and operators.orgTaxNo != '' ">${operators.orgTaxNo}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.orgTaxNo}
+        </if>
+        <if test="variables.orgCreateDate != null and variables.orgCreateDate != ''">
+            AND ORG_CREATE_DATE
+            <choose>
+                <when test="operators.orgCreateDate != null and operators.orgCreateDate != '' ">
+                    ${operators.orgCreateDate}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.orgCreateDate}
+        </if>
+        <if test="variables.orgStartDate != null and variables.orgStartDate != ''">
+            AND ORG_START_DATE
+            <choose>
+                <when test="operators.orgStartDate != null and operators.orgStartDate != '' ">
+                    ${operators.orgStartDate}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.orgStartDate}
+        </if>
+        <if test="variables.orgEndDate != null and variables.orgEndDate != ''">
+            AND ORG_END_DATE
+            <choose>
+                <when test="operators.orgEndDate != null and operators.orgEndDate != '' ">${operators.orgEndDate}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.orgEndDate}
+        </if>
+        <if test="variables.orgHeader != null and variables.orgHeader != ''">
+            AND ORG_HEADER
+            <choose>
+                <when test="operators.orgHeader != null and operators.orgHeader != '' ">${operators.orgHeader}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.orgHeader}
+        </if>
+        <if test="variables.nodeNo != null and variables.nodeNo != ''">
+            AND NODE_NO
+            <choose>
+                <when test="operators.nodeNo != null and operators.nodeNo != '' ">${operators.nodeNo}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.nodeNo}
+        </if>
+        <if test="variables.isLeaf != null and variables.isLeaf != ''">
+            AND IS_LEAF
+            <choose>
+                <when test="operators.isLeaf != null and operators.isLeaf != '' ">${operators.isLeaf}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.isLeaf}
+        </if>
+        <if test="variables.orgName != null and variables.orgName != ''">
+            AND ORG_NAME
+            <choose>
+                <when test="operators.orgName != null and operators.orgName != '' ">${operators.orgName}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.orgName}
+        </if>
+        <if test="variables.busiStatus != null and variables.busiStatus != ''">
+            AND BUSI_STATUS
+            <choose>
+                <when test="operators.busiStatus != null and operators.busiStatus != '' ">${operators.busiStatus}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.busiStatus}
+        </if>
+        <if test="variables.areaCode != null and variables.areaCode != ''">
+            AND AREA_CODE
+            <choose>
+                <when test="operators.areaCode != null and operators.areaCode != '' ">${operators.areaCode}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.areaCode}
+        </if>
+        <if test="variables.orders != null and variables.orders != ''">
+            AND ORDERS
+            <choose>
+                <when test="operators.orders != null and operators.orders != '' ">${operators.orders}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.orders}
+        </if>
+        <if test="variables.ownLine != null and variables.ownLine != ''">
+            AND OWN_LINE
+            <choose>
+                <when test="operators.ownLine != null and operators.ownLine != '' ">${operators.ownLine}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.ownLine}
+        </if>
+        <if test="variables.verNo != null and variables.verNo != ''">
+            AND VER_NO
+            <choose>
+                <when test="operators.verNo != null and operators.verNo != '' ">${operators.verNo}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.verNo}
+        </if>
+        <if test="variables.processInstanceId != null and variables.processInstanceId != ''">
+            AND PROCESS_INSTANCE_ID
+            <choose>
+                <when test="operators.processInstanceId != null and operators.processInstanceId != '' ">
+                    ${operators.processInstanceId}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.processInstanceId}
+        </if>
+        <if test="variables.remark != null and variables.remark != ''">
+            AND REMARK
+            <choose>
+                <when test="operators.remark != null and operators.remark != '' ">${operators.remark}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.remark}
+        </if>
+        <if test="variables.crtUserCode != null and variables.crtUserCode != ''">
+            AND CRT_USER_CODE
+            <choose>
+                <when test="operators.crtUserCode != null and operators.crtUserCode != '' ">${operators.crtUserCode}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.crtUserCode}
+        </if>
+        <if test="variables.crtOrgCode != null and variables.crtOrgCode != ''">
+            AND CRT_ORG_CODE
+            <choose>
+                <when test="operators.crtOrgCode != null and operators.crtOrgCode != '' ">${operators.crtOrgCode}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.crtOrgCode}
+        </if>
+        <if test="variables.crtDate != null and variables.crtDate != ''">
+            AND CRT_DATE
+            <choose>
+                <when test="operators.crtDate != null and operators.crtDate != '' ">${operators.crtDate}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.crtDate}
+        </if>
+        <if test="variables.orgBrief != null and variables.orgBrief != ''">
+            AND ORG_BRIEF
+            <choose>
+                <when test="operators.orgBrief != null and operators.orgBrief != '' ">${operators.orgBrief}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.orgBrief}
+        </if>
+        <if test="variables.updUserCode != null and variables.updUserCode != ''">
+            AND UPD_USER_CODE
+            <choose>
+                <when test="operators.updUserCode != null and operators.updUserCode != '' ">${operators.updUserCode}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.updUserCode}
+        </if>
+        <if test="variables.updOrgCode != null and variables.updOrgCode != ''">
+            AND UPD_ORG_CODE
+            <choose>
+                <when test="operators.updOrgCode != null and operators.updOrgCode != '' ">${operators.updOrgCode}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.updOrgCode}
+        </if>
+        <if test="variables.updDate != null and variables.updDate != ''">
+            AND UPD_DATE
+            <choose>
+                <when test="operators.updDate != null and operators.updDate != '' ">${operators.updDate}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.updDate}
+        </if>
+        <if test="variables.parentOrgCode != null and variables.parentOrgCode != ''">
+            AND PARENT_ORG_CODE
+            <choose>
+                <when test="operators.parentOrgCode != null and operators.parentOrgCode != '' ">
+                    ${operators.parentOrgCode}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.parentOrgCode}
+        </if>
+        <if test="variables.orgCategory != null and variables.orgCategory != ''">
+            AND ORG_CATEGORY
+            <choose>
+                <when test="operators.orgCategory != null and operators.orgCategory != '' ">${operators.orgCategory}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.orgCategory}
+        </if>
+        <if test="variables.orgLevel != null and variables.orgLevel != ''">
+            AND ORG_LEVEL
+            <choose>
+                <when test="operators.orgLevel != null and operators.orgLevel != '' ">${operators.orgLevel}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.orgLevel}
+        </if>
+        <if test="variables.orgGrade != null and variables.orgGrade != ''">
+            AND ORG_GRADE
+            <choose>
+                <when test="operators.orgGrade != null and operators.orgGrade != '' ">${operators.orgGrade}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.orgGrade}
+        </if>
+        <if test="variables.pathName != null and variables.pathName != ''">
+            AND PATH_NAME
+            <choose>
+                <when test="operators.pathName != null and operators.pathName != '' ">${operators.pathName}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.pathName}
+        </if>
+        <if test="variables._orgAuth != null and variables._orgAuth != ''">
+            AND ORG_CODE ${variables._orgAuth}
+        </if>
+        <if test="variables._userAuth != null and variables._userAuth != ''">
+            AND USER_CODE ${variables._userAuth}
+        </if>
+    </select>
+</mapper>

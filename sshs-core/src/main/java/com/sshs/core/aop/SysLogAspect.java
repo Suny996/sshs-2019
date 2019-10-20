@@ -1,6 +1,7 @@
 package com.sshs.core.aop;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.sshs.core.util.SystemUtil;
 import com.sshs.core.util.UuidUtil;
 import com.sshs.core.customise.mapper.CommonMapper;
@@ -26,7 +27,7 @@ import java.util.Date;
 public class SysLogAspect {
 
     @Resource
-    CommonMapper commonMapper;
+    BaseMapper<SysLog> mapper;
 
     /**
      * 定义切点 @Pointcut
@@ -85,7 +86,7 @@ public class SysLogAspect {
         sysLog.setClientIp(SystemUtil.getRemoteId());
 
         //调用service保存SysLog实体类到数据库
-        commonMapper.saveLog(sysLog);
+        mapper.insert(sysLog);
     }
 
 }

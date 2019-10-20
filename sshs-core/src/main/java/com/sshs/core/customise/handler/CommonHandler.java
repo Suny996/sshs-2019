@@ -21,7 +21,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Component
 public class CommonHandler {
-    Log logger = LogFactory.getLog(CommonHandler.class);
+    Logger logger = LoggerFactory.getLogger(CommonHandler.class);
     //@Resource(name = "sqlSessionTemplate")
     //private SqlSessionTemplate sqlSessionTemplate;
 

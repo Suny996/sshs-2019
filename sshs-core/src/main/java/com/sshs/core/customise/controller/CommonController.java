@@ -28,7 +28,7 @@ import java.util.Map;
  */
 @RestController
 public class CommonController extends BaseController {
-    Log logger = LogFactory.getLog(CommonController.class);
+    Logger logger = LoggerFactory.getLogger(CommonController.class);
     @Resource
     CommonMapper commonMapper;
 

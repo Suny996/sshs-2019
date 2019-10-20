@@ -29,7 +29,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Component
 public class CustomiseHandler {
-    Log logger = LogFactory.getLog(CustomiseHandler.class);
+    Logger logger = LoggerFactory.getLogger(CustomiseHandler.class);
     @Resource(name = "sqlSessionTemplate")
     private SqlSessionTemplate sqlSessionTemplate;
 

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sshs.system.userRole.mapper.UserRoleMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		SYS_USER_ROLE
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+				USER_ROLE_ID,
+				USER_CODE,
+				ROLE_CODE,
+				CRT_USER_CODE,
+				CRT_ORG_CODE,
+				CRT_DATE,
+				UPD_USER_CODE,
+				UPD_ORG_CODE,
+				UPD_DATE
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+				#{userRoleId},
+				#{userCode},
+				#{roleCode},
+				#{crtUserCode},
+				#{crtOrgCode},
+				#{crtDate},
+				#{updUserCode},
+				#{updOrgCode},
+				#{updDate}
+	</sql>
+
+    <!--通过userCode删除信息-->
+    <delete id="deleteByUserCode" parameterType="String">
+		delete from <include refid="tableName"></include> where user_code=#{_parameter}
+	</delete>
+
+    <!-- 分页查询系统管理->系统管理-用户角色对照表-查询列信息 -->
+    <select id="findForList" parameterType="Map"
+            resultType="UserRole">
+        SELECT
+        <include refid="Field"></include>
+        FROM
+        <include refid="tableName"></include>
+        WHERE 1=1
+			<if test="variables.userRoleId != null and variables.userRoleId != ''">
+                AND USER_ROLE_ID
+                <choose>
+                    <when test="operators.userRoleId != null and operators.userRoleId != '' ">${operators.userRoleId}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.userRoleId}
+            </if>
+			<if test="variables.userCode != null and variables.userCode != ''">
+                AND USER_CODE
+                <choose>
+                    <when test="operators.userCode != null and operators.userCode != '' ">${operators.userCode}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.userCode}
+            </if>
+			<if test="variables.roleCode != null and variables.roleCode != ''">
+                AND ROLE_CODE
+                <choose>
+                    <when test="operators.roleCode != null and operators.roleCode != '' ">${operators.roleCode}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.roleCode}
+            </if>
+			<if test="variables.crtUserCode != null and variables.crtUserCode != ''">
+                AND CRT_USER_CODE
+                <choose>
+                    <when test="operators.crtUserCode != null and operators.crtUserCode != '' ">${operators.crtUserCode}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.crtUserCode}
+            </if>
+			<if test="variables.crtOrgCode != null and variables.crtOrgCode != ''">
+                AND CRT_ORG_CODE
+                <choose>
+                    <when test="operators.crtOrgCode != null and operators.crtOrgCode != '' ">${operators.crtOrgCode}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.crtOrgCode}
+            </if>
+			<if test="variables.crtDate != null and variables.crtDate != ''">
+                AND CRT_DATE
+                <choose>
+                    <when test="operators.crtDate != null and operators.crtDate != '' ">${operators.crtDate}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.crtDate}
+            </if>
+			<if test="variables.updUserCode != null and variables.updUserCode != ''">
+                AND UPD_USER_CODE
+                <choose>
+                    <when test="operators.updUserCode != null and operators.updUserCode != '' ">${operators.updUserCode}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.updUserCode}
+            </if>
+			<if test="variables.updOrgCode != null and variables.updOrgCode != ''">
+                AND UPD_ORG_CODE
+                <choose>
+                    <when test="operators.updOrgCode != null and operators.updOrgCode != '' ">${operators.updOrgCode}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.updOrgCode}
+            </if>
+			<if test="variables.updDate != null and variables.updDate != ''">
+                AND UPD_DATE
+                <choose>
+                    <when test="operators.updDate != null and operators.updDate != '' ">${operators.updDate}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.updDate}
+            </if>
+    </select>
+
+    <!-- 分页查询系统管理->系统管理-用户角色对照表-查询列信息 -->
+	<select id="findForPageList" parameterType="Page"
+		resultType="UserRole">
+		SELECT  
+		<include refid="Field"></include>
+		FROM 
+		<include refid="tableName"></include>
+		WHERE 1=1
+			<if test="variables.userRoleId != null and variables.userRoleId != ''">
+				AND USER_ROLE_ID 
+				<choose>
+					<when test="operators.userRoleId != null and operators.userRoleId != '' ">${operators.userRoleId}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.userRoleId}
+			</if>	
+			<if test="variables.userCode != null and variables.userCode != ''">
+				AND USER_CODE 
+				<choose>
+					<when test="operators.userCode != null and operators.userCode != '' ">${operators.userCode}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.userCode}
+			</if>	
+			<if test="variables.roleCode != null and variables.roleCode != ''">
+				AND ROLE_CODE 
+				<choose>
+					<when test="operators.roleCode != null and operators.roleCode != '' ">${operators.roleCode}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.roleCode}
+			</if>	
+			<if test="variables.crtUserCode != null and variables.crtUserCode != ''">
+				AND CRT_USER_CODE 
+				<choose>
+					<when test="operators.crtUserCode != null and operators.crtUserCode != '' ">${operators.crtUserCode}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.crtUserCode}
+			</if>	
+			<if test="variables.crtOrgCode != null and variables.crtOrgCode != ''">
+				AND CRT_ORG_CODE 
+				<choose>
+					<when test="operators.crtOrgCode != null and operators.crtOrgCode != '' ">${operators.crtOrgCode}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.crtOrgCode}
+			</if>	
+			<if test="variables.crtDate != null and variables.crtDate != ''">
+				AND CRT_DATE 
+				<choose>
+					<when test="operators.crtDate != null and operators.crtDate != '' ">${operators.crtDate}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.crtDate}
+			</if>	
+			<if test="variables.updUserCode != null and variables.updUserCode != ''">
+				AND UPD_USER_CODE 
+				<choose>
+					<when test="operators.updUserCode != null and operators.updUserCode != '' ">${operators.updUserCode}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.updUserCode}
+			</if>	
+			<if test="variables.updOrgCode != null and variables.updOrgCode != ''">
+				AND UPD_ORG_CODE 
+				<choose>
+					<when test="operators.updOrgCode != null and operators.updOrgCode != '' ">${operators.updOrgCode}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.updOrgCode}
+			</if>	
+			<if test="variables.updDate != null and variables.updDate != ''">
+				AND UPD_DATE 
+				<choose>
+					<when test="operators.updDate != null and operators.updDate != '' ">${operators.updDate}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.updDate}
+			</if>	
+	</select>
+</mapper>

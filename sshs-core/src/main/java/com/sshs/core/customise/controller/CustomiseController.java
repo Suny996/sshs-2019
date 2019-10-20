@@ -40,7 +40,7 @@ public class CustomiseController extends BaseController {
             //customise.setCustomiseId(UuidUtil.get32UUID());
             customise.setUserCode("admin");
             customise.setCrtDate(new Date());
-            customiseMapper.save(customise);
+            customiseMapper.insert(customise);
             return Message.success(customise);
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sshs.system.log.mapper.LogMapper">
+	
+	<!--表名 -->
+	<sql id="tableName">
+		SYS_LOG
+	</sql>
+	
+	<!-- 字段 -->
+	<sql id="Field">
+				LOG_ID,
+				LEGAL_ORG,
+				CRT_USER_CODE,
+				CRT_ORG_CODE,
+				CRT_DATE,
+				UPD_USER_CODE,
+				UPD_ORG_CODE,
+				UPD_DATE,
+				USER_CODE,
+				USER_NAME,
+				MODULE,
+				ACTION,
+				OPT_DATE,
+				CLIENT_IP,
+				METHOD,
+				PARAMS,
+				OPT_DESC
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+				#{logId},
+				#{legalOrg},
+				#{crtUserCode},
+				#{crtOrgCode},
+				#{crtDate},
+				#{updUserCode},
+				#{updOrgCode},
+				#{updDate},
+				#{userCode},
+				#{userName},
+				#{module},
+				#{action},
+				#{optDate},
+				#{clientIp},
+				#{method},
+				#{params},
+				#{optDesc}
+	</sql>
+
+    <!-- 分页查询系统管理->系统管理-系统操作日志表-查询列信息 -->
+    <select id="findForList" parameterType="Map"
+            resultType="Log">
+        SELECT
+        <include refid="Field"></include>
+        FROM
+        <include refid="tableName"></include>
+        WHERE 1=1
+			<if test="variables.logId != null and variables.logId != ''">
+                AND LOG_ID
+                <choose>
+                    <when test="operators.logId != null and operators.logId != '' ">${operators.logId}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.logId}
+            </if>
+			<if test="variables.legalOrg != null and variables.legalOrg != ''">
+                AND LEGAL_ORG
+                <choose>
+                    <when test="operators.legalOrg != null and operators.legalOrg != '' ">${operators.legalOrg}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.legalOrg}
+            </if>
+			<if test="variables.crtUserCode != null and variables.crtUserCode != ''">
+                AND CRT_USER_CODE
+                <choose>
+                    <when test="operators.crtUserCode != null and operators.crtUserCode != '' ">${operators.crtUserCode}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.crtUserCode}
+            </if>
+			<if test="variables.crtOrgCode != null and variables.crtOrgCode != ''">
+                AND CRT_ORG_CODE
+                <choose>
+                    <when test="operators.crtOrgCode != null and operators.crtOrgCode != '' ">${operators.crtOrgCode}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.crtOrgCode}
+            </if>
+			<if test="variables.crtDate != null and variables.crtDate != ''">
+                AND CRT_DATE
+                <choose>
+                    <when test="operators.crtDate != null and operators.crtDate != '' ">${operators.crtDate}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.crtDate}
+            </if>
+			<if test="variables.updUserCode != null and variables.updUserCode != ''">
+                AND UPD_USER_CODE
+                <choose>
+                    <when test="operators.updUserCode != null and operators.updUserCode != '' ">${operators.updUserCode}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.updUserCode}
+            </if>
+			<if test="variables.updOrgCode != null and variables.updOrgCode != ''">
+                AND UPD_ORG_CODE
+                <choose>
+                    <when test="operators.updOrgCode != null and operators.updOrgCode != '' ">${operators.updOrgCode}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.updOrgCode}
+            </if>
+			<if test="variables.updDate != null and variables.updDate != ''">
+                AND UPD_DATE
+                <choose>
+                    <when test="operators.updDate != null and operators.updDate != '' ">${operators.updDate}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.updDate}
+            </if>
+			<if test="variables.userCode != null and variables.userCode != ''">
+                AND USER_CODE
+                <choose>
+                    <when test="operators.userCode != null and operators.userCode != '' ">${operators.userCode}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.userCode}
+            </if>
+			<if test="variables.userName != null and variables.userName != ''">
+                AND USER_NAME
+                <choose>
+                    <when test="operators.userName != null and operators.userName != '' ">${operators.userName}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.userName}
+            </if>
+			<if test="variables.module != null and variables.module != ''">
+                AND MODULE
+                <choose>
+                    <when test="operators.module != null and operators.module != '' ">${operators.module}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.module}
+            </if>
+			<if test="variables.action != null and variables.action != ''">
+                AND ACTION
+                <choose>
+                    <when test="operators.action != null and operators.action != '' ">${operators.action}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.action}
+            </if>
+		<if test="variables.optDate != null and variables.optDate != ''">
+			AND OPT_DATE
+			<choose>
+				<when test="variables.optDateEnd != null and variables.optDateEnd != '' ">
+					BETWEEN  #{variables.optDate} AND #{variables.optDateEnd}
+				</when>
+				<otherwise>
+					>= #{variables.optDate}
+				</otherwise>
+			</choose>
+
+		</if>
+		<if test="variables.optDate == null and variables.optDate == ''">
+			AND OPT_DATE
+			<choose>
+				<when test="variables.optDateEnd != null and variables.optDateEnd != '' ">
+					BETWEEN  #{variables.optDate} AND #{variables.optDateEnd}
+				</when>
+				<otherwise>
+					= #{variables.optDate}
+				</otherwise>
+			</choose>
+		</if>
+			<if test="variables.clientIp != null and variables.clientIp != ''">
+                AND CLIENT_IP
+                <choose>
+                    <when test="operators.clientIp != null and operators.clientIp != '' ">${operators.clientIp}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.clientIp}
+            </if>
+			<if test="variables.method != null and variables.method != ''">
+                AND METHOD
+                <choose>
+                    <when test="operators.method != null and operators.method != '' ">${operators.method}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.method}
+            </if>
+			<if test="variables.params != null and variables.params != ''">
+                AND PARAMS
+                <choose>
+                    <when test="operators.params != null and operators.params != '' ">${operators.params}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.params}
+            </if>
+			<if test="variables.optDesc != null and variables.optDesc != ''">
+                AND OPT_DESC
+                <choose>
+                    <when test="operators.optDesc != null and operators.optDesc != '' ">${operators.optDesc}</when>
+                    <otherwise> = </otherwise>
+                </choose>
+				#{variables.optDesc}
+            </if>
+    </select>
+
+    <!-- 分页查询系统管理->系统管理-系统操作日志表-查询列信息 -->
+	<select id="findForPageList" parameterType="Page"
+		resultType="Log">
+		SELECT  
+		<include refid="Field"></include>
+		FROM 
+		<include refid="tableName"></include>
+		WHERE 1=1
+			<if test="variables.logId != null and variables.logId != ''">
+				AND LOG_ID 
+				<choose>
+					<when test="operators.logId != null and operators.logId != '' ">${operators.logId}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.logId}
+			</if>	
+			<if test="variables.legalOrg != null and variables.legalOrg != ''">
+				AND LEGAL_ORG 
+				<choose>
+					<when test="operators.legalOrg != null and operators.legalOrg != '' ">${operators.legalOrg}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.legalOrg}
+			</if>	
+			<if test="variables.crtUserCode != null and variables.crtUserCode != ''">
+				AND CRT_USER_CODE 
+				<choose>
+					<when test="operators.crtUserCode != null and operators.crtUserCode != '' ">${operators.crtUserCode}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.crtUserCode}
+			</if>	
+			<if test="variables.crtOrgCode != null and variables.crtOrgCode != ''">
+				AND CRT_ORG_CODE 
+				<choose>
+					<when test="operators.crtOrgCode != null and operators.crtOrgCode != '' ">${operators.crtOrgCode}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.crtOrgCode}
+			</if>	
+			<if test="variables.crtDate != null and variables.crtDate != ''">
+				AND CRT_DATE 
+				<choose>
+					<when test="operators.crtDate != null and operators.crtDate != '' ">${operators.crtDate}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.crtDate}
+			</if>	
+			<if test="variables.updUserCode != null and variables.updUserCode != ''">
+				AND UPD_USER_CODE 
+				<choose>
+					<when test="operators.updUserCode != null and operators.updUserCode != '' ">${operators.updUserCode}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.updUserCode}
+			</if>	
+			<if test="variables.updOrgCode != null and variables.updOrgCode != ''">
+				AND UPD_ORG_CODE 
+				<choose>
+					<when test="operators.updOrgCode != null and operators.updOrgCode != '' ">${operators.updOrgCode}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.updOrgCode}
+			</if>	
+			<if test="variables.updDate != null and variables.updDate != ''">
+				AND UPD_DATE 
+				<choose>
+					<when test="operators.updDate != null and operators.updDate != '' ">${operators.updDate}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.updDate}
+			</if>	
+			<if test="variables.userCode != null and variables.userCode != ''">
+				AND USER_CODE 
+				<choose>
+					<when test="operators.userCode != null and operators.userCode != '' ">${operators.userCode}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.userCode}
+			</if>	
+			<if test="variables.userName != null and variables.userName != ''">
+				AND USER_NAME 
+				<choose>
+					<when test="operators.userName != null and operators.userName != '' ">${operators.userName}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.userName}
+			</if>	
+			<if test="variables.module != null and variables.module != ''">
+				AND MODULE 
+				<choose>
+					<when test="operators.module != null and operators.module != '' ">${operators.module}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.module}
+			</if>	
+			<if test="variables.action != null and variables.action != ''">
+				AND ACTION 
+				<choose>
+					<when test="operators.action != null and operators.action != '' ">${operators.action}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.action}
+			</if>
+		    <if test="variables.optDate != null and variables.optDate != ''">
+			AND OPT_DATE
+			<choose>
+				<when test="variables.optDateEnd != null and variables.optDateEnd != '' ">
+					BETWEEN  #{variables.optDate} AND #{variables.optDateEnd}
+				</when>
+				<otherwise>
+					>= #{variables.optDate}
+				</otherwise>
+			</choose>
+
+		</if>
+			<if test="variables.optDate == null and variables.optDate == ''">
+			AND OPT_DATE
+			<choose>
+				<when test="variables.optDateEnd != null and variables.optDateEnd != '' ">
+					BETWEEN  #{variables.optDate} AND #{variables.optDateEnd}
+				</when>
+				<otherwise>
+					= #{variables.optDate}
+				</otherwise>
+			</choose>
+		</if>
+			<if test="variables.clientIp != null and variables.clientIp != ''">
+				AND CLIENT_IP
+				<choose>
+					<when test="operators.clientIp != null and operators.clientIp != '' ">${operators.clientIp}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.clientIp}
+			</if>	
+			<if test="variables.method != null and variables.method != ''">
+				AND METHOD 
+				<choose>
+					<when test="operators.method != null and operators.method != '' ">${operators.method}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.method}
+			</if>	
+			<if test="variables.params != null and variables.params != ''">
+				AND PARAMS 
+				<choose>
+					<when test="operators.params != null and operators.params != '' ">${operators.params}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.params}
+			</if>	
+			<if test="variables.optDesc != null and variables.optDesc != ''">
+				AND OPT_DESC
+				<choose>
+					<when test="operators.optDesc != null and operators.optDesc != '' ">${operators.optDesc}</when>
+					<otherwise> = </otherwise>
+				</choose> 
+			#{variables.optDesc}
+			</if>	
+	</select>
+</mapper>

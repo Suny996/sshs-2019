@@ -1,6 +1,7 @@
 package com.sshs.core.base.service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.message.Message;
 import com.sshs.core.page.Page;
 
@@ -17,116 +18,92 @@ public interface IBaseService<T> {
     /**
      * 新增
      *
-     * @param model
-     * @return
-     * @throws Exception
+     * @param model 待保存的对象
+     * @return 保存后的对象
      */
-    public Message save(T model) throws Exception;
+    Message<T> save(T model);
 
     /**
-     * 批量新增
+     * 批量新增(不推荐使用，且记录数不要超过2000)
      *
-     * @param models
-     * @return
-     * @throws Exception
+     * @param models 待保存的对象列表
+     * @return 保存成功的记录数
      */
-    public Message save(List<T> models) throws Exception;
+    Message<Integer> save(List<T> models);
 
     /**
      * 修改
      *
-     * @param model
-     * @return
-     * @throws Exception
+     * @param model 要更新的对象
+     * @return 更新后的对象
      */
-    Message update(T model) throws Exception;
+    Message<T> update(T model);
 
     /**
      * 批量修改
      *
-     * @param models
-     * @return
-     * @throws Exception
+     * @param models 要更新的记录列表
+     * @return 更新成功的记录数
      */
-    public int update(List<T> models) throws Exception;
+    Message<Integer> update(List<T> models);
 
     /**
      * 删除
      *
-     * @param model
-     * @return
-     * @throws Exception
+     * @param model 要删除的对象
+     * @return 返回删除的对象
      */
-    Message delete(Wrapper<T> model) throws Exception;
-
-    /**
-     * 根据主键批量删除
-     *
-     * @param ids
-     * @return
-     * @throws Exception
-     */
-    Message deleteByIds(List<String> ids) throws Exception;
+    Message<T> delete(Wrapper<T> model);
 
     /**
      * 根据主键删除
      *
-     * @param id
-     * @return
-     * @throws Exception
+     * @param id 待删除对象的主键
+     * @return 删除成功的数量
      */
-    Message deleteById(String id) throws Exception;
+    Message<Integer> deleteById(String id);
+
+    /**
+     * 根据主键批量删除
+     *
+     * @param ids 要删除的记录主键列表
+     * @return 返回删除记录数
+     */
+    Message<Integer> deleteByIds(List<String> ids);
+
 
     /**
      * 根据主键查询单笔记录
      *
-     * @param id
-     * @return
-     * @throws Exception
+     * @param id ID
+     * @return 查询到的对象
      */
-    T getById(String id) throws Exception;
+    Message<T> getById(String id);
 
     /**
-     * 分页查询
+     * 分页查询方法
      *
-     * @param sqlId
-     * @param page
-     * @return
+     * @param page      分页信息
+     * @param parameter 查询条件
+     * @return 分页查询结果
      */
-    Message findForPageList(String sqlId, Page<T> page);
+    Message<IPage<T>> findForPageList(Page<T> page, Object parameter);
 
     /**
      * 公共列表查询方法
      *
-     * @param sqlId
-     * @param parameter
-     * @return
+     * @param parameter 查询条件
+     * @return 查询结果
      */
-    List<T> findForList(String sqlId, Object parameter);
+    Message<List<T>> findForList(Object parameter);
 
     /**
-     * 查询列表
+     * 分页查询方法
      *
-     * @param parameter
-     * @param limit
-     * @param offset
-     * @return Message
+     * @param limit     分页信息
+     * @param offset    页码
+     * @param parameter 查询条件
+     * @return 分页查询结果
      */
-    public Message queryPageList(String limit, String offset, Map<String, Object> parameter);
-
-    /**
-     * 查询列表
-     *
-     * @param parameter
-     * @return Message
-     */
-    public List<T> queryList(Map<String, Object> parameter);
-
-    /**
-     * 分页查询列表
-     *
-     * @param page
-     * @return Message
-     */
-    Message queryPageList(Page<T> page);
+    Message<IPage<T>> queryPageList(String limit, String offset, Map<String, Object> parameter);
 }

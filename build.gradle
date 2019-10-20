@@ -29,13 +29,13 @@ buildscript {
 
 dependencies {
     compile project(":sshs-core")
-    //compile project(":scais-security")
-    //compile project(":scais-system")
-    //compile project(":scais-develop")
-    //compile project(":scais-report")
-    //compile project(":scais-toolkit")
-    //compile project(":scais-sigma")
-    //compile project(":scais-screen")
+    //compile project(":sshs-security")
+    //compile project(":sshs-system")
+    //compile project(":sshs-develop")
+    //compile project(":sshs-report")
+    //compile project(":sshs-toolkit")
+    //compile project(":sshs-sigma")
+    //compile project(":sshs-screen")
 }
 
 allprojects {

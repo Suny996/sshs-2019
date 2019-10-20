@@ -1,4 +1,4 @@
-package com.scai.core.websocket.handler;
+package com.sshs.core.websocket.handler;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.socket.WebSocketHandler;

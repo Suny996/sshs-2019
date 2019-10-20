@@ -22,7 +22,7 @@ public interface CommonMapper extends BaseMapper<Customise> {
      * @param orgCode
      * @return
      */
-    public List<Map<String, Object>> findOrgListByOrgCode(String orgCode);
+    List<Map<String, Object>> findOrgListByOrgCode(String orgCode);
 
     /**
      * 根据机构号查询机构信息
@@ -30,7 +30,7 @@ public interface CommonMapper extends BaseMapper<Customise> {
      * @param orgCode
      * @return
      */
-    public Map<String, Object> findOrgInfoByOrgCode(String orgCode);
+    Map<String, Object> findOrgInfoByOrgCode(String orgCode);
 
     /**
      * 根据机构号查询上级机构
@@ -38,14 +38,14 @@ public interface CommonMapper extends BaseMapper<Customise> {
      * @param orgCode
      * @return
      */
-    public Map<String, Object> findParentOrgByOrgCode(String orgCode);
+    Map<String, Object> findParentOrgByOrgCode(String orgCode);
 
     /**
      * 查询岗位列表
      *
      * @return
      */
-    public List<Map<String, Object>> findPosts();
+    List<Map<String, Object>> findPosts();
 
     /**
      * 查询用户菜单树
@@ -53,7 +53,7 @@ public interface CommonMapper extends BaseMapper<Customise> {
      * @param params
      * @return
      */
-    public List<Map<String, Object>> findUserMenus(Map<String, Object> params);
+    List<Map<String, Object>> findUserMenus(Map<String, Object> params);
 
     /**
      * 根据用户ID查询用户密码信息
@@ -61,7 +61,7 @@ public interface CommonMapper extends BaseMapper<Customise> {
      * @param username
      * @return
      */
-    public String getPasswordByUserName(@Param("username") String username);
+    String getPasswordByUserName(@Param("username") String username);
 
     /**
      * 根据用户ID修改用户密码信息
@@ -70,7 +70,7 @@ public interface CommonMapper extends BaseMapper<Customise> {
      * @param password
      * @return
      */
-    public int setNewPassword(@Param("username") String username, @Param("password") String password, @Param("usercode") String usercode, @Param("date") Date date);
+    int setNewPassword(@Param("username") String username, @Param("password") String password, @Param("usercode") String usercode, @Param("date") Date date);
 
     /**
      * 根据用户编号及资源ID查询数据权限
@@ -78,7 +78,7 @@ public interface CommonMapper extends BaseMapper<Customise> {
      * @param
      * @return
      */
-    public String getDataAuthByUserCode(@Param("url") String url, @Param("userCode") String userCode);
+    String getDataAuthByUserCode(@Param("url") String url, @Param("userCode") String userCode);
 
 
     /**
@@ -87,5 +87,5 @@ public interface CommonMapper extends BaseMapper<Customise> {
      * @param log
      * @return
      */
-    public void saveLog(SysLog log);
+    //void saveLog(SysLog log);
 }

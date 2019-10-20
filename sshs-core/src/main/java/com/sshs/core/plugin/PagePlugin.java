@@ -41,7 +41,7 @@ import java.util.Properties;
 @Intercepts({
         @Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class})})
 public class PagePlugin implements Interceptor {
-    Log logger = LogFactory.getLog(PagePlugin.class);
+    Logger logger = LoggerFactory.getLogger(PagePlugin.class);
     /**
      * 数据库方言
      */

@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sshs.system.menu.mapper.MenuMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+		SYS_MENU
+	</sql>
+
+    <!-- 字段 -->
+    <sql id="Field">
+				MENU_CODE,
+				MENU_NAME,
+				MENU_TYPE,
+				MENU_URL,
+				PARENT_CODE,
+				IS_RELATIVE_PATH,
+				MENU_LEVEL,
+				MENU_SEQ,
+				MENU_ICON,
+				MENU_ICONA,
+				IS_VISIBLE,
+				OPEN_MODE,
+				MENU_TIP,
+				IS_START,
+				CRT_USER_CODE,
+				CRT_ORG_CODE,
+				CRT_DATE,
+				UPD_USER_CODE,
+				UPD_ORG_CODE,
+				UPD_DATE,
+				MENU_MODULE
+	</sql>
+
+    <!-- 字段值 -->
+    <sql id="FieldValue">
+				#{menuCode},
+				#{menuName},
+				#{menuType},
+				#{menuUrl},
+				#{parentCode},
+				#{isRelativePath},
+				#{menuLevel},
+				#{menuSeq},
+				#{menuIcon},
+				#{menuIcona},
+				#{isVisible},
+				#{openMode},
+				#{menuTip},
+				#{isStart},
+				#{crtUserCode},
+				#{crtOrgCode},
+				#{crtDate},
+				#{updUserCode},
+				#{updOrgCode},
+				#{updDate},
+				#{menuModule}
+	</sql>
+
+    <!--根据menuName查询menu-->
+    <select id="getMenuByMenuName" parameterType="String"
+            resultType="Menu">
+        SELECT
+        <include refid="Field"></include>
+        FROM
+        <include refid="tableName"></include>
+        WHERE
+        MENU_NAME=#{menuName}
+    </select>
+
+    <!-- 根据MENU_CODE查询系统管理->系统管理-菜单表 menu_code 空时查询跟节点 -->
+    <select id="findMenuById" parameterType="String"
+            resultType="Menu">
+        SELECT
+        <include refid="Field"></include>
+        FROM
+        <include refid="tableName"></include>
+        WHERE
+        <choose>
+            <when test="_parameter != null and _parameter != ''">
+                MENU_CODE= #{_parameter}
+            </when>
+            <otherwise>
+                IS_START='1'
+            </otherwise>
+        </choose>
+    </select>
+    <!-- 根据MENU_CODE查询最后一个子节点 -->
+    <select id="findLastChildCodeById" parameterType="String"
+            resultType="String">
+        SELECT
+        max(menu_code) as menu_code
+        FROM
+        <include refid="tableName"></include>
+        WHERE PARENT_CODE= #{_parameter}
+    </select>
+    <!-- 查询所有菜单记录 -->
+    <select id="findMenuAll"
+            resultType="Menu">
+        SELECT
+        <include refid="Field"></include>
+        FROM
+        <include refid="tableName"></include>
+        order by menu_code
+    </select>
+
+    <!-- 分页查询系统管理->系统管理-菜单表-查询列信息 -->
+    <select id="findForPageList" parameterType="Page"
+            resultType="Menu">
+        SELECT
+        <include refid="Field"></include>
+        FROM
+        <include refid="tableName"></include>
+        WHERE 1=1
+        <if test="variables.menuCode != null and variables.menuCode != ''">
+            AND MENU_CODE
+            <choose>
+                <when test="operators.menuCode != null and operators.menuCode != '' ">${operators.menuCode}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.menuCode}
+        </if>
+        <if test="variables.menuName != null and variables.menuName != ''">
+            AND MENU_NAME
+            <choose>
+                <when test="operators.menuName != null and operators.menuName != '' ">${operators.menuName}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.menuName}
+        </if>
+        <if test="variables.menuType != null and variables.menuType != ''">
+            AND MENU_TYPE
+            <choose>
+                <when test="operators.menuType != null and operators.menuType != '' ">${operators.menuType}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.menuType}
+        </if>
+        <if test="variables.menuUrl != null and variables.menuUrl != ''">
+            AND MENU_URL
+            <choose>
+                <when test="operators.menuUrl != null and operators.menuUrl != '' ">${operators.menuUrl}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.menuUrl}
+        </if>
+        <if test="variables.parentCode != null and variables.parentCode != ''">
+            AND PARENT_CODE
+            <choose>
+                <when test="operators.parentCode != null and operators.parentCode != '' ">
+                    ${operators.parentCode}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.parentCode}
+        </if>
+        <if test="variables.isRelativePath != null and variables.isRelativePath != ''">
+            AND IS_RELATIVE_PATH
+            <choose>
+                <when test="operators.isRelativePath != null and operators.isRelativePath != '' ">
+                    ${operators.isRelativePath}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.isRelativePath}
+        </if>
+        <if test="variables.menuLevel != null and variables.menuLevel != ''">
+            AND MENU_LEVEL
+            <choose>
+                <when test="operators.menuLevel != null and operators.menuLevel != '' ">${operators.menuLevel}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.menuLevel}
+        </if>
+        <if test="variables.menuSeq != null and variables.menuSeq != ''">
+            AND MENU_SEQ
+            <choose>
+                <when test="operators.menuSeq != null and operators.menuSeq != '' ">${operators.menuSeq}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.menuSeq}
+        </if>
+        <if test="variables.menuIcon != null and variables.menuIcon != ''">
+            AND MENU_ICON
+            <choose>
+                <when test="operators.menuIcon != null and operators.menuIcon != '' ">${operators.menuIcon}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.menuIcon}
+        </if>
+        <if test="variables.menuIcona != null and variables.menuIcona != ''">
+            AND MENU_ICONA
+            <choose>
+                <when test="operators.menuIcona != null and operators.menuIcona != '' ">${operators.menuIcona}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.menuIcona}
+        </if>
+        <if test="variables.isVisible != null and variables.isVisible != ''">
+            AND IS_VISIBLE
+            <choose>
+                <when test="operators.isVisible != null and operators.isVisible != '' ">${operators.isVisible}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.isVisible}
+        </if>
+        <if test="variables.openMode != null and variables.openMode != ''">
+            AND OPEN_MODE
+            <choose>
+                <when test="operators.openMode != null and operators.openMode != '' ">${operators.openMode}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.openMode}
+        </if>
+        <if test="variables.menuTip != null and variables.menuTip != ''">
+            AND MENU_TIP
+            <choose>
+                <when test="operators.menuTip != null and operators.menuTip != '' ">${operators.menuTip}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.menuTip}
+        </if>
+        <if test="variables.isStart != null and variables.isStart != ''">
+            AND IS_START
+            <choose>
+                <when test="operators.isStart != null and operators.isStart != '' ">${operators.isStart}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.isStart}
+        </if>
+        <if test="variables.crtUserCode != null and variables.crtUserCode != ''">
+            AND CRT_USER_CODE
+            <choose>
+                <when test="operators.crtUserCode != null and operators.crtUserCode != '' ">${operators.crtUserCode}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.crtUserCode}
+        </if>
+        <if test="variables.crtOrgCode != null and variables.crtOrgCode != ''">
+            AND CRT_ORG_CODE
+            <choose>
+                <when test="operators.crtOrgCode != null and operators.crtOrgCode != '' ">${operators.crtOrgCode}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.crtOrgCode}
+        </if>
+        <if test="variables.crtDate != null and variables.crtDate != ''">
+            AND CRT_DATE
+            <choose>
+                <when test="operators.crtDate != null and operators.crtDate != '' ">${operators.crtDate}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.crtDate}
+        </if>
+        <if test="variables.updUserCode != null and variables.updUserCode != ''">
+            AND UPD_USER_CODE
+            <choose>
+                <when test="operators.updUserCode != null and operators.updUserCode != '' ">${operators.updUserCode}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.updUserCode}
+        </if>
+        <if test="variables.updOrgCode != null and variables.updOrgCode != ''">
+            AND UPD_ORG_CODE
+            <choose>
+                <when test="operators.updOrgCode != null and operators.updOrgCode != '' ">${operators.updOrgCode}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.updOrgCode}
+        </if>
+        <if test="variables.updDate != null and variables.updDate != ''">
+            AND UPD_DATE
+            <choose>
+                <when test="operators.updDate != null and operators.updDate != '' ">${operators.updDate}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.updDate}
+        </if>
+        <if test="variables.menuModule != null and variables.menuModule != ''">
+            AND MENU_MODULE
+            <choose>
+                <when test="operators.menuModule != null and operators.menuModule != '' ">${operators.menuModule}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.menuModule}
+        </if>
+        ORDER BY MENU_LEVEL,MENU_SEQ
+    </select>
+    <select id="getMaxMenuSeq" parameterType="String" resultType="BigDecimal">
+        SELECT MAX(MENU_SEQ) as MENU_SEQ
+        FROM
+        <include refid="tableName"></include>
+        WHERE PARENT_CODE= #{_parameter}
+    </select>
+    <select id="getMenuByName" parameterType="String" resultType="Menu">
+        SELECT
+        <include refid="Field"></include>
+        FROM
+        <include refid="tableName"></include>
+        WHERE MENU_NAME= #{_parameter}
+    </select>
+</mapper>

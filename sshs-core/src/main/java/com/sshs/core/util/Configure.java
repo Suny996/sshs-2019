@@ -19,7 +19,7 @@ import java.util.Properties;
  * @date 2017-10-23
  */
 public class Configure {
-	private static final Log logger = LogFactory.getLog(Configure.class);
+	private static final Logger logger = LoggerFactory.getLogger(Configure.class);
 	/**
 	 * 是否缓存视图文件配置项key
 	 */
