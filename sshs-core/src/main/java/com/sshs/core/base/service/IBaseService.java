@@ -1,6 +1,5 @@
 package com.sshs.core.base.service;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.message.Message;
 import com.sshs.core.page.Page;
@@ -53,7 +52,7 @@ public interface IBaseService<T> {
      * @param model 要删除的对象
      * @return 返回删除的对象
      */
-    Message<T> delete(Wrapper<T> model);
+    Message<T> delete(T model);
 
     /**
      * 根据主键删除

@@ -1,13 +1,13 @@
 package com.sshs.system.log.controller;
 
+import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
-import com.sshs.core.page.Page;
 import com.sshs.system.log.model.Log;
 import com.sshs.system.log.service.ILogService;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-import com.sshs.core.base.controller.BaseController;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
@@ -27,7 +27,7 @@ public class LogController extends BaseController {
     @Resource
     private ILogService logService;
 
-    org.apache.commons.logging.Logger logger = LoggerFactory.getLogger(LogController.class);
+    Logger logger = LoggerFactory.getLogger(LogController.class);
 
     /**
      * 保存系统管理->系统管理-系统操作日志表数据
@@ -129,25 +129,6 @@ public class LogController extends BaseController {
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("查询系统管理->系统管理-系统操作日志表信息异常！");
-            throw new BusinessException("SY0005");
-        }
-    }
-
-
-    /**
-     * 分页查询系统管理->系统管理-系统操作日志表信息
-     */
-    @PostMapping("/pageList")
-    public Mono<Message> queryPageList(@RequestBody Page<Log> page) {
-        try {
-            logger.debug("开始分页查询系统管理->系统管理-系统操作日志表信息……");
-            Message message = logService.queryPageList(page);
-            return Mono.justOrEmpty(message);
-        } catch (BusinessException e) {
-            throw e;
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("分页查询系统管理->系统管理-系统操作日志表信息异常！");
             throw new BusinessException("SY0005");
         }
     }

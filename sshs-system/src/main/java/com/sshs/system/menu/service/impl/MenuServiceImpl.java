@@ -11,8 +11,8 @@ import com.sshs.system.menu.mapper.MenuMapper;
 import com.sshs.system.menu.model.Menu;
 import com.sshs.system.menu.service.IMenuService;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.hsqldb.lib.StringUtil;
 import org.springframework.stereotype.Service;
 

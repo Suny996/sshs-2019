@@ -11,8 +11,8 @@ import com.sshs.system.dictionary.mapper.DictionaryMapper;
 import com.sshs.system.dictionary.model.Dictionary;
 import com.sshs.system.dictionary.model.DictionaryI18n;
 import com.sshs.system.dictionary.service.IDictionaryService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.hsqldb.lib.StringUtil;
 import org.springframework.stereotype.Service;
 

@@ -9,8 +9,8 @@ import com.sshs.core.util.UuidUtil;
 import com.sshs.system.org.mapper.OrgMapper;
 import com.sshs.system.org.model.Org;
 import com.sshs.system.org.service.IOrgService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.hsqldb.lib.StringUtil;
 import org.springframework.stereotype.Service;
 

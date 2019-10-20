@@ -11,8 +11,8 @@ import com.sshs.system.user.model.User;
 import com.sshs.system.userRole.mapper.UserRoleMapper;
 import com.sshs.system.userRole.model.UserRole;
 import com.sshs.system.userRole.service.IUserRoleService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.hsqldb.lib.StringUtil;
 import org.springframework.stereotype.Service;
 

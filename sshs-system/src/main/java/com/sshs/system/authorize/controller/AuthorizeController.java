@@ -3,7 +3,6 @@ package com.sshs.system.authorize.controller;
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
-import com.sshs.core.page.Page;
 import com.sshs.system.authorize.model.Authorize;
 import com.sshs.system.authorize.service.IAuthorizeService;
 import org.slf4j.Logger;
@@ -123,34 +122,23 @@ public class AuthorizeController extends BaseController {
     }*/
 
 
-   //6191
+    /**
+     * 角色分配菜单查询功能
+     * 6191
+     *
+     * @param params
+     * @return Message
+     */
     @GetMapping
     public Mono<Message> queryList(@RequestParam Map<String, Object> params) {
         try {
             logger.debug("开始查询系统管理->系统管理-角色权限表列表信息……");
-            Message message = authorizeService.queryForList(params);
+            Message message = authorizeService.queryAuthorizeList(params);
             return Mono.justOrEmpty(message);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("查询系统管理->系统管理-角色权限表信息异常！");
             throw new BusinessException("SY0001");
-        }
-    }
-
-
-    /**
-     * 分页查询系统管理->系统管理-角色权限表信息
-     */
-    @PostMapping("/pageList")
-    public Mono<Message> queryPageList(@RequestBody Page<Authorize> page) {
-        try {
-            logger.debug("开始分页查询系统管理->系统管理-角色权限表信息……");
-            Message message = authorizeService.queryPageList(page);
-            return Mono.justOrEmpty(message);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("分页查询系统管理->系统管理-角色权限表信息异常！");
-            throw new BusinessException("SY0005");
         }
     }
 }

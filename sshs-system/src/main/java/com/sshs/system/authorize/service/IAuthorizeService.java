@@ -3,10 +3,7 @@ package com.sshs.system.authorize.service;
 import com.sshs.core.base.service.IBaseService;
 import com.sshs.core.message.Message;
 import com.sshs.system.authorize.model.Authorize;
-import com.sshs.system.menu.model.Menu;
-import com.sshs.system.role.model.Role;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,8 +14,11 @@ import java.util.Map;
  */
 public interface IAuthorizeService extends IBaseService<Authorize> {
     /**
+     * 角色分配菜单查询功能
      * 6191
+     *
+     * @param params
+     * @return Message
      */
-    public Message save(Authorize authorize);
-    public Message queryForList(Map<String , Object> params);
+    Message<Map> queryAuthorizeList(Map<String, Object> params);
 }

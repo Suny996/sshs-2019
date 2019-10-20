@@ -10,8 +10,8 @@ import com.sshs.system.role.mapper.RoleMapper;
 import com.sshs.system.role.model.Role;
 import com.sshs.system.role.service.IRoleService;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.hsqldb.lib.StringUtil;
 import org.springframework.stereotype.Service;
 

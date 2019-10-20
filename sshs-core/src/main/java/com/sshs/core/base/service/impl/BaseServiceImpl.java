@@ -1,6 +1,5 @@
 package com.sshs.core.base.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
@@ -51,7 +50,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     @Transactional(rollbackFor = Exception.class)
     public Message<T> save(T model) {
         setCrtProperties(model);
-        if (dao.insert(model) > 0) {
+        if (dao.insertSelective(model) > 0) {
             return Message.success(model);
         } else {
             return Message.failure("-100001");
@@ -73,19 +72,10 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
             logger.error("批量插入记录数不能大于2000");
             throw new BusinessException("-10005");
         }
-        String sqlStatement = SqlHelper.table((Class<T>) ReflectionKit.getSuperClassGenericType(getClass(), 1)).getSqlStatement(SqlMethod.INSERT_ONE.getMethod());
-        try (SqlSession batchSqlSession = SqlHelper.sqlSessionBatch((Class<T>) ReflectionKit.getSuperClassGenericType(getClass(), 1))) {
-            int i = 0;
-            for (T model : models) {
-                batchSqlSession.insert(sqlStatement, model);
-                if (i >= 1 && i % 300 == 0) {
-                    batchSqlSession.flushStatements();
-                }
-                i++;
-            }
-            batchSqlSession.flushStatements();
-            return Message.success(i);
+        for (T model : models) {
+            setCrtProperties(model);
         }
+        return Message.success(dao.insertList(models));
     }
 
 
@@ -99,7 +89,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     @Transactional(rollbackFor = Exception.class)
     public Message<T> update(T model) {
         setUpdProperties(model);
-        if (dao.updateById(model) > 0) {
+        if (dao.updateByPrimaryKey(model) > 0) {
             return Message.success(model);
         } else {
             return Message.failure("-20001");
@@ -113,6 +103,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
      * @return 更新成功的记录数
      */
     @Override
+    @Deprecated
     @Transactional(rollbackFor = Exception.class)
     public Message<Integer> update(List<T> models) {
         Assert.notEmpty(models, "error: entityList must not be empty");
@@ -145,9 +136,9 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Message<T> delete(Wrapper<T> model) {
+    public Message<T> delete(T model) {
         if (dao.delete(model) > 0) {
-            return Message.success(model.getEntity());
+            return Message.success(model);
         } else {
             return Message.failure("-30001");
         }
@@ -162,7 +153,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Message<Integer> deleteById(String id) {
-        return Message.success(dao.deleteById(id));
+        return Message.success(dao.deleteByPrimaryKey(id));
     }
 
     /**
@@ -174,12 +165,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Message<Integer> deleteByIds(List<String> ids) {
-        int i = dao.deleteBatchIds(ids);
-        if (i > 0) {
-            return Message.success(i);
-        } else {
-            return Message.failure("-30001");
-        }
+        return Message.success(dao.deleteBatchIds(ids));
     }
 
     /**
@@ -190,7 +176,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
      */
     @Override
     public Message<T> getById(String id) {
-        return Message.success(dao.selectById(id));
+        return Message.success(dao.selectByPrimaryKey(id));
     }
 
     /**
