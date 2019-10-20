@@ -1,7 +1,7 @@
-package com.sshs.system.userRole.mapper;
+package com.sshs.system.userrole.mapper;
 
 import com.sshs.core.page.Page;
-import com.sshs.system.userRole.model.UserRole;
+import com.sshs.system.userrole.model.UserRole;
 import tk.mybatis.mapper.common.Mapper;
 
 

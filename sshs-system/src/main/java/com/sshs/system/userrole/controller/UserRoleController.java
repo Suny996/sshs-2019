@@ -1,16 +1,16 @@
-package com.sshs.system.userRole.controller;
+package com.sshs.system.userrole.controller;
 
+import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
-import com.sshs.core.page.Page;
 import com.sshs.system.user.model.User;
-import com.sshs.system.userRole.model.UserRole;
-import com.sshs.system.userRole.service.IUserRoleService;
+import com.sshs.system.userrole.model.UserRole;
+import com.sshs.system.userrole.service.IUserRoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-import com.sshs.core.base.controller.BaseController;
 import reactor.core.publisher.Mono;
+
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
@@ -118,22 +118,5 @@ public class UserRoleController extends BaseController {
        logger.error("查询系统管理->系统管理-用户角色对照表信息异常！");
        throw new BusinessException("SY0001");
        }
-   }
-
-
-   /**
-   * 分页查询系统管理->系统管理-用户角色对照表信息
-   */
-   @PostMapping("/pageList")
-   public Mono<Message> queryPageList(@RequestBody Page<UserRole> page) {
-      try {
-          logger.debug("开始分页查询系统管理->系统管理-用户角色对照表信息……");
-          Message message = userRoleService.queryPageList(page);
-          return Mono.justOrEmpty(message);
-      } catch (Exception e) {
-          e.printStackTrace();
-          logger.error("分页查询系统管理->系统管理-用户角色对照表信息异常！");
-          throw new BusinessException("SY0005");
-      }
    }
 }

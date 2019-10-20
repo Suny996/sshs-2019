@@ -1,4 +1,4 @@
-package com.sshs.system.userRole.service.impl;
+package com.sshs.system.userrole.service.impl;
 
 import com.sshs.core.base.service.impl.BaseServiceImpl;
 import com.sshs.core.exception.BusinessException;
@@ -8,9 +8,9 @@ import com.sshs.core.util.UuidUtil;
 import com.sshs.system.role.model.Role;
 import com.sshs.system.role.service.IRoleService;
 import com.sshs.system.user.model.User;
-import com.sshs.system.userRole.mapper.UserRoleMapper;
-import com.sshs.system.userRole.model.UserRole;
-import com.sshs.system.userRole.service.IUserRoleService;
+import com.sshs.system.userrole.mapper.UserRoleMapper;
+import com.sshs.system.userrole.model.UserRole;
+import com.sshs.system.userrole.service.IUserRoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.hsqldb.lib.StringUtil;
