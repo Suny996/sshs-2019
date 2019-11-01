@@ -6,47 +6,8 @@ description = "框架基础组件包（不会独立运行）"
 archivesBaseName = 'sshs-core'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+
 }
 dependencies {
-    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-eureka-client
-    compile(
-            'org.springframework.boot:spring-boot-starter:2.1.0.RELEASE',
-            'org.springframework.boot:spring-boot-starter-webflux:2.1.0.RELEASE',
-            'org.springframework.boot:spring-boot-starter-test:2.1.0.RELEASE',
-            //'org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.2',
-            'org.springframework.boot:spring-boot-starter-aop:2.1.0.RELEASE',
-           // 'tk.mybatis:mapper-spring-boot-starter:2.0.4',
-            //'mysql:mysql-connector-java:5.1.44',
-            'commons-lang:commons-lang:2.6',
-            'commons-io:commons-io:2.6',
-            'javax.persistence:persistence-api:1.0',
-            'com.alibaba:fastjson:1.2.52',
-            "com.alibaba:druid:1.1.14"
-    )
-    //mybatisplus
-    compile 'com.baomidou:mybatis-plus-boot-starter:3.2.0'
-    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
-    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.11'
-    // war deploy
-    compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.3'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.1.0.RELEASE'
-}
-sourceSets {
-    main {
-        java {
-            srcDirs = ['src/main/java']
-        }
-        resources {
-            srcDirs = ['src/main/resources/config', 'src/main/resources/mapper']
-        }
-    }
-    test {
-        java {
-            srcDirs = ['src/test/java']
-        }
-        resources {
-            srcDirs = ['src/test/resources']
-        }
-    }
+
 }
