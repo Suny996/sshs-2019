@@ -5,7 +5,6 @@ import com.sshs.core.base.service.impl.BaseServiceImpl;
 import com.sshs.core.constant.MenuType;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
-import com.sshs.core.page.Page;
 import com.sshs.core.util.BusiUtil;
 import com.sshs.system.menu.mapper.MenuMapper;
 import com.sshs.system.menu.model.Menu;
@@ -13,13 +12,11 @@ import com.sshs.system.menu.service.IMenuService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.hsqldb.lib.StringUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 系统管理->系统管理-菜单表service实现类
@@ -49,7 +46,7 @@ public class MenuServiceImpl extends BaseServiceImpl<Menu> implements IMenuServi
      * @throws Exception
      */
     @Override
-    public Message save(Menu menu) throws Exception {
+    public Message save(Menu menu)  {
         String ccode = mapper.findLastChildCodeById(menu.getParentCode());
         String parentMenuCode = menu.getParentCode();
         if (parentMenuCode == null || parentMenuCode.equals("0") || parentMenuCode.equals("00")) {
@@ -118,29 +115,6 @@ public class MenuServiceImpl extends BaseServiceImpl<Menu> implements IMenuServi
             }
         }
         return menu;
-    }
-
-    /**
-     * 查询系统管理->系统管理-菜单表列表信息
-     *
-     * @param limit
-     */
-    @Override
-    public Message queryPageList(String limit, String offset, Map<String, Object> parameter) {
-        if (StringUtil.isEmpty(limit)) {
-            return Message.success(findForList("com.sshs.system.menu.mapper.MenuMapper.findForList", parameter));
-        } else {
-            Page<Menu> page = new Page<Menu>(Integer.valueOf(limit, 10), Integer.valueOf(offset, 10), parameter);
-            return queryPageList(page);
-        }
-    }
-
-    /**
-     * 分页查询系统管理->系统管理-菜单表信息
-     */
-    @Override
-    public Message queryPageList(Page<Menu> page) {
-        return findForPageList("com.sshs.system.menu.mapper.MenuMapper.findForPageList", page);
     }
 
     /*

@@ -4,7 +4,6 @@ import com.sshs.core.base.service.impl.BaseServiceImpl;
 import com.sshs.core.constant.Global;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
-import com.sshs.core.page.Page;
 import com.sshs.core.util.DictionaryUtil;
 import com.sshs.core.util.UuidUtil;
 import com.sshs.system.dictionary.mapper.DictionaryMapper;
@@ -13,7 +12,6 @@ import com.sshs.system.dictionary.model.DictionaryI18n;
 import com.sshs.system.dictionary.service.IDictionaryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.hsqldb.lib.StringUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -36,22 +34,6 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
 
     @Resource
     private DictionaryMapper dao;
-
-    /**
-     * @param parameter
-     * @return Message
-     */
-    public Message queryList(Object parameter) {
-        return Message.success(findForList("com.sshs.system.dictionary.mapper.DictionaryMapper.findForList", parameter));
-    }
-
-    /**
-     * @param page
-     */
-    @Override
-    public Message queryPageList(Page<Dictionary> page) {
-        return findForPageList("com.sshs.system.dictionary.mapper.DictionaryMapper.findForPageList", page);
-    }
 
     @Override
     public List<Dictionary> findByParentId(String parentId) {
@@ -207,8 +189,9 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
         }
         return dictProj;
     }
+
     @Override
-    public Message save(Dictionary dictionary){
+    public Message save(Dictionary dictionary) {
         dictionary.setDictId(UuidUtil.get32UUID());
         try {
             return super.save(dictionary);
@@ -216,20 +199,6 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
             e.printStackTrace();
             logger.error("保存系统管理->系统管理-数据字典表信息异常！");
             throw new BusinessException("SY0001");
-        }
-    }
-
-    /**
-     * 查询系统管理->系统管理-数据字典表列表信息
-     * @param limit
-     */
-    @Override
-    public Message queryPageList(String limit, String offset, Map<String, Object> parameter) {
-        if (StringUtil.isEmpty(limit)) {
-            return Message.success(findForList("com.sshs.system.dictionary.mapper.DictionaryMapper.findForList", parameter));
-        } else {
-            Page<Dictionary> page = new Page<Dictionary>(Integer.valueOf(limit, 10), Integer.valueOf(offset, 10), parameter);
-            return queryPageList(page);
         }
     }
 }

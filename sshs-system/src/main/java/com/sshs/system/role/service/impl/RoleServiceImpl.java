@@ -3,7 +3,6 @@ package com.sshs.system.role.service.impl;
 import com.sshs.core.base.service.impl.BaseServiceImpl;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
-import com.sshs.core.page.Page;
 import com.sshs.core.util.BusiUtil;
 import com.sshs.core.util.UuidUtil;
 import com.sshs.system.role.mapper.RoleMapper;
@@ -12,12 +11,10 @@ import com.sshs.system.role.service.IRoleService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.hsqldb.lib.StringUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -67,36 +64,5 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements IRoleServi
             logger.error("保存系统管理->系统管理-角色表信息异常！");
             throw new BusinessException("SY0001");
         }
-    }
-
-    /**
-     * 查询系统管理->系统管理-角色表列表信息
-     *
-     * @param limit
-     */
-    @Override
-    public Message queryPageList(String limit, String offset, Map<String, Object> parameter) {
-        if (StringUtil.isEmpty(limit)) {
-            return Message.success(findForList("com.sshs.system.role.mapper.RoleMapper.findForList", parameter));
-        } else {
-            Page<Role> page = new Page<Role>(Integer.valueOf(limit, 10), Integer.valueOf(offset, 10), parameter);
-            return queryPageList(page);
-        }
-    }
-
-    /**
-     * 分页查询系统管理->系统管理-角色表信息
-     */
-    @Override
-    public Message queryPageList(Page<Role> page) {
-        return findForPageList("com.sshs.system.role.mapper.RoleMapper.findForPageList", page);
-    }
-
-    /**
-     * 分页查询系统管理->系统管理-角色表信息
-     */
-    @Override
-    public List<Role> queryList(Map<String, Object> parameter) {
-        return findForList("com.sshs.system.role.mapper.RoleMapper.findForList", parameter);
     }
 }
