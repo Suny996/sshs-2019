@@ -17,7 +17,7 @@
 	<plugins>
 		<plugin interceptor="com.sshs.core.plugin.PagePlugin">
 			<property name="dialect"
-				value="com.scai.core.plugin.dialect.MySql57Dialect" />
+				value="com.sshs.core.plugin.dialect.MySql57Dialect" />
 			<property name="pageSqlId" value=".*Page*.*" />
 		</plugin>
 	<!-- 	<plugin interceptor="com.github.abel533.mapper.MapperInterceptor">

@@ -52,5 +52,5 @@ mybatis-plus:
 toolkit:
   coder:
     path:
-      java: d:/coder/scais/src/main/java
+      java: d:/coder/sshs/src/main/java
       view: d:/coder/scaiui/src/main/view

@@ -1,11 +1,11 @@
 rootProject.name = 'sshs'
 include 'sshs-core'
-//include 'scais-security'
-//include 'scais-system'
-/*include 'scais-develop'
-include 'scais-report'
-//include 'scais-toolkit'
-include 'scais-sigma'
-include 'scais-business'*/
-//include 'scais-screen'
+//include 'sshs-security'
+include 'sshs-system'
+/*include 'sshs-develop'
+include 'sshs-report'
+//include 'sshs-toolkit'
+include 'sshs-sigma'
+include 'sshs-business'*/
+//include 'sshs-screen'
 

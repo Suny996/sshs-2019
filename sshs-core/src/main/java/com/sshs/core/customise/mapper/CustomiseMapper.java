@@ -22,7 +22,7 @@ public interface CustomiseMapper extends BaseMapper<Customise> {
      * @param customise
      * @return
      */
-    int save(Customise customise);
+    //int save(Customise customise);
 
 
     /**
@@ -31,7 +31,7 @@ public interface CustomiseMapper extends BaseMapper<Customise> {
      * @param customise
      * @return
      */
-    int delete(Wrapper<Customise> customise);
+    //int delete(Wrapper<Customise> customise);
 
     /**
      * 根据名称删除
@@ -39,7 +39,7 @@ public interface CustomiseMapper extends BaseMapper<Customise> {
      * @param customise
      * @return
      */
-    int deleteByCustomiseName(Customise customise);
+    //int deleteByCustomiseName(Customise customise);
 
     /**
      * 根据主键查询
@@ -47,7 +47,7 @@ public interface CustomiseMapper extends BaseMapper<Customise> {
      * @param customise
      * @return
      */
-    List<Customise> getCustomises(Customise customise);
+    //List<Customise> getCustomises(Customise customise);
 
     /**
      * 分页查询示例，该功能不需要
@@ -56,6 +56,6 @@ public interface CustomiseMapper extends BaseMapper<Customise> {
      * @param customise
      * @return
      */
-    IPage<Customise> getCustomises(Page<Customise> page, Wrapper<Customise> customise);
+    //IPage<Customise> getCustomises(Page<Customise> page, Wrapper<Customise> customise);
 
 }

@@ -1,16 +1,25 @@
 package com.sshs.core.base.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.mapper.Mapper;
+import com.baomidou.mybatisplus.core.enums.SqlMethod;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Assert;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
+import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
+import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
+import com.sshs.core.base.mapper.BaseMapper;
 import com.sshs.core.base.service.IBaseService;
+import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
 import com.sshs.core.page.Page;
 import com.sshs.core.util.SystemUtil;
-import org.mybatis.spring.SqlSessionTemplate;
+import com.sshs.core.util.UuidUtil;
+import org.apache.ibatis.binding.MapperMethod;
+import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,63 +35,61 @@ import java.util.Map;
 public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     @Autowired
     private BaseMapper<T> dao;
-
-    @Resource(name = "sqlSessionTemplate")
-    protected SqlSessionTemplate sqlSessionTemplate;
-
     /**
-     * @return
+     * 日志工具
      */
-    public Mapper<T> getDao() {
-        return this.dao;
-    }
+    private final static Logger logger = LoggerFactory.getLogger(BaseServiceImpl.class);
 
     /**
      * 新增
      *
-     * @param model
-     * @return
-     * @throws Exception
+     * @param model 待保存的对象
+     * @return 保存后的对象
      */
     @Override
-    public Message save(T model) throws Exception {
+    @Transactional(rollbackFor = Exception.class)
+    public Message<T> save(T model) {
         setCrtProperties(model);
-        if (dao.insert(model) > 0) {
+        if (dao.insertSelective(model) > 0) {
             return Message.success(model);
         } else {
-            return null;
+            return Message.failure("-100001");
         }
     }
 
     /**
-     * 新增
+     * 批量新增(不推荐使用，且记录数不要超过2000)
      *
-     * @param models
-     * @return
-     * @throws Exception
+     * @param models 待保存的对象列表
+     * @return 保存成功的记录数
      */
     @Override
-    public Message save(List<T> models) throws Exception {
-        int i = 0;
+    @Deprecated
+    @Transactional(rollbackFor = Exception.class)
+    public Message<Integer> save(List<T> models) {
+        Assert.notEmpty(models, "error: entityList must not be empty");
+        if (models.size() > 2000) {
+            logger.error("批量插入记录数不能大于2000");
+            throw new BusinessException("-10005");
+        }
         for (T model : models) {
             setCrtProperties(model);
-            i += dao.insert(model);
         }
-        return Message.success(i);
+        return Message.success(dao.insertList(models));
     }
 
 
     /**
      * 修改
      *
-     * @param model
-     * @return
-     * @throws Exception
+     * @param model 要更新的对象
+     * @return 更新后的对象
      */
     @Override
-    public Message update(T model) throws Exception {
+    @Transactional(rollbackFor = Exception.class)
+    public Message<T> update(T model) {
         setUpdProperties(model);
-        if (dao.updateById(model) > 0) {
+        if (dao.updateByPrimaryKey(model) > 0) {
             return Message.success(model);
         } else {
             return Message.failure("-20001");
@@ -90,30 +97,46 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     }
 
     /**
-     * 批量修改
+     * 批量修改(不推荐使用，且记录数不要超过2000)
      *
-     * @param models
-     * @return
-     * @throws Exception
+     * @param models 要更新的记录列表
+     * @return 更新成功的记录数
      */
     @Override
-    public int update(List<T> models) throws Exception {
-        int i = 0;
-        for (T model : models) {
-            setUpdProperties(model);
-            i += dao.updateById(model);
+    @Deprecated
+    @Transactional(rollbackFor = Exception.class)
+    public Message<Integer> update(List<T> models) {
+        Assert.notEmpty(models, "error: entityList must not be empty");
+        if (models.size() > 2000) {
+            logger.error("批量插入记录数不能大于2000");
+            throw new BusinessException("-10005");
         }
-        return i;
+        String sqlStatement = SqlHelper.table((Class<T>) ReflectionKit.getSuperClassGenericType(getClass(), 1)).getSqlStatement(SqlMethod.UPDATE_BY_ID.getMethod());
+        try (SqlSession batchSqlSession = SqlHelper.sqlSessionBatch((Class<T>) ReflectionKit.getSuperClassGenericType(getClass(), 1))) {
+            int i = 0;
+            for (T anEntityList : models) {
+                MapperMethod.ParamMap<T> param = new MapperMethod.ParamMap<>();
+                param.put(Constants.ENTITY, anEntityList);
+                batchSqlSession.update(sqlStatement, param);
+                if (i >= 1 && i % 300 == 0) {
+                    batchSqlSession.flushStatements();
+                }
+                i++;
+            }
+            batchSqlSession.flushStatements();
+            return Message.success(i);
+        }
     }
 
     /**
      * 删除
      *
-     * @param model
-     * @return
+     * @param model 要删除的对象
+     * @return 返回删除的对象
      */
     @Override
-    public Message delete(Wrapper<T> model) {
+    @Transactional(rollbackFor = Exception.class)
+    public Message<T> delete(T model) {
         if (dao.delete(model) > 0) {
             return Message.success(model);
         } else {
@@ -124,76 +147,78 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     /**
      * 根据主键删除
      *
-     * @param id
-     * @return
-     * @throws Exception
+     * @param id 待删除对象的主键
+     * @return 删除成功的数量
      */
     @Override
-    public Message deleteById(String id) throws Exception {
-        if (dao.deleteById(id) > 0) {
-            return Message.success(id);
-        } else {
-            return Message.failure("-30001");
-        }
+    @Transactional(rollbackFor = Exception.class)
+    public Message<Integer> deleteById(String id) {
+        return Message.success(dao.deleteByPrimaryKey(id));
     }
 
     /**
      * 根据主键批量删除
      *
-     * @param ids
-     * @return
+     * @param ids 要删除的记录主键列表
+     * @return 返回删除记录数
      */
     @Override
-    public Message deleteByIds(List<String> ids) {
-        int i = dao.deleteBatchIds(ids);
-        if (i > 0) {
-            return Message.success(ids);
-        } else {
-            return Message.failure("-30001");
-        }
+    @Transactional(rollbackFor = Exception.class)
+    public Message<Integer> deleteByIds(List<String> ids) {
+        return Message.success(dao.deleteBatchIds(ids));
     }
 
     /**
      * 根据主键查询单笔记录
      *
-     * @param id
-     * @return
+     * @param id ID
+     * @return 查询到的对象
      */
     @Override
-    public T getById(String id) {
-        return dao.selectById(id);
+    public Message<T> getById(String id) {
+        return Message.success(dao.selectByPrimaryKey(id));
     }
 
     /**
-     * 公共分页查询方法
+     * 分页查询方法
      *
-     * @param sqlId
-     * @param page
-     * @return
+     * @param page      分页信息
+     * @param parameter 查询条件
+     * @return 分页查询结果
      */
     @Override
-    public Message findForPageList(String sqlId, Page<T> page) {
+    public Message<IPage<T>> findForPageList(Page<T> page, Object parameter) {
         /**
          * 加入数据权限过滤条件
          */
-        //page.getVariables().put("_orgAuth", SystemUtil.getOrgAuthStatement());
-        page.setRows(sqlSessionTemplate.selectList(sqlId, page));
-        return Message.success(page);
+        //parameter.put("_orgAuth", SystemUtil.getOrgAuthStatement());
+        return Message.success(dao.findForList(page, parameter));
     }
 
     /**
      * 公共列表查询方法
      *
-     * @param sqlId
-     * @param parameter
-     * @return
+     * @param parameter 查询条件
+     * @return 查询结果
      */
     @Override
-    public List<T> findForList(String sqlId, Object parameter) {
+    public Message<List<T>> findForList(Object parameter) {
         Map<String, Object> params = new HashMap<String, Object>();
-        params.put("variables", parameter);
-        params.put("operators", new HashMap<String, Object>(0));
-        return (List<T>) sqlSessionTemplate.selectList(sqlId, params);
+        return Message.success(dao.findForList(parameter));
+    }
+
+    /**
+     * 分页查询方法
+     *
+     * @param limit     分页信息
+     * @param offset    页码
+     * @param parameter 查询条件
+     * @return 分页查询结果
+     */
+    @Override
+    public Message<IPage<T>> queryPageList(String limit, String offset, Map<String, Object> parameter) {
+        Page<T> page = new Page<>(Integer.valueOf(limit, 10), Integer.valueOf(offset, 10));
+        return findForPageList(page, parameter);
     }
 
     /**
@@ -203,11 +228,20 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
         try {
             Class<?> clazz = object.getClass();
             try {
+                Method setId = clazz.getDeclaredMethod("setId", String.class);
+                if (setId != null) {
+                    setId.invoke(object, UuidUtil.get32UUID());
+                }
+            } catch (Exception e) {
+                logger.warn("设置新增相关公共字段出错可以忽略{}", "setId");
+            }
+            try {
                 Method setCrtUserCode = clazz.getDeclaredMethod("setCrtUserCode", String.class);
                 if (setCrtUserCode != null) {
                     setCrtUserCode.invoke(object, SystemUtil.getCurrentUser().getUserCode());
                 }
             } catch (Exception e) {
+                logger.warn("设置新增相关公共字段出错可以忽略{}", "setCrtUserCode");
             }
             try {
                 Method setCrtOrgCode = clazz.getDeclaredMethod("setCrtOrgCode", String.class);
@@ -215,6 +249,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
                     setCrtOrgCode.invoke(object, SystemUtil.getCurrentUser().getOrgCode());
                 }
             } catch (Exception e) {
+                logger.warn("设置新增相关公共字段出错可以忽略{}", "setCrtOrgCode");
             }
             try {
                 Method setCrtDate = clazz.getDeclaredMethod("setCrtDate", java.util.Date.class);
@@ -222,6 +257,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
                     setCrtDate.invoke(object, new Date());
                 }
             } catch (Exception e) {
+                logger.warn("设置新增相关公共字段出错可以忽略{}", "setCrtDate");
             }
             // 处理法人行问题，全省权限时不设置法人行号
             /*String authType = "01";
@@ -236,9 +272,9 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
             }*/
 
         } catch (SecurityException e) {
-            e.printStackTrace();
+            logger.warn("设置新增相关公共字段出错可以忽略");
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            logger.warn("设置新增相关公共字段出错可以忽略");
         }
     }
 
@@ -247,7 +283,6 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
      */
     private void setUpdProperties(T object) {
         try {
-
             Class<?> clazz = object.getClass();
             try {
                 Method setUpdUserCode = clazz.getDeclaredMethod("setUpdUserCode", String.class);
@@ -255,7 +290,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
                     setUpdUserCode.invoke(object, SystemUtil.getCurrentUser().getUserCode());
                 }
             } catch (Exception e) {
-
+                logger.warn("设置修改相关公共字段出错可以忽略{}", "setUpdUserCode");
             }
             try {
                 Method setUpdOrgCode = clazz.getDeclaredMethod("setUpdOrgCode", String.class);
@@ -263,7 +298,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
                     setUpdOrgCode.invoke(object, SystemUtil.getCurrentUser().getOrgCode());
                 }
             } catch (Exception e) {
-
+                logger.warn("设置修改相关公共字段出错可以忽略{}", "setUpdOrgCode");
             }
             try {
                 Method setUpdDate = clazz.getDeclaredMethod("setUpdDate", java.util.Date.class);
@@ -271,47 +306,12 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
                     setUpdDate.invoke(object, new Date());
                 }
             } catch (Exception e) {
-
+                logger.warn("设置修改相关公共字段出错可以忽略{}", "setUpdDate");
             }
         } catch (SecurityException e) {
-            e.printStackTrace();
+            logger.warn("设置修改相关公共字段出错可以忽略");
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            logger.warn("设置修改相关公共字段出错可以忽略");
         }
-    }
-
-    /**
-     * 虚方法，要用该方法必须在实体类中实现
-     *
-     * @param limit
-     * @param offset
-     * @param parameter
-     * @return
-     * @throws Exception
-     */
-    @Override
-    public Message queryPageList(String limit, String offset, Map<String, Object> parameter) {
-        return null;
-    }
-
-    /**
-     * 虚方法，要用该方法必须在实体类中实现
-     *
-     * @param page
-     * @return
-     * @throws Exception
-     */
-    @Override
-    public Message queryPageList(Page<T> page) {
-        return null;
-    }
-
-    /**
-     * @param parameter
-     * @return
-     */
-    @Override
-    public List<T> queryList(Map<String, Object> parameter) {
-        return null;
     }
 }

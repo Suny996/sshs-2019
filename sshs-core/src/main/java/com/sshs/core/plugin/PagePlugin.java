@@ -4,8 +4,8 @@ import com.sshs.core.plugin.dialect.IDialect;
 import com.sshs.core.page.Page;
 import com.sshs.core.util.ReflectHelper;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.ibatis.executor.ErrorContext;
 import org.apache.ibatis.executor.ExecutorException;
 import org.apache.ibatis.executor.statement.BaseStatementHandler;
@@ -41,7 +41,7 @@ import java.util.Properties;
 @Intercepts({
         @Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class})})
 public class PagePlugin implements Interceptor {
-    Log logger = LogFactory.getLog(PagePlugin.class);
+    Logger logger = LoggerFactory.getLogger(PagePlugin.class);
     /**
      * 数据库方言
      */

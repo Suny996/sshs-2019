@@ -1,0 +1,10 @@
+apply plugin: 'application'
+
+group = "com.sshs"
+version '0.2.0-SNAPSHOT'
+description = "系统管理模块"
+archivesBaseName = 'sshs-system'
+
+dependencies{
+    compile project(":sshs-core")
+}

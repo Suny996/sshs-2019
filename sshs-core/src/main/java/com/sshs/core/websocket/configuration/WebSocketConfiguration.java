@@ -1,7 +1,7 @@
-package com.scai.core.websocket.configuration;
+package com.sshs.core.websocket.configuration;
 
 import com.sshs.core.websocket.handler.ChatWebSocketHandler;
-import com.scai.core.websocket.handler.DefaultWebSocketHandler;
+import com.sshs.core.websocket.handler.DefaultWebSocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

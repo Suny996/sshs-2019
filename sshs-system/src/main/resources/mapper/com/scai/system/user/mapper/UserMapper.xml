@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sshs.system.user.mapper.UserMapper">
+    <!--表名 -->
+    <sql id="tableName">
+		SYS_USER
+	</sql>
+
+
+    <!-- 字段 -->
+    <sql id="Field">
+				USER_ID,
+				USER_CODE,
+				USER_NAME,
+				USER_NAME_EN,
+				USER_NAME_PY,
+				USER_NAME_FR,
+				ORG_CODE,
+				POST_NO,
+				USER_SEX,
+				NATIONALITY,
+				ETHNIC,
+				NATIVE_PLACE,
+				BIRTH_PLACE,
+				BIRTH_DATE,
+				ID_DECIMAL,
+				PHOTO_ID,
+				JOIN_DATE,
+				STATUS,
+				TELLER_ID,
+				RESIDENTIAL_ADDRESS,
+				MOBILE_PHONE,
+				REMARK,
+				PASSWORD,
+				SALT,
+				ONLINE_STATUS,
+				IP_ADDR,
+				USER_THEME,
+				PD_COUNT,
+				PD_MODTIME,
+				PD_LOCKTIME,
+				LAST_SIGNON_TIME,
+				LAST_SIGNOUT_TIME,
+				LEGAL_ORG,
+				CRT_USER_CODE,
+				CRT_ORG_CODE,
+				CRT_DATE,
+				UPD_USER_CODE,
+				UPD_ORG_CODE,
+				UPD_DATE
+	</sql>
+
+    <!--根据userCode查询-->
+    <select id="getByUserCode" parameterType="Map"
+            resultType="User">
+     SELECT
+        <include refid="Field"></include>
+        FROM
+        <include refid="tableName"></include>
+        WHERE USER_CODE= #{usercode}
+    </select>
+
+    <!-- 字段值 -->
+    <sql id="FieldValue">
+				#{userId},
+				#{userCode},
+				#{userName},
+				#{userNameEn},
+				#{userNamePy},
+				#{userNameFr},
+				#{orgCode},
+				#{postNo},
+				#{userSex},
+				#{nationality},
+				#{ethnic},
+				#{nativePlace},
+				#{birthPlace},
+				#{birthDate},
+				#{idDecimal},
+				#{photoId},
+				#{joinDate},
+				#{status},
+				#{tellerId},
+				#{residentialAddress},
+				#{mobilePhone},
+				#{remark},
+				#{password},
+				#{salt},
+				#{onlineStatus},
+				#{ipAddr},
+				#{userTheme},
+				#{pdCount},
+				#{pdModtime},
+				#{pdLocktime},
+				#{lastSignonTime},
+				#{lastSignoutTime},
+				#{legalOrg},
+				#{crtUserCode},
+				#{crtOrgCode},
+				#{crtDate},
+				#{updUserCode},
+				#{updOrgCode},
+				#{updDate}
+	</sql>
+    <!-- 系统管理->系统管理-用户表-查询列信息 -->
+    <select id="findForList" parameterType="Map"
+            resultType="User">
+        SELECT
+        <include refid="Field"></include>
+        FROM
+        <include refid="tableName"></include>
+        WHERE 1=1
+        <if test="userId != null and userId != ''">
+            AND USER_ID = #{userId}
+        </if>
+        <if test="userCode != null and userCode != ''">
+            AND USER_CODE = #{userCode}
+        </if>
+        <if test="userName != null and userName != ''">
+            AND USER_NAME = #{userName}
+        </if>
+        <if test="userNameEn != null and userNameEn != ''">
+            AND USER_NAME_EN = #{userNameEn}
+        </if>
+        <if test="userNamePy != null and userNamePy != ''">
+            AND USER_NAME_PY = #{userNamePy}
+        </if>
+        <if test="userNameFr != null and userNameFr != ''">
+            AND USER_NAME_FR = #{userNameFr}
+        </if>
+        <if test="orgCode != null and orgCode != ''">
+            AND ORG_CODE = #{orgCode}
+        </if>
+        <if test="postNo != null and postNo != ''">
+            AND POST_NO = #{postNo}
+        </if>
+        <if test="userSex != null and userSex != ''">
+            AND USER_SEX = #{userSex}
+        </if>
+        <if test="nationality != null and nationality != ''">
+            AND NATIONALITY = #{nationality}
+        </if>
+        <if test="ethnic != null and ethnic != ''">
+            AND ETHNIC = #{ethnic}
+        </if>
+        <if test="nativePlace != null and nativePlace != ''">
+            AND NATIVE_PLACE = #{nativePlace}
+        </if>
+        <if test="birthPlace != null and birthPlace != ''">
+            AND BIRTH_PLACE = #{birthPlace}
+        </if>
+        <if test="birthDate != null and birthDate != ''">
+            AND BIRTH_DATE = #{birthDate}
+        </if>
+        <if test="idDecimal != null and idDecimal != ''">
+            AND ID_DECIMAL = #{idDecimal}
+        </if>
+        <if test="photoId != null and photoId != ''">
+            AND PHOTO_ID = #{photoId}
+        </if>
+        <if test="joinDate != null and joinDate != ''">
+            AND JOIN_DATE = #{joinDate}
+        </if>
+        <if test="status != null and status != ''">
+            AND STATUS = #{status}
+        </if>
+        <if test="tellerId != null and tellerId != ''">
+            AND TELLER_ID = #{tellerId}
+        </if>
+        <if test="residentialAddress != null and residentialAddress != ''">
+            AND RESIDENTIAL_ADDRESS = #{residentialAddress}
+        </if>
+        <if test="mobilePhone != null and mobilePhone != ''">
+            AND MOBILE_PHONE = #{mobilePhone}
+        </if>
+        <if test="remark != null and remark != ''">
+            AND REMARK = #{remark}
+        </if>
+        <if test="password != null and password != ''">
+            AND PASSWORD = #{password}
+        </if>
+        <if test="salt != null and salt != ''">
+            AND SALT = #{salt}
+        </if>
+        <if test="onlineStatus != null and onlineStatus != ''">
+            AND ONLINE_STATUS = #{onlineStatus}
+        </if>
+        <if test="ipAddr != null and ipAddr != ''">
+            AND IP_ADDR = #{ipAddr}
+        </if>
+        <if test="userTheme != null and userTheme != ''">
+            AND USER_THEME = #{userTheme}
+        </if>
+        <if test="pdCount != null and pdCount != ''">
+            AND PD_COUNT = #{pdCount}
+        </if>
+        <if test="pdModtime != null and pdModtime != ''">
+            AND PD_MODTIME = #{pdModtime}
+        </if>
+        <if test="pdLocktime != null and pdLocktime != ''">
+            AND PD_LOCKTIME = #{pdLocktime}
+        </if>
+        <if test="lastSignonTime != null and lastSignonTime != ''">
+            AND LAST_SIGNON_TIME = #{lastSignonTime}
+        </if>
+        <if test="lastSignoutTime != null and lastSignoutTime != ''">
+            AND LAST_SIGNOUT_TIME = #{lastSignoutTime}
+        </if>
+        <if test="legalOrg != null and legalOrg != ''">
+            AND LEGAL_ORG = #{legalOrg}
+        </if>
+        <if test="crtUserCode != null and crtUserCode != ''">
+            AND CRT_USER_CODE = #{crtUserCode}
+        </if>
+        <if test="crtOrgCode != null and crtOrgCode != ''">
+            AND CRT_ORG_CODE = #{crtOrgCode}
+        </if>
+        <if test="crtDate != null and crtDate != ''">
+            AND CRT_DATE = #{crtDate}
+        </if>
+        <if test="updUserCode != null and updUserCode != ''">
+            AND UPD_USER_CODE = #{updUserCode}
+        </if>
+        <if test="updOrgCode != null and updOrgCode != ''">
+            AND UPD_ORG_CODE = #{updOrgCode}
+        </if>
+        <if test="updDate != null and updDate != ''">
+            AND UPD_DATE = #{updDate}
+        </if>
+    </select>
+    <!-- 系统管理->系统管理-用户表-分页查询列信息 -->
+    <select id="findForPageList" parameterType="Page"
+            resultType="User">
+        SELECT
+        <include refid="Field"></include>
+        FROM
+        <include refid="tableName"></include>
+        WHERE 1=1
+        <if test="variables.userId != null and variables.userId != ''">
+            AND USER_ID
+            <choose>
+                <when
+                        test="operators.userId != null and operators.userId != '' ">${operators.userId}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.userId}
+        </if>
+        <if test="variables.userCode != null and variables.userCode != ''">
+            AND USER_CODE
+            <choose>
+                <when
+                        test="operators.userCode != null and operators.userCode != '' ">${operators.userCode}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.userCode}
+        </if>
+        <if test="variables.userName != null and variables.userName != ''">
+            AND USER_NAME
+            <choose>
+                <when
+                        test="operators.userName != null and operators.userName != '' ">${operators.userName}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.userName}
+        </if>
+        <if test="variables.userNameEn != null and variables.userNameEn != ''">
+            AND USER_NAME_EN
+            <choose>
+                <when
+                        test="operators.userNameEn != null and operators.userNameEn != '' ">${operators.userNameEn}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.userNameEn}
+        </if>
+        <if test="variables.userNamePy != null and variables.userNamePy != ''">
+            AND USER_NAME_PY
+            <choose>
+                <when
+                        test="operators.userNamePy != null and operators.userNamePy != '' ">${operators.userNamePy}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.userNamePy}
+        </if>
+        <if test="variables.userNameFr != null and variables.userNameFr != ''">
+            AND USER_NAME_FR
+            <choose>
+                <when
+                        test="operators.userNameFr != null and operators.userNameFr != '' ">${operators.userNameFr}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{variables.userNameFr}
+        </if>
+        <if test="variables.orgCode != null and variables.orgCode != ''">
+            AND ORG_CODE = #{variables.orgCode}
+        </if>
+        <if test="variables.postNo != null and variables.postNo != ''">
+            AND POST_NO = #{variables.postNo}
+        </if>
+        <if test="variables.userSex != null and variables.userSex != ''">
+            AND USER_SEX = #{variables.userSex}
+        </if>
+        <if test="variables.nationality != null and variables.nationality != ''">
+            AND NATIONALITY = #{variables.nationality}
+        </if>
+        <if test="variables.ethnic != null and variables.ethnic != ''">
+            AND ETHNIC = #{variables.ethnic}
+        </if>
+        <if test="variables.nativePlace != null and variables.nativePlace != ''">
+            AND NATIVE_PLACE = #{variables.nativePlace}
+        </if>
+        <if test="variables.birthPlace != null and variables.birthPlace != ''">
+            AND BIRTH_PLACE = #{variables.birthPlace}
+        </if>
+        <if test="variables.birthDate != null and variables.birthDate != ''">
+            AND BIRTH_DATE = #{variables.birthDate}
+        </if>
+        <if test="variables.idDecimal != null and variables.idDecimal != ''">
+            AND ID_DECIMAL = #{variables.idDecimal}
+        </if>
+        <if test="variables.photoId != null and variables.photoId != ''">
+            AND PHOTO_ID = #{variables.photoId}
+        </if>
+        <if test="variables.joinDate != null and variables.joinDate != ''">
+            AND JOIN_DATE = #{variables.joinDate}
+        </if>
+        <if test="variables.status != null and variables.status != ''">
+            AND STATUS = #{variables.status}
+        </if>
+        <if test="variables.tellerId != null and variables.tellerId != ''">
+            AND TELLER_ID = #{variables.tellerId}
+        </if>
+        <if test="variables.residentialAddress != null and variables.residentialAddress != ''">
+            AND RESIDENTIAL_ADDRESS = #{variables.residentialAddress}
+        </if>
+        <if test="variables.mobilePhone != null and variables.mobilePhone != ''">
+            AND MOBILE_PHONE = #{variables.mobilePhone}
+        </if>
+        <if test="variables.remark != null and variables.remark != ''">
+            AND REMARK = #{variables.remark}
+        </if>
+        <if test="variables.password != null and variables.password != ''">
+            AND PASSWORD = #{variables.password}
+        </if>
+        <if test="variables.salt != null and variables.salt != ''">
+            AND SALT = #{variables.salt}
+        </if>
+        <if test="variables.onlineStatus != null and variables.onlineStatus != ''">
+            AND ONLINE_STATUS = #{variables.onlineStatus}
+        </if>
+        <if test="variables.ipAddr != null and variables.ipAddr != ''">
+            AND IP_ADDR = #{variables.ipAddr}
+        </if>
+        <if test="variables.userTheme != null and variables.userTheme != ''">
+            AND USER_THEME = #{variables.userTheme}
+        </if>
+        <if test="variables.pdCount != null and variables.pdCount != ''">
+            AND PD_COUNT = #{variables.pdCount}
+        </if>
+        <if test="variables.pdModtime != null and variables.pdModtime != ''">
+            AND PD_MODTIME = #{variables.pdModtime}
+        </if>
+        <if test="variables.pdLocktime != null and variables.pdLocktime != ''">
+            AND PD_LOCKTIME = #{variables.pdLocktime}
+        </if>
+        <if test="variables.lastSignonTime != null and variables.lastSignonTime != ''">
+            AND LAST_SIGNON_TIME = #{variables.lastSignonTime}
+        </if>
+        <if test="variables.lastSignoutTime != null and variables.lastSignoutTime != ''">
+            AND LAST_SIGNOUT_TIME = #{variables.lastSignoutTime}
+        </if>
+        <if test="variables.legalOrg != null and variables.legalOrg != ''">
+            AND LEGAL_ORG = #{variables.legalOrg}
+        </if>
+        <if test="variables.crtUserCode != null and variables.crtUserCode != ''">
+            AND CRT_USER_CODE = #{variables.crtUserCode}
+        </if>
+        <if test="variables.crtOrgCode != null and variables.crtOrgCode != ''">
+            AND CRT_ORG_CODE = #{variables.crtOrgCode}
+        </if>
+        <if test="variables.crtDate != null and variables.crtDate != ''">
+            AND CRT_DATE = #{variables.crtDate}
+        </if>
+        <if test="variables.updUserCode != null and variables.updUserCode != ''">
+            AND UPD_USER_CODE = #{variables.updUserCode}
+        </if>
+        <if test="variables.updOrgCode != null and variables.updOrgCode != ''">
+            AND UPD_ORG_CODE = #{variables.updOrgCode}
+        </if>
+        <if test="variables.updDate != null and variables.updDate != ''">
+            AND UPD_DATE = #{variables.updDate}
+        </if>
+        <if test="variables._orgAuth != null and variables._orgAuth != ''">
+            AND ORG_CODE ${variables._orgAuth}
+        </if>
+        <if test="variables._userAuth != null and variables._userAuth != ''">
+            AND USER_CODE ${variables._userAuth}
+        </if>
+    </select>
+</mapper>

@@ -1,8 +1,8 @@
 package com.sshs.core.locale;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -10,7 +10,8 @@ import org.apache.commons.logging.LogFactory;
  *
  */
 public class LocaleHelper {
-	public static Log logger = LogFactory.getLog(LocaleHelper.class);
+
+	public static Logger logger = LoggerFactory.getLogger(LocaleHelper.class);
 	//@Autowired
 	//private static HttpServletRequest request;
 

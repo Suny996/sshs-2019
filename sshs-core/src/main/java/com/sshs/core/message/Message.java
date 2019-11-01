@@ -18,16 +18,16 @@ import java.util.jar.JarFile;
  * @author Suny
  */
 public class Message<T> {
-    final private static String SUCCESS_CODE = "000000";
-    private static Logger logger = LoggerFactory.getLogger(Message.class);
-    String code;
-    String msg;
+    private final static String SUCCESS_CODE = "000000";
+    private final static Logger logger = LoggerFactory.getLogger(Message.class);
+    private String code;
+    private String msg;
     T data;
     /**
      * 国际化资源文件集
      */
     private static Map<String, List<ResourceBundle>> RESOURCES = new HashMap<String, List<ResourceBundle>>();
-    private static Set<String> RESOURCE_NAMES = new HashSet<>();
+    private static Set<String> resource_names = new HashSet<>();
 
     /**
      * 初始化国际化文件
@@ -35,7 +35,7 @@ public class Message<T> {
      * @param locale
      */
     private static void init(Locale locale) {
-        if (RESOURCE_NAMES.isEmpty()) {
+        if (resource_names.isEmpty()) {
             String pkg = "i18n";
             ClassLoader classLoader = Message.class.getClassLoader();
             try {
@@ -66,7 +66,7 @@ public class Message<T> {
             logger.debug("加载国际化文件:[i18n/messages]");
             ResourceBundle root = ResourceBundle.getBundle("i18n/messages", locale);
             try {
-                for (String name : RESOURCE_NAMES) {
+                for (String name : resource_names) {
                     logger.debug("加载国际化文件:[i18n/" + name + "/messages]");
                     ResourceBundle resource = ResourceBundle.getBundle("i18n/" + name + "/messages", locale);
                     if (resource != null) {
@@ -109,8 +109,8 @@ public class Message<T> {
         return new Message(SUCCESS_CODE);
     }
 
-    public static Message success(Object data) {
-        return new Message(SUCCESS_CODE, data);
+    public static <T> Message<T> success(T data) {
+        return new Message<T>(SUCCESS_CODE, data);
     }
 
     public static Message failure(String code) {
@@ -187,14 +187,13 @@ public class Message<T> {
     }
 
     public static void main(String[] args) {
-        System.out.println(Message.success());
+       // System.out.println(Message.success());
     }
 
     /**
      * 从目录里获取国际化文件夹（子模块）
      *
      * @param pkgPath
-     * @return
      */
     private static void findClassesByFile(String pkgPath) {
         File dir = new File(pkgPath);
@@ -203,7 +202,7 @@ public class Message<T> {
             if (children != null && children.length > 0) {
                 for (File f : children) {
                     if (f.isDirectory()) {
-                        RESOURCE_NAMES.add(f.getName());
+                        resource_names.add(f.getName());
                     }
                 }
             }
@@ -215,7 +214,6 @@ public class Message<T> {
      *
      * @param pkgName
      * @param jar
-     * @return
      */
     private static void findClassesByJar(String pkgName, JarFile jar) {
         String pkgDir = pkgName.replace(".", "/");
@@ -227,7 +225,7 @@ public class Message<T> {
             // 获取jar里的一个实体 可以是目录 和一些jar包里的其他文件 如META-INF等文
             jarEntry = entry.nextElement();
             name = jarEntry.getName();
-            logger.debug("=====从jar包中扫描国际化文件目录====>>>" + name);
+            logger.debug("=====从jar包中扫描国际化文件目录====>>>{}", name);
             // 如果是以/开头的
             if (name.charAt(0) == '/') {
                 name = name.substring(1);
@@ -235,18 +233,18 @@ public class Message<T> {
             if (jarEntry.isDirectory() && name.startsWith(pkgName) && name.indexOf("/") > 0) {
                 String[] args = name.split("\\/");
                 if (args.length > 1) {
-                    RESOURCE_NAMES.add(args[1]);
+                    resource_names.add(args[1]);
                 }
             }
         }
-        logger.debug("=====从jar包中扫描国际化文件目录结果====>>>" + RESOURCE_NAMES);
+        logger.debug("=====从jar包中扫描国际化文件目录结果====>>>,{}", resource_names);
     }
 
     /**
      * 加载类
      *
      * @param fullClzName 类全名
-     * @return
+     * @return 类
      */
     private static Class<?> loadClass(String fullClzName) {
         try {
