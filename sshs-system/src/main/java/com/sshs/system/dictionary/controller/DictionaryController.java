@@ -1,5 +1,6 @@
 package com.sshs.system.dictionary.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
@@ -8,20 +9,15 @@ import com.sshs.system.dictionary.service.IDictionaryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.server.ServerRequest;
-import org.springframework.web.reactive.function.server.ServerResponse;
-import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-
 
 /**
  * 系统管理->系统管理-数据字典表controller类
+ *
  * @author 61910
  * @date 2018/11/12
  */
@@ -31,112 +27,91 @@ public class DictionaryController extends BaseController {
     @Resource
     private IDictionaryService dictionaryService;
 
-    Logger logger = LoggerFactory.getLogger(DictionaryController.class);
+    private static final Logger logger = LoggerFactory.getLogger(DictionaryController.class);
 
     /**
-    * 保存系统管理->系统管理-数据字典表数据
-    */
+     * 保存系统管理->系统管理-数据字典表数据
+     */
     @PostMapping
-    public Mono<Message> save(@RequestBody Dictionary dictionary) {
-       try {
-           logger.debug("开始保存系统管理->系统管理-数据字典表信息……");
-           return Mono.justOrEmpty(dictionaryService.save(dictionary));
-       } catch (Exception e) {
-           e.printStackTrace();
-           logger.error("保存系统管理->系统管理-数据字典表信息异常！");
-           throw new BusinessException("SY0001");
-       }
-    }
-
-    /**
-    * 修改系统管理->系统管理-数据字典表数据
-    */
-    @PutMapping
-    public Mono<Message> update(@RequestBody Dictionary dictionary) {
+    public Message<Dictionary> save(@RequestBody Dictionary dictionary) {
         try {
-            logger.debug("开始更新系统管理->系统管理-数据字典表信息……");
-            return Mono.justOrEmpty(dictionaryService.update(dictionary));
+            logger.debug("开始保存系统管理->系统管理-数据字典表信息……");
+            return dictionaryService.save1(dictionary);
         } catch (Exception e) {
-             e.printStackTrace();
-             logger.error("更新系统管理->系统管理-数据字典表信息异常！");
-             throw new BusinessException("SY0002");
+            logger.error("保存系统管理->系统管理-数据字典表信息异常！", e);
+            throw new BusinessException("SY0001");
         }
     }
+
     /**
-    * 根据主键删除系统管理->系统管理-数据字典表数据
-    */
+     * 修改系统管理->系统管理-数据字典表数据
+     */
+    @PutMapping
+    public Message<Dictionary> update(@RequestBody Dictionary dictionary) {
+        try {
+            logger.debug("开始更新系统管理->系统管理-数据字典表信息……");
+            return dictionaryService.update1(dictionary);
+        } catch (Exception e) {
+            logger.error("更新系统管理->系统管理-数据字典表信息异常！", e);
+            throw new BusinessException("SY0002");
+        }
+    }
+
+    /**
+     * 根据主键删除系统管理->系统管理-数据字典表数据
+     */
     @DeleteMapping("/{dictionaryId}")
-    public Mono<Message> delete(@PathVariable("dictionaryId") String dictionaryId) {
+    public Message<Boolean> delete(@PathVariable("dictionaryId") String dictionaryId) {
         try {
             logger.debug("开始删除系统管理->系统管理-数据字典表信息……");
-            return Mono.justOrEmpty(dictionaryService.deleteById(dictionaryId));
+            return dictionaryService.deleteById(dictionaryId);
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("删除系统管理->系统管理-数据字典表信息异常！");
+            logger.error("删除系统管理->系统管理-数据字典表信息异常！", e);
             throw new BusinessException("SY0003");
         }
     }
 
-   /**
-   * 批量删除系统管理->系统管理-数据字典表数据
-   */
-   @DeleteMapping
-   public Mono<Message> delete(@RequestBody List<String> ids) {
-       try {
-           logger.debug("开始批量删除系统管理->系统管理-数据字典表信息……");
-           return Mono.justOrEmpty(dictionaryService.deleteByIds(ids));
-       } catch (Exception e) {
-       e.printStackTrace();
-       logger.error("批量删除系统管理->系统管理-数据字典表信息异常！");
-       throw new BusinessException("SY0003");
-       }
-   }
-
-   /**
-   * 根据主键查找系统管理->系统管理-数据字典表信息
-   */
-   @GetMapping("/{dictionaryId}")
-   public Mono<Message> getById(@PathVariable("dictionaryId") String dictionaryId) {
-       try {
-           logger.debug("开始查询系统管理->系统管理-数据字典表信息……");
-           Message message = Message.success(dictionaryService.getById(dictionaryId));
-           return Mono.justOrEmpty(message);
-       } catch (Exception e) {
-       e.printStackTrace();
-       logger.error("查询系统管理->系统管理-数据字典表信息异常！");
-       throw new BusinessException("SY0001");
-       }
-   }
-
-   /**
-   * 查询系统管理->系统管理-数据字典表信息列表
-   */
-   @GetMapping
-   public Mono<Message> queryList(@RequestParam (value = "limit", required = false) String limit, @RequestParam String offset, @RequestParam Map<String , Object> params) {
-       try {
-           logger.debug("开始查询系统管理->系统管理-数据字典表列表信息……");
-           Message message = dictionaryService.queryPageList(limit, offset, params);
-           return Mono.justOrEmpty(message);
+    /**
+     * 批量删除系统管理->系统管理-数据字典表数据
+     */
+    @DeleteMapping
+    public Message<Boolean> delete(@RequestBody List<String> ids) {
+        try {
+            logger.debug("开始批量删除系统管理->系统管理-数据字典表信息……");
+            return dictionaryService.deleteByIds(ids);
         } catch (Exception e) {
-       e.printStackTrace();
-       logger.error("查询系统管理->系统管理-数据字典表信息异常！");
-       throw new BusinessException("SY0001");
-       }
-   }
+            e.printStackTrace();
+            logger.error("批量删除系统管理->系统管理-数据字典表信息异常！");
+            throw new BusinessException("SY0003");
+        }
+    }
 
     /**
-     * 数据字典-查询方法
-     *
-     * @param request
-     * @return
+     * 根据主键查找系统管理->系统管理-数据字典表信息
      */
-    public Mono<ServerResponse> getDictionarys(ServerRequest request) {
-        String dictCode = request.pathVariable("dictCode");
-        Mono<ServerResponse> notFound = ServerResponse.notFound().build();
-        Dictionary dictionary = dictionaryService.getDictionaryByCode(dictCode);
+    @GetMapping("/{dictionaryId}")
+    public Message<Dictionary> getById(@PathVariable("dictionaryId") String dictionaryId) {
+        try {
+            logger.debug("开始查询系统管理->系统管理-数据字典表信息……");
+            return dictionaryService.getById(dictionaryId);
+        } catch (Exception e) {
+            logger.error("查询系统管理->系统管理-数据字典表信息异常！", e);
+            throw new BusinessException("SY0001");
+        }
+    }
 
-        return ServerResponse.ok().contentType(APPLICATION_JSON)
-                .body(BodyInserters.fromObject(dictionary.getChildren())).switchIfEmpty(notFound);
+    /**
+     * 查询系统管理->系统管理-数据字典表信息列表
+     */
+    @GetMapping
+    public Message<IPage<Dictionary>> queryList(@RequestParam(value = "limit", required = false) String limit, @RequestParam String offset, @RequestParam Map<String, Object> params) {
+        try {
+            logger.debug("开始查询系统管理->系统管理-数据字典表列表信息……");
+            return dictionaryService.queryPageList(limit, offset, params);
+        } catch (Exception e) {
+            logger.error("查询系统管理->系统管理-数据字典表信息异常！", e);
+            throw new BusinessException("SY0001");
+        }
     }
 
     /**
@@ -146,11 +121,9 @@ public class DictionaryController extends BaseController {
     public Dictionary getDictionarys(@PathVariable("dictCode") String dictCode) {
         try {
             logger.debug("开始查询系统管理->系统管理-数据字典表信息……");
-            Dictionary dictionary = dictionaryService.getDictionaryByCode(dictCode);
-            return dictionary;
+            return dictionaryService.getDictionaryByCode(dictCode);
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("查询系统管理->系统管理-数据字典表信息异常！");
+            logger.error("查询系统管理->系统管理-数据字典表信息异常！", e);
             throw new BusinessException("SY0001");
         }
     }

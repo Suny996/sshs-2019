@@ -14,33 +14,33 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 
- /**
+/**
  * 系统管理->系统管理-岗位表service实现类
+ *
  * @author 61910
  * @date 2018/11/08
  */
 @Service("postService")
 public class PostServiceImpl extends BaseServiceImpl<Post> implements IPostService {
-     Logger logger = LoggerFactory.getLogger(PostServiceImpl.class);
-     @Resource
-     private PostMapper mapper;
+    private static final Logger logger = LoggerFactory.getLogger(PostServiceImpl.class);
+    @Resource
+    private PostMapper mapper;
 
-     /**
-      * 保存系统管理->系统管理-岗位表数据方法
-      *
-      * @param post
-      * @return Message
-      */
-     @Override
-     public Message save(Post post) {
-         post.setPostId(UuidUtil.get32UUID());
-         try {
-             return super.save(post);
-         } catch (Exception e) {
-             e.printStackTrace();
-             logger.error("保存系统管理->系统管理-岗位表信息异常！");
-             throw new BusinessException("SY0001");
-         }
-     }
+    /**
+     * 保存系统管理->系统管理-岗位表数据方法
+     *
+     * @param post
+     * @return Message
+     */
+    @Override
+    public Message save1(Post post) {
+        post.setPostId(UuidUtil.get32UUID());
+        try {
+            return super.save1(post);
+        } catch (Exception e) {
+            logger.error("保存系统管理->系统管理-岗位表信息异常！", e);
+            throw new BusinessException("SY0001");
+        }
+    }
 
- }
+}

@@ -23,7 +23,7 @@ import javax.annotation.Resource;
  */
 @Service("userService")
 public class UserServiceImpl extends BaseServiceImpl<User> implements IUserService {
-    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+   private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     @Resource
     private UserMapper mapper;
     /**
@@ -47,14 +47,13 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
      * @return
      */
     @Override
-    public Message save(User user) {
+    public Message<User> save1(User user) {
         user.setUserId(UuidUtil.get32UUID());
         user.setPassword(defaultPassword);
         try {
-            return super.save(user);
+            return super.save1(user);
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("保存用户信息异常！");
+            logger.error("保存用户信息异常！",e);
             throw new BusinessException("SY0001");
         }
     }

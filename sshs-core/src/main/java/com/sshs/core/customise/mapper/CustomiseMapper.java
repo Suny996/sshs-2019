@@ -1,13 +1,7 @@
 package com.sshs.core.customise.mapper;
 
-
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.sshs.core.base.mapper.BaseMapper;
 import com.sshs.core.customise.model.Customise;
-import com.sshs.core.page.Page;
-
-import java.util.List;
 
 /**
  * 代码生成mapper接口

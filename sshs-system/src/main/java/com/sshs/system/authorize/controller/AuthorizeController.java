@@ -27,7 +27,7 @@ public class AuthorizeController extends BaseController {
     @Resource
     private IAuthorizeService authorizeService;
 
-    Logger logger = LoggerFactory.getLogger(AuthorizeController.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthorizeController.class);
 
     /**
      * 保存系统管理->系统管理-角色权限表数据
@@ -36,10 +36,9 @@ public class AuthorizeController extends BaseController {
     public Mono<Message> save(@RequestBody Authorize authorize) {
         try {
             logger.debug("开始保存系统管理->系统管理-角色权限表信息……");
-            return Mono.justOrEmpty(authorizeService.save(authorize));
+            return Mono.justOrEmpty(authorizeService.save1(authorize));
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("保存系统管理->系统管理-角色权限表信息异常！");
+            logger.error("保存系统管理->系统管理-角色权限表信息异常！", e);
             throw new BusinessException("SY0001");
         }
     }
@@ -51,10 +50,9 @@ public class AuthorizeController extends BaseController {
     public Mono<Message> update(@RequestBody Authorize authorize) {
         try {
             logger.debug("开始更新系统管理->系统管理-角色权限表信息……");
-            return Mono.justOrEmpty(authorizeService.update(authorize));
+            return Mono.justOrEmpty(authorizeService.update1(authorize));
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("更新系统管理->系统管理-角色权限表信息异常！");
+            logger.error("更新系统管理->系统管理-角色权限表信息异常！", e);
             throw new BusinessException("SY0002");
         }
     }
@@ -68,8 +66,7 @@ public class AuthorizeController extends BaseController {
             logger.debug("开始删除系统管理->系统管理-角色权限表信息……");
             return Mono.justOrEmpty(authorizeService.deleteById(authorizeId));
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("删除系统管理->系统管理-角色权限表信息异常！");
+            logger.error("删除系统管理->系统管理-角色权限表信息异常！", e);
             throw new BusinessException("SY0003");
         }
     }
@@ -83,8 +80,7 @@ public class AuthorizeController extends BaseController {
             logger.debug("开始批量删除系统管理->系统管理-角色权限表信息……");
             return Mono.justOrEmpty(authorizeService.deleteByIds(ids));
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("批量删除系统管理->系统管理-角色权限表信息异常！");
+            logger.error("批量删除系统管理->系统管理-角色权限表信息异常！", e);
             throw new BusinessException("SY0003");
         }
     }
@@ -99,8 +95,7 @@ public class AuthorizeController extends BaseController {
             Message message = Message.success(authorizeService.getById(authorizeId));
             return Mono.justOrEmpty(message);
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("查询系统管理->系统管理-角色权限表信息异常！");
+            logger.error("查询系统管理->系统管理-角色权限表信息异常！", e);
             throw new BusinessException("SY0001");
         }
     }
@@ -136,8 +131,7 @@ public class AuthorizeController extends BaseController {
             Message message = authorizeService.queryAuthorizeList(params);
             return Mono.justOrEmpty(message);
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("查询系统管理->系统管理-角色权限表信息异常！");
+            logger.error("查询系统管理->系统管理-角色权限表信息异常！", e);
             throw new BusinessException("SY0001");
         }
     }

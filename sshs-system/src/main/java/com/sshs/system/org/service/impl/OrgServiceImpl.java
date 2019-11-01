@@ -35,10 +35,10 @@ public class OrgServiceImpl extends BaseServiceImpl<Org> implements IOrgService 
      * @return Message
      */
     @Override
-    public Message save(Org org) {
+    public Message<Org> save1(Org org) {
         org.setOrgId(UuidUtil.get32UUID());
         try {
-            return super.save(org);
+            return super.save1(org);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("保存系统管理->系统管理-机构表信息异常！");

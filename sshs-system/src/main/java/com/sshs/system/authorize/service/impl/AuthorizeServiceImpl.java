@@ -11,6 +11,7 @@ import com.sshs.system.menu.model.Menu;
 import com.sshs.system.menu.service.IMenuService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -27,8 +28,8 @@ import java.util.Map;
  */
 @Service("authorizeService")
 public class AuthorizeServiceImpl extends BaseServiceImpl<Authorize> implements IAuthorizeService {
-    Logger logger = LoggerFactory.getLogger(AuthorizeServiceImpl.class);
-    @Resource
+    private static final Logger logger = LoggerFactory.getLogger(AuthorizeServiceImpl.class);
+    @Autowired
     private AuthorizeMapper mapper;
 
     @Resource
@@ -41,7 +42,7 @@ public class AuthorizeServiceImpl extends BaseServiceImpl<Authorize> implements 
      * @return Message
      */
     @Override
-    public Message save(Authorize authorize) {
+    public Message<Authorize> save1(Authorize authorize) {
         authorize.setId(UuidUtil.get32UUID());
         try {
             mapper.deleteByRoleCode(authorize.getRoleCode());
@@ -84,7 +85,6 @@ public class AuthorizeServiceImpl extends BaseServiceImpl<Authorize> implements 
         data.put("authorizes", authorizes);
         return Message.success(data);
     }
-
 
 
     /**

@@ -36,9 +36,9 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements IRoleServi
      * @return Message
      */
     @Override
-    public Message save(Role role) {
+    public Message save1(Role role) {
         role.setRoleId(UuidUtil.get32UUID());
-        if(null!=mapper.getRoleByRoleCode(role.getRoleCode())){
+        if (null != mapper.getRoleByRoleCode(role.getRoleCode())) {
             throw new BusinessException("U1001");
         }
         if (StringUtils.isBlank(role.getRoleName())) {
@@ -53,15 +53,11 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements IRoleServi
             throw new BusinessException("R1002", "该角色名称已存在，请重新输入！");
         }
         try {
-            return super.save(role);
-        }
-        catch (BusinessException e) {
-            e.printStackTrace();
+            return super.save1(role);
+        } catch (BusinessException e) {
             throw e;
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            logger.error("保存系统管理->系统管理-角色表信息异常！");
+        } catch (Exception e) {
+            logger.error("保存系统管理->系统管理-角色表信息异常！", e);
             throw new BusinessException("SY0001");
         }
     }

@@ -1,8 +1,9 @@
 package com.sshs.system.menu.mapper;
 
-import com.sshs.core.page.Page;
+import com.sshs.core.base.mapper.BaseMapper;
 import com.sshs.system.menu.model.Menu;
-import tk.mybatis.mapper.common.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -13,9 +14,9 @@ import java.util.List;
  * @author Suny
  * @date 2018/03/13
  */
-public interface MenuMapper extends Mapper<Menu> {
+public interface MenuMapper extends BaseMapper<Menu> {
     /**
-     *根据menuName查询menu
+     * 根据menuName查询menu
      */
     public Menu getMenuByMenuName(String menuName);
 
@@ -36,22 +37,15 @@ public interface MenuMapper extends Mapper<Menu> {
     public String findLastChildCodeById(String menuCode);
 
     /**
-     * 查询所有记录
-     *
-     * @return
-     */
-    public List<Menu> findMenuAll();
-
-    public Page<Menu> findForPageList();
-
-    /*
      * 功能描述:通过父级菜单Code查询子级最大序列
+     *
      * @param:
      * @return:
      * @auther: huangnan
      * @date: 2018/11/13 17:26
      */
-    public BigDecimal getMaxMenuSeq(String parentCode);
+    @Select("SELECT MAX(MENU_SEQ) as MENU_SEQ FROM SYS_MENU WHERE PARENT_CODE= #{parentCode}")
+    BigDecimal getMaxMenuSeq(@Param("parentCode") String parentCode);
 
     /*
      * 功能描述:通过菜单名称查询菜单信息
@@ -60,5 +54,5 @@ public interface MenuMapper extends Mapper<Menu> {
      * @auther: huangnan
      * @date: 2018/11/13 17:25
      */
-    public List<Menu> getMenuByName(String menuName);
+    List<Menu> getMenuByName(String menuName);
 }

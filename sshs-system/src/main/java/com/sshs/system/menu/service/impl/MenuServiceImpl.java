@@ -1,6 +1,7 @@
 package com.sshs.system.menu.service.impl;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.sshs.core.base.service.impl.BaseServiceImpl;
 import com.sshs.core.constant.MenuType;
 import com.sshs.core.exception.BusinessException;
@@ -26,7 +27,7 @@ import java.util.List;
  */
 @Service("menuService")
 public class MenuServiceImpl extends BaseServiceImpl<Menu> implements IMenuService {
-    Logger logger = LoggerFactory.getLogger(MenuServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(MenuServiceImpl.class);
     @Resource
     private MenuMapper mapper;
 
@@ -34,7 +35,7 @@ public class MenuServiceImpl extends BaseServiceImpl<Menu> implements IMenuServi
      * 根据menuName查询menu
      */
     @Override
-    public Menu getMenuByMenuName(String menuName){
+    public Menu getMenuByMenuName(String menuName) {
         return mapper.getMenuByMenuName(menuName);
     }
 
@@ -46,7 +47,7 @@ public class MenuServiceImpl extends BaseServiceImpl<Menu> implements IMenuServi
      * @throws Exception
      */
     @Override
-    public Message save(Menu menu)  {
+    public Message<Menu> save1(Menu menu) {
         String ccode = mapper.findLastChildCodeById(menu.getParentCode());
         String parentMenuCode = menu.getParentCode();
         if (parentMenuCode == null || parentMenuCode.equals("0") || parentMenuCode.equals("00")) {
@@ -74,9 +75,9 @@ public class MenuServiceImpl extends BaseServiceImpl<Menu> implements IMenuServi
 //        menu.setMenuCode(UuidUtil.get32UUID());
         //设置同级菜单序列--查询父级菜单下最大序号然后自增1
         BigDecimal menuSeq = getMaxMenuSeq(menu.getParentCode());
-        menu.setMenuSeq(BusiUtil.nvl(menuSeq,BigDecimal.ZERO).add(new BigDecimal(1)));
+        menu.setMenuSeq(BusiUtil.nvl(menuSeq, BigDecimal.ZERO).add(new BigDecimal(1)));
         try {
-            return super.save(menu);
+            return super.save1(menu);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("保存系统管理->系统管理-菜单表信息异常！");
@@ -91,10 +92,12 @@ public class MenuServiceImpl extends BaseServiceImpl<Menu> implements IMenuServi
      * @return
      */
     @Override
-    public Message getMenuTree(String rootId) {
+    public Message<Menu> getMenuTree(String rootId) {
         Menu menu = mapper.findMenuById(rootId);
         if (menu != null) {
-            List<Menu> menus = mapper.findMenuAll();
+            QueryWrapper<Menu> wrapper = new QueryWrapper<>();
+            wrapper.orderByAsc("menuCode");
+            List<Menu> menus = super.list(wrapper);
             menu = initChildren(menu, menus);
         }
         return Message.success(menu);
@@ -160,6 +163,7 @@ public class MenuServiceImpl extends BaseServiceImpl<Menu> implements IMenuServi
 
     /**
      * 功能描述:根据菜单code查询菜单信息
+     *
      * @param:
      * @return:
      * @auther: huangnan
@@ -167,11 +171,12 @@ public class MenuServiceImpl extends BaseServiceImpl<Menu> implements IMenuServi
      */
     @Override
     public Menu findMenuById(String menuCode) {
-        return mapper.findMenuById(menuCode);
+        return super.getEntityById(menuCode);
     }
 
     /**
      * 功能描述:获取同级目录下菜单最大序列
+     *
      * @param parentCode
      * @return:
      * @auther: huangnan

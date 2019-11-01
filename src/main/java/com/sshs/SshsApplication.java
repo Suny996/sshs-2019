@@ -1,6 +1,5 @@
 package com.sshs;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -13,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
  * @author Suny
  * @date 2018-10-28
  */
-@MapperScan(basePackages = {"com.sshs.*.*.mapper"})
+//@MapperScan(basePackages = {"com.sshs.*.*.mapper"})
 @SpringBootApplication
 @Configuration
 @EnableCaching

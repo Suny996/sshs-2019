@@ -1,11 +1,10 @@
 package com.sshs.system.dictionary.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.sshs.core.base.service.impl.BaseServiceImpl;
 import com.sshs.core.constant.Global;
-import com.sshs.core.exception.BusinessException;
-import com.sshs.core.message.Message;
 import com.sshs.core.util.DictionaryUtil;
-import com.sshs.core.util.UuidUtil;
+import com.sshs.system.dictionary.mapper.DictionaryI18nMapper;
 import com.sshs.system.dictionary.mapper.DictionaryMapper;
 import com.sshs.system.dictionary.model.Dictionary;
 import com.sshs.system.dictionary.model.DictionaryI18n;
@@ -33,11 +32,24 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
     public static Map<String, Dictionary> dictionarys = new HashMap<String, Dictionary>(100);
 
     @Resource
-    private DictionaryMapper dao;
+    private DictionaryMapper dictionaryMapper;
 
+
+    @Resource
+    private DictionaryI18nMapper dictionaryI18nMapper;
+
+    /**
+     * 查询子节点
+     *
+     * @param parentId
+     * @return
+     */
     @Override
     public List<Dictionary> findByParentId(String parentId) {
-        return dao.findByParentId(parentId);
+        QueryWrapper<Dictionary> wrapper = new QueryWrapper<>();
+        wrapper.eq("parentId", parentId);
+        wrapper.orderByAsc("sortNo");
+        return super.list(wrapper);
     }
 
     @Override
@@ -46,7 +58,7 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
         if (dict != null) {
             return dict;
         } else {
-            List<Dictionary> dicts = dao.findByDictCode(dictCode);
+            List<Dictionary> dicts = dictionaryMapper.findByDictCode(dictCode);
             if (dicts != null && !dicts.isEmpty()) {
                 for (Dictionary d : dicts) {
                     initChildren(d);
@@ -64,7 +76,9 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
     //@PostConstruct
     @Override
     public void initDictList() {
-        List<Dictionary> dictCodes = dao.findAllDictCodes();
+        QueryWrapper<Dictionary> wrapper = new QueryWrapper<>();
+        wrapper.eq("dictType", "1").eq("status", "1");
+        List<Dictionary> dictCodes = super.list(wrapper);
         // 字典项
         for (Dictionary dict : dictCodes) {
             initChildren(dict);
@@ -80,7 +94,7 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
      */
     private void initChildren(Dictionary parent) {
         if (!Global.DICTIONARY_DICTTYPE_KEYVALUE.equals(parent.getDictType())) {
-            List<Dictionary> children = dao.findByParentId(parent.getDictId());
+            List<Dictionary> children = findByParentId(parent.getId());
             if (children != null && !children.isEmpty()) {
                 for (Dictionary d : children) {
                     initI18n(d);
@@ -92,13 +106,25 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
     }
 
     /**
+     * 查询国际化信息
+     *
+     * @param dictId
+     * @return
+     */
+    private List<DictionaryI18n> findI18nByDictId(String dictId) {
+        Map<String, Object> parameter = new HashMap<>();
+        parameter.put("dictId", dictId);
+        return dictionaryI18nMapper.findForList(parameter);
+    }
+
+    /**
      * 迭代初始化字典项
      *
      * @param dict
      * @return
      */
     private void initI18n(Dictionary dict) {
-        List<DictionaryI18n> i18ns = dao.findI18nByDictId(dict.getDictId());
+        List<DictionaryI18n> i18ns = findI18nByDictId(dict.getId());
         if (i18ns != null && !i18ns.isEmpty()) {
             for (DictionaryI18n i : i18ns) {
                 dict.addI18n(i);
@@ -118,7 +144,7 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
             dictGrp.put("value", dgrp.getDictCode());
             dictGrp.put("label", dgrp.getDictName());
             dictGrp.put("desc", dgrp.getDictDesc());
-            dictGrp.put("key", dgrp.getDictId());
+            dictGrp.put("key", dgrp.getId());
             dictGrp.put("status", dgrp.getStatus());
             if (dgrp.getI18ns() != null && !dgrp.getI18ns().isEmpty()) {
                 for (DictionaryI18n i18n : dgrp.getI18ns()) {
@@ -157,7 +183,7 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
                     Map<String, Object> dictVal = new LinkedHashMap<String, Object>();
                     dictVal.put("value", dv.getDictCode());
                     dictVal.put("label", dv.getDictName());
-                    dictVal.put("key", dv.getDictId());
+                    dictVal.put("key", dv.getId());
                     dictVal.put("desc", dv.getDictDesc());
                     dictVal.put("status", dv.getStatus());
                     if (dv.getI18ns() != null && !dv.getI18ns().isEmpty()) {
@@ -175,7 +201,7 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
             dictGrp.put("value", dgrp.getDictCode());
             dictGrp.put("label", dgrp.getDictName());
             dictGrp.put("desc", dgrp.getDictDesc());
-            dictGrp.put("key", dgrp.getDictId());
+            dictGrp.put("key", dgrp.getId());
             dictGrp.put("status", dgrp.getStatus());
             if (dgrp.getI18ns() != null && !dgrp.getI18ns().isEmpty()) {
                 for (DictionaryI18n i18n : dgrp.getI18ns()) {
@@ -188,17 +214,5 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
             dictProj.add(dictGrp);
         }
         return dictProj;
-    }
-
-    @Override
-    public Message save(Dictionary dictionary) {
-        dictionary.setDictId(UuidUtil.get32UUID());
-        try {
-            return super.save(dictionary);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("保存系统管理->系统管理-数据字典表信息异常！");
-            throw new BusinessException("SY0001");
-        }
     }
 }

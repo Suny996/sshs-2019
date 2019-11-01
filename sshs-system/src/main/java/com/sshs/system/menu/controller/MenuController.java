@@ -42,14 +42,13 @@ public class MenuController extends BaseController {
             logger.debug("开始保存系统管理->系统管理-菜单表信息……");
             //校验菜单信息
             menuService.verifyMenuForm(menu);
-            return Mono.justOrEmpty(menuService.save(menu));
+            return Mono.justOrEmpty(menuService.save1(menu));
         }catch (BusinessException e){
             e.printStackTrace();
             throw e;
         }
         catch (Exception e) {
-            e.printStackTrace();
-            logger.error("保存系统管理->系统管理-菜单表信息异常！");
+            logger.error("保存系统管理->系统管理-菜单表信息异常！",e);
             throw new BusinessException("SY0001");
         }
     }
@@ -63,10 +62,9 @@ public class MenuController extends BaseController {
             logger.debug("开始更新系统管理->系统管理-菜单表信息……");
             //校验菜单信息
             menuService.verifyMenuForm(menu);
-            return Mono.justOrEmpty(menuService.update(menu));
+            return Mono.justOrEmpty(menuService.update1(menu));
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("更新系统管理->系统管理-菜单表信息异常！");
+            logger.error("更新系统管理->系统管理-菜单表信息异常！",e);
             throw new BusinessException("SY0002");
         }
     }
@@ -80,8 +78,7 @@ public class MenuController extends BaseController {
             logger.debug("开始删除系统管理->系统管理-菜单表信息……");
             return Mono.justOrEmpty(menuService.deleteById(menuCode));
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("删除系统管理->系统管理-菜单表信息异常！");
+            logger.error("删除系统管理->系统管理-菜单表信息异常！",e);
             throw new BusinessException("SY0003");
         }
     }
@@ -95,8 +92,7 @@ public class MenuController extends BaseController {
             logger.debug("开始批量删除系统管理->系统管理-菜单表信息……");
             return Mono.justOrEmpty(menuService.deleteByIds(ids));
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("批量删除系统管理->系统管理-菜单表信息异常！");
+            logger.error("批量删除系统管理->系统管理-菜单表信息异常！",e);
             throw new BusinessException("SY0003");
         }
     }
@@ -116,8 +112,7 @@ public class MenuController extends BaseController {
             }
             return Mono.justOrEmpty(menu);
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("查询系统管理->系统管理-菜单表信息异常！");
+            logger.error("查询系统管理->系统管理-菜单表信息异常！",e);
             throw new BusinessException("SY0001");
         }
     }
@@ -132,8 +127,7 @@ public class MenuController extends BaseController {
             Message message = menuService.queryPageList(limit, offset, params);
             return Mono.justOrEmpty(message);
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("查询系统管理->系统管理-菜单表信息异常！");
+            logger.error("查询系统管理->系统管理-菜单表信息异常！",e);
             throw new BusinessException("SY0001");
         }
     }

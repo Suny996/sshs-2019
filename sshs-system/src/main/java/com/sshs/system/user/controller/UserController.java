@@ -35,21 +35,19 @@ public class UserController extends BaseController {
     @PostMapping
     public Mono<Message> save(@RequestBody User user) {
         try {
-            User u=userService.getByUserCode(user.getUserCode());
-            if(u!=null){
+            User u = userService.getByUserCode(user.getUserCode());
+            if (u != null) {
                 throw new BusinessException("US3002");
             }
 
-                logger.debug("开始保存用户信息……");
-                return Mono.justOrEmpty(userService.save(user));
+            logger.debug("开始保存用户信息……");
+            return Mono.justOrEmpty(userService.save1(user));
 
-        }catch (BusinessException e) {
+        } catch (BusinessException e) {
             e.printStackTrace();
             throw e;
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            logger.error("保存用户信息异常！");
+        } catch (Exception e) {
+            logger.error("保存用户信息异常！",e);
             throw new BusinessException("SY0001");
         }
     }
@@ -61,10 +59,9 @@ public class UserController extends BaseController {
     public Mono<Message> update(@RequestBody User user) {
         try {
             logger.debug("开始更新用户信息……");
-            return Mono.justOrEmpty(userService.update(user));
+            return Mono.justOrEmpty(userService.update1(user));
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("更新用户信息异常！");
+            logger.error("更新用户信息异常！",e);
             throw new BusinessException("SY0002");
         }
     }

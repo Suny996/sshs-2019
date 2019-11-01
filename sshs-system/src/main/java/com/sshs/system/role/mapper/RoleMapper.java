@@ -1,9 +1,9 @@
 package com.sshs.system.role.mapper;
 
+import com.sshs.core.base.mapper.BaseMapper;
 import com.sshs.core.page.Page;
 import com.sshs.system.role.model.Role;
 import org.apache.ibatis.annotations.Param;
-import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @author 61910
  * @date 2018/11/07
  */
-public interface RoleMapper extends Mapper<Role> {
+public interface RoleMapper extends BaseMapper<Role> {
     public Page<Role> findForPageList();
 
     /*

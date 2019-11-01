@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableTransactionManagement
 @Configuration
-@MapperScan("com.sshs.**.mapper.*")
+@MapperScan("com.sshs.**.mapper")
 public class MybatisPlusConfig {
 
     @Bean

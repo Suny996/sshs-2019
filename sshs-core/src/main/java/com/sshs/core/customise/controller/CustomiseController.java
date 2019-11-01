@@ -24,7 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/core/custmise")
 public class CustomiseController extends BaseController {
-    Logger logger = LoggerFactory.getLogger(CustomiseController.class);
+    private static final Logger logger = LoggerFactory.getLogger(CustomiseController.class);
     @Resource
     CustomiseMapper customiseMapper;
 
@@ -35,7 +35,7 @@ public class CustomiseController extends BaseController {
      * @throws Exception
      */
     @PostMapping
-    public Message saveCustomise(@RequestBody Customise customise) throws Exception {
+    public Message saveCustomise(@RequestBody Customise customise) {
         try {
             //customise.setCustomiseId(UuidUtil.get32UUID());
             customise.setUserCode("admin");
@@ -56,7 +56,7 @@ public class CustomiseController extends BaseController {
      * @throws Exception
      */
     @DeleteMapping("/{pageId}/{customiseName}")
-    public Message deleteCustomise(@PathVariable("pageId") String pageId, @PathVariable("customiseName") String customiseName) throws Exception {
+    public Message deleteCustomise(@PathVariable("pageId") String pageId, @PathVariable("customiseName") String customiseName) {
         try {
             QueryWrapper wrapper = new QueryWrapper<Customise>();
             Customise customise = new Customise();
@@ -86,10 +86,6 @@ public class CustomiseController extends BaseController {
         wrapper.setEntity(customise);
 
         List<Customise> customises = customiseMapper.selectList(wrapper);
-        //return customises;
-
-        //Page<Customise> page = new Page<>();
-        //customiseMapper.getCustomises(page, wrapper);
         return Message.success(customises);
     }
 }

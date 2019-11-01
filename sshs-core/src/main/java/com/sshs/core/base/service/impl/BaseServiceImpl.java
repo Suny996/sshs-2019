@@ -1,10 +1,12 @@
 package com.sshs.core.base.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.sshs.core.base.mapper.BaseMapper;
 import com.sshs.core.base.service.IBaseService;
@@ -17,7 +19,6 @@ import org.apache.ibatis.binding.MapperMethod;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Method;
@@ -32,9 +33,7 @@ import java.util.Map;
  * @author Suny
  * @date 2017-10-20
  */
-public abstract class BaseServiceImpl<T> implements IBaseService<T> {
-    @Autowired
-    private BaseMapper<T> dao;
+public abstract class BaseServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implements IBaseService<T> {
     /**
      * 日志工具
      */
@@ -48,9 +47,9 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Message<T> save(T model) {
+    public Message<T> save1(T model) {
         setCrtProperties(model);
-        if (dao.insertSelective(model) > 0) {
+        if (super.save(model)) {
             return Message.success(model);
         } else {
             return Message.failure("-100001");
@@ -66,7 +65,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     @Override
     @Deprecated
     @Transactional(rollbackFor = Exception.class)
-    public Message<Integer> save(List<T> models) {
+    public Message<Boolean> saveList(List<T> models) {
         Assert.notEmpty(models, "error: entityList must not be empty");
         if (models.size() > 2000) {
             logger.error("批量插入记录数不能大于2000");
@@ -75,7 +74,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
         for (T model : models) {
             setCrtProperties(model);
         }
-        return Message.success(dao.insertList(models));
+        return Message.success(super.saveBatch(models, 1000));
     }
 
 
@@ -87,9 +86,9 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Message<T> update(T model) {
+    public Message<T> update1(T model) {
         setUpdProperties(model);
-        if (dao.updateByPrimaryKey(model) > 0) {
+        if (super.updateById(model)) {
             return Message.success(model);
         } else {
             return Message.failure("-20001");
@@ -105,7 +104,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     @Override
     @Deprecated
     @Transactional(rollbackFor = Exception.class)
-    public Message<Integer> update(List<T> models) {
+    public Message<Integer> updateList(List<T> models) {
         Assert.notEmpty(models, "error: entityList must not be empty");
         if (models.size() > 2000) {
             logger.error("批量插入记录数不能大于2000");
@@ -136,8 +135,9 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Message<T> delete(T model) {
-        if (dao.delete(model) > 0) {
+    public Message<T> delete1(T model) {
+        QueryWrapper<T> queryWrapper = new QueryWrapper<>(model);
+        if (super.remove(queryWrapper)) {
             return Message.success(model);
         } else {
             return Message.failure("-30001");
@@ -152,8 +152,8 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Message<Integer> deleteById(String id) {
-        return Message.success(dao.deleteByPrimaryKey(id));
+    public Message<Boolean> deleteById(String id) {
+        return Message.success(super.removeById(id));
     }
 
     /**
@@ -164,8 +164,8 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Message<Integer> deleteByIds(List<String> ids) {
-        return Message.success(dao.deleteBatchIds(ids));
+    public Message<Boolean> deleteByIds(List<String> ids) {
+        return Message.success(super.removeByIds(ids));
     }
 
     /**
@@ -176,7 +176,18 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
      */
     @Override
     public Message<T> getById(String id) {
-        return Message.success(dao.selectByPrimaryKey(id));
+        return Message.success((T) super.getById(id));
+    }
+
+    /**
+     * 根据主键查询单笔记录
+     *
+     * @param id ID
+     * @return 查询到的对象
+     */
+    @Override
+    public T getEntityById(String id) {
+        return super.getById(id);
     }
 
     /**
@@ -192,7 +203,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
          * 加入数据权限过滤条件
          */
         //parameter.put("_orgAuth", SystemUtil.getOrgAuthStatement());
-        return Message.success(dao.findForList(page, parameter));
+        return Message.success(baseMapper.findForList(page, parameter));
     }
 
     /**
@@ -204,7 +215,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     @Override
     public Message<List<T>> findForList(Object parameter) {
         Map<String, Object> params = new HashMap<String, Object>();
-        return Message.success(dao.findForList(parameter));
+        return Message.success(baseMapper.findForList(parameter));
     }
 
     /**
@@ -217,7 +228,15 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
      */
     @Override
     public Message<IPage<T>> queryPageList(String limit, String offset, Map<String, Object> parameter) {
-        Page<T> page = new Page<>(Integer.valueOf(limit, 10), Integer.valueOf(offset, 10));
+        int pageSize = 10;
+        int pageNumber = 1;
+        if (limit != null) {
+            pageSize = Integer.min(1000, Integer.valueOf(limit, 10));
+        }
+        if (offset != null) {
+            pageNumber = Integer.valueOf(offset, 10);
+        }
+        Page<T> page = new Page<>(pageSize, pageNumber);
         return findForPageList(page, parameter);
     }
 
