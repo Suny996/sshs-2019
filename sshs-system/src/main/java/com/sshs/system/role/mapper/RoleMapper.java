@@ -3,6 +3,7 @@ package com.sshs.system.role.mapper;
 import com.sshs.core.base.mapper.BaseMapper;
 import com.sshs.core.page.Page;
 import com.sshs.system.role.model.Role;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -13,10 +14,11 @@ import java.util.List;
  * @author 61910
  * @date 2018/11/07
  */
+@Mapper
 public interface RoleMapper extends BaseMapper<Role> {
     public Page<Role> findForPageList();
 
-    /*
+    /**
      * 功能描述:
      * @param:
      * @return:

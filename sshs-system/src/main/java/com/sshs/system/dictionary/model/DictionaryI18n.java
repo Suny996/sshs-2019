@@ -2,6 +2,7 @@ package com.sshs.system.dictionary.model;
 
 import org.apache.ibatis.type.Alias;
 
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
@@ -13,15 +14,14 @@ import java.util.Date;
  * 
  */
 @Alias("DictionaryI18n")
-@Table(name = "SYS_DICTIONARY_I18N")
+@Table(name = "SYS_DICTIONARIES_I18N")
 public class DictionaryI18n implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	//@Id
-	//@GeneratedValue(generator = "UUID")
+	@Id
 	private String i18nId;
 	private String dictId;
 	private String dictCode;

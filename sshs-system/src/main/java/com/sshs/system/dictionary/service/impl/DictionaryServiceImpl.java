@@ -1,6 +1,5 @@
 package com.sshs.system.dictionary.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.sshs.core.base.service.impl.BaseServiceImpl;
 import com.sshs.core.constant.Global;
 import com.sshs.core.util.DictionaryUtil;
@@ -12,6 +11,7 @@ import com.sshs.system.dictionary.service.IDictionaryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -24,7 +24,7 @@ import java.util.*;
  */
 @Service
 public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implements IDictionaryService {
-    Logger logger = LoggerFactory.getLogger(DictionaryServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(DictionaryServiceImpl.class);
 
     /**
      * 字典缓存。
@@ -32,8 +32,7 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
     public static Map<String, Dictionary> dictionarys = new HashMap<String, Dictionary>(100);
 
     @Resource
-    private DictionaryMapper dictionaryMapper;
-
+    private DictionaryMapper mapper;
 
     @Resource
     private DictionaryI18nMapper dictionaryI18nMapper;
@@ -46,10 +45,10 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
      */
     @Override
     public List<Dictionary> findByParentId(String parentId) {
-        QueryWrapper<Dictionary> wrapper = new QueryWrapper<>();
-        wrapper.eq("parentId", parentId);
-        wrapper.orderByAsc("sortNo");
-        return super.list(wrapper);
+        Example example = new Example(Dictionary.class);
+        example.createCriteria().andEqualTo("parentId", parentId);
+        example.orderBy("sortNo").asc();
+        return mapper.selectByExample(example);
     }
 
     @Override
@@ -58,7 +57,7 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
         if (dict != null) {
             return dict;
         } else {
-            List<Dictionary> dicts = dictionaryMapper.findByDictCode(dictCode);
+            List<Dictionary> dicts = mapper.findByDictCode(dictCode);
             if (dicts != null && !dicts.isEmpty()) {
                 for (Dictionary d : dicts) {
                     initChildren(d);
@@ -76,9 +75,9 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
     //@PostConstruct
     @Override
     public void initDictList() {
-        QueryWrapper<Dictionary> wrapper = new QueryWrapper<>();
-        wrapper.eq("dictType", "1").eq("status", "1");
-        List<Dictionary> dictCodes = super.list(wrapper);
+        Example wrapper = new Example(Dictionary.class);
+        wrapper.createCriteria().andEqualTo("dictType", "1").andEqualTo("status", "1");
+        List<Dictionary> dictCodes = mapper.selectByExample(wrapper);
         // 字典项
         for (Dictionary dict : dictCodes) {
             initChildren(dict);
@@ -112,9 +111,9 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
      * @return
      */
     private List<DictionaryI18n> findI18nByDictId(String dictId) {
-        Map<String, Object> parameter = new HashMap<>();
-        parameter.put("dictId", dictId);
-        return dictionaryI18nMapper.findForList(parameter);
+        Example example = new Example(DictionaryI18n.class);
+        example.createCriteria().andEqualTo("dictId", dictId);
+        return dictionaryI18nMapper.selectByExample(example);
     }
 
     /**

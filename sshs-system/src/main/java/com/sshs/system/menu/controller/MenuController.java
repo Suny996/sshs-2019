@@ -42,7 +42,7 @@ public class MenuController extends BaseController {
             logger.debug("开始保存系统管理->系统管理-菜单表信息……");
             //校验菜单信息
             menuService.verifyMenuForm(menu);
-            return Mono.justOrEmpty(menuService.save1(menu));
+            return Mono.justOrEmpty(menuService.save(menu));
         }catch (BusinessException e){
             e.printStackTrace();
             throw e;
@@ -62,7 +62,7 @@ public class MenuController extends BaseController {
             logger.debug("开始更新系统管理->系统管理-菜单表信息……");
             //校验菜单信息
             menuService.verifyMenuForm(menu);
-            return Mono.justOrEmpty(menuService.update1(menu));
+            return Mono.justOrEmpty(menuService.update(menu));
         } catch (Exception e) {
             logger.error("更新系统管理->系统管理-菜单表信息异常！",e);
             throw new BusinessException("SY0002");

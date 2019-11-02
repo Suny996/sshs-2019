@@ -28,10 +28,10 @@ public class LogServiceImpl extends BaseServiceImpl<Log> implements ILogService 
      * @return Message
      */
     @Override
-    public Message<Log> save1(Log log) {
+    public Message<Log> save(Log log) {
         log.setLogId(UuidUtil.get32UUID());
         try {
-            return super.save1(log);
+            return super.save(log);
         } catch (Exception e) {
             logger.error("保存系统管理->系统管理-系统操作日志表信息异常！", e);
             throw new BusinessException("-110002");

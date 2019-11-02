@@ -41,7 +41,7 @@ public class UserController extends BaseController {
             }
 
             logger.debug("开始保存用户信息……");
-            return Mono.justOrEmpty(userService.save1(user));
+            return Mono.justOrEmpty(userService.save(user));
 
         } catch (BusinessException e) {
             e.printStackTrace();
@@ -59,7 +59,7 @@ public class UserController extends BaseController {
     public Mono<Message> update(@RequestBody User user) {
         try {
             logger.debug("开始更新用户信息……");
-            return Mono.justOrEmpty(userService.update1(user));
+            return Mono.justOrEmpty(userService.update(user));
         } catch (Exception e) {
             logger.error("更新用户信息异常！",e);
             throw new BusinessException("SY0002");
@@ -122,8 +122,7 @@ public class UserController extends BaseController {
             Message message = userService.queryPageList(limit, offset, params);
             return Mono.justOrEmpty(message);
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("查询用户信息异常！");
+            logger.error("查询用户信息异常！",e);
             throw new BusinessException("SY0001");
         }
     }

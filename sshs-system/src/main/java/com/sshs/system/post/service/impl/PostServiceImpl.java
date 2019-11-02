@@ -33,10 +33,10 @@ public class PostServiceImpl extends BaseServiceImpl<Post> implements IPostServi
      * @return Message
      */
     @Override
-    public Message save1(Post post) {
+    public Message save(Post post) {
         post.setPostId(UuidUtil.get32UUID());
         try {
-            return super.save1(post);
+            return super.save(post);
         } catch (Exception e) {
             logger.error("保存系统管理->系统管理-岗位表信息异常！", e);
             throw new BusinessException("SY0001");

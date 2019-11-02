@@ -2,6 +2,7 @@ package com.sshs.system.menu.mapper;
 
 import com.sshs.core.base.mapper.BaseMapper;
 import com.sshs.system.menu.model.Menu;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * @author Suny
  * @date 2018/03/13
  */
+@Mapper
 public interface MenuMapper extends BaseMapper<Menu> {
     /**
      * 根据menuName查询menu

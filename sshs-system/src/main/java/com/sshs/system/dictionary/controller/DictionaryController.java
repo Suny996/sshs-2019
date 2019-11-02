@@ -1,9 +1,9 @@
 package com.sshs.system.dictionary.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
+import com.sshs.core.page.Page;
 import com.sshs.system.dictionary.model.Dictionary;
 import com.sshs.system.dictionary.service.IDictionaryService;
 import org.slf4j.Logger;
@@ -36,7 +36,7 @@ public class DictionaryController extends BaseController {
     public Message<Dictionary> save(@RequestBody Dictionary dictionary) {
         try {
             logger.debug("开始保存系统管理->系统管理-数据字典表信息……");
-            return dictionaryService.save1(dictionary);
+            return dictionaryService.save(dictionary);
         } catch (Exception e) {
             logger.error("保存系统管理->系统管理-数据字典表信息异常！", e);
             throw new BusinessException("SY0001");
@@ -50,7 +50,7 @@ public class DictionaryController extends BaseController {
     public Message<Dictionary> update(@RequestBody Dictionary dictionary) {
         try {
             logger.debug("开始更新系统管理->系统管理-数据字典表信息……");
-            return dictionaryService.update1(dictionary);
+            return dictionaryService.update(dictionary);
         } catch (Exception e) {
             logger.error("更新系统管理->系统管理-数据字典表信息异常！", e);
             throw new BusinessException("SY0002");
@@ -61,7 +61,7 @@ public class DictionaryController extends BaseController {
      * 根据主键删除系统管理->系统管理-数据字典表数据
      */
     @DeleteMapping("/{dictionaryId}")
-    public Message<Boolean> delete(@PathVariable("dictionaryId") String dictionaryId) {
+    public Message<Integer> delete(@PathVariable("dictionaryId") String dictionaryId) {
         try {
             logger.debug("开始删除系统管理->系统管理-数据字典表信息……");
             return dictionaryService.deleteById(dictionaryId);
@@ -75,7 +75,7 @@ public class DictionaryController extends BaseController {
      * 批量删除系统管理->系统管理-数据字典表数据
      */
     @DeleteMapping
-    public Message<Boolean> delete(@RequestBody List<String> ids) {
+    public Message<Integer> delete(@RequestBody List<String> ids) {
         try {
             logger.debug("开始批量删除系统管理->系统管理-数据字典表信息……");
             return dictionaryService.deleteByIds(ids);
@@ -104,7 +104,7 @@ public class DictionaryController extends BaseController {
      * 查询系统管理->系统管理-数据字典表信息列表
      */
     @GetMapping
-    public Message<IPage<Dictionary>> queryList(@RequestParam(value = "limit", required = false) String limit, @RequestParam String offset, @RequestParam Map<String, Object> params) {
+    public Message<Page<Dictionary>> queryList(@RequestParam(value = "limit", required = false) String limit, @RequestParam String offset, @RequestParam Map<String, Object> params) {
         try {
             logger.debug("开始查询系统管理->系统管理-数据字典表列表信息……");
             return dictionaryService.queryPageList(limit, offset, params);

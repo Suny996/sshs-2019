@@ -26,7 +26,6 @@ public class Log implements Serializable {
      * ID
      */
     @Id
-    //@GeneratedValue(generator = "UUID")
     @Column(name = "LOG_ID")
     private String logId;
 

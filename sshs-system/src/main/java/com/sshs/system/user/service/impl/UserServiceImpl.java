@@ -47,11 +47,11 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
      * @return
      */
     @Override
-    public Message<User> save1(User user) {
+    public Message<User> save(User user) {
         user.setUserId(UuidUtil.get32UUID());
         user.setPassword(defaultPassword);
         try {
-            return super.save1(user);
+            return super.save(user);
         } catch (Exception e) {
             logger.error("保存用户信息异常！",e);
             throw new BusinessException("SY0001");

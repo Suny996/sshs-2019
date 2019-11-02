@@ -69,12 +69,12 @@ public class UserRoleServiceImpl extends BaseServiceImpl<UserRole> implements IU
      * @return Message
      */
     @Override
-    public Message saveList(List<UserRole> userRoles) {
+    public Message save(List<UserRole> userRoles) {
         try {
             for (UserRole userRole : userRoles) {
                 userRole.setUserRoleId(UuidUtil.get32UUID());
             }
-            return super.saveList(userRoles);
+            return super.save(userRoles);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("批量保存系统管理->系统管理-用户角色对照表信息异常！");

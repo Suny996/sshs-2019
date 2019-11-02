@@ -1,9 +1,9 @@
 package com.sshs.system.log.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
+import com.sshs.core.page.Page;
 import com.sshs.system.log.model.Log;
 import com.sshs.system.log.service.ILogService;
 import org.slf4j.Logger;
@@ -36,7 +36,7 @@ public class LogController extends BaseController {
     public Message save1(@RequestBody Log log) {
         try {
             logger.debug("开始保存系统管理->系统管理-系统操作日志表信息……");
-            return logService.save1(log);
+            return logService.save(log);
         } catch (BusinessException e) {
             throw e;
         } catch (Exception e) {
@@ -53,7 +53,7 @@ public class LogController extends BaseController {
     public Message<Log> update1(@RequestBody Log log) {
         try {
             logger.debug("开始更新系统管理->系统管理-系统操作日志表信息……");
-            return logService.update1(log);
+            return logService.update(log);
         } catch (BusinessException e) {
             throw e;
         } catch (Exception e) {
@@ -66,7 +66,7 @@ public class LogController extends BaseController {
      * 根据主键删除系统管理->系统管理-系统操作日志表数据
      */
     @DeleteMapping("/{logId}")
-    public Message<Boolean> delete(@PathVariable("logId") String logId) {
+    public Message<Integer> delete(@PathVariable("logId") String logId) {
         try {
             logger.debug("开始删除系统管理->系统管理-系统操作日志表信息……");
             return logService.deleteById(logId);
@@ -82,7 +82,7 @@ public class LogController extends BaseController {
      * 批量删除系统管理->系统管理-系统操作日志表数据
      */
     @DeleteMapping
-    public Message<Boolean> delete(@RequestBody List<String> ids) {
+    public Message<Integer> delete(@RequestBody List<String> ids) {
         try {
             logger.debug("开始批量删除系统管理->系统管理-系统操作日志表信息……");
             return logService.deleteByIds(ids);
@@ -114,7 +114,7 @@ public class LogController extends BaseController {
      * 查询系统管理->系统管理-系统操作日志表信息列表
      */
     @GetMapping
-    public Message<IPage<Log>> queryList(@RequestParam(value = "limit", required = true) String limit, @RequestParam(value = "offset", required = false) String offset, @RequestParam Map<String, Object> params) {
+    public Message<Page<Log>> queryList(@RequestParam(value = "limit", required = true) String limit, @RequestParam(value = "offset", required = false) String offset, @RequestParam Map<String, Object> params) {
         try {
             logger.debug("开始查询系统管理->系统管理-系统操作日志表列表信息……");
             return logService.queryPageList(limit, offset, params);

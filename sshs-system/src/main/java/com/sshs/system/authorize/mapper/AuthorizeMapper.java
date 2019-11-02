@@ -1,7 +1,6 @@
 package com.sshs.system.authorize.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.sshs.core.page.Page;
+import com.sshs.core.base.mapper.BaseMapper;
 import com.sshs.system.authorize.model.Authorize;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -14,7 +13,4 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface AuthorizeMapper extends BaseMapper<Authorize> {
-    Page<Authorize> findForPageList();
-
-    void deleteByRoleCode(String roleCode);
 }

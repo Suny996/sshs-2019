@@ -36,7 +36,7 @@ public class PostController extends BaseController {
     public Mono<Message> save(@RequestBody Post post) {
         try {
             logger.debug("开始保存系统管理->系统管理-岗位表信息……");
-            return Mono.justOrEmpty(postService.save1(post));
+            return Mono.justOrEmpty(postService.save(post));
         } catch (Exception e) {
             logger.error("保存系统管理->系统管理-岗位表信息异常！", e);
             throw new BusinessException("SY0001");
@@ -50,7 +50,7 @@ public class PostController extends BaseController {
     public Mono<Message> update(@RequestBody Post post) {
         try {
             logger.debug("开始更新系统管理->系统管理-岗位表信息……");
-            return Mono.justOrEmpty(postService.update1(post));
+            return Mono.justOrEmpty(postService.update(post));
         } catch (Exception e) {
             logger.error("更新系统管理->系统管理-岗位表信息异常！", e);
             throw new BusinessException("SY0002");

@@ -36,7 +36,7 @@ public class RoleController extends BaseController {
     public Mono<Message> save(@RequestBody Role role) {
         try {
             logger.debug("开始保存系统管理->系统管理-角色表信息……");
-            return Mono.justOrEmpty(roleService.save1(role));
+            return Mono.justOrEmpty(roleService.save(role));
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("保存系统管理->系统管理-角色表信息异常！");
@@ -51,7 +51,7 @@ public class RoleController extends BaseController {
     public Mono<Message> update(@RequestBody Role role) {
         try {
             logger.debug("开始更新系统管理->系统管理-角色表信息……");
-            return Mono.justOrEmpty(roleService.update1(role));
+            return Mono.justOrEmpty(roleService.update(role));
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("更新系统管理->系统管理-角色表信息异常！");

@@ -1,13 +1,7 @@
 package com.sshs.core.base.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.enums.SqlMethod;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Assert;
-import com.baomidou.mybatisplus.core.toolkit.Constants;
-import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
+
+import com.google.common.collect.Lists;
 import com.sshs.core.base.mapper.BaseMapper;
 import com.sshs.core.base.service.IBaseService;
 import com.sshs.core.exception.BusinessException;
@@ -15,10 +9,10 @@ import com.sshs.core.message.Message;
 import com.sshs.core.page.Page;
 import com.sshs.core.util.SystemUtil;
 import com.sshs.core.util.UuidUtil;
-import org.apache.ibatis.binding.MapperMethod;
-import org.apache.ibatis.session.SqlSession;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Method;
@@ -33,11 +27,14 @@ import java.util.Map;
  * @author Suny
  * @date 2017-10-20
  */
-public abstract class BaseServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implements IBaseService<T> {
+public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     /**
      * 日志工具
      */
     private final static Logger logger = LoggerFactory.getLogger(BaseServiceImpl.class);
+
+    @Autowired
+    BaseMapper<T> mapper;
 
     /**
      * 新增
@@ -47,9 +44,9 @@ public abstract class BaseServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> i
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Message<T> save1(T model) {
+    public Message<T> save(T model) {
         setCrtProperties(model);
-        if (super.save(model)) {
+        if (mapper.insertSelective(model) >= 1) {
             return Message.success(model);
         } else {
             return Message.failure("-100001");
@@ -63,18 +60,19 @@ public abstract class BaseServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> i
      * @return 保存成功的记录数
      */
     @Override
-    @Deprecated
     @Transactional(rollbackFor = Exception.class)
-    public Message<Boolean> saveList(List<T> models) {
-        Assert.notEmpty(models, "error: entityList must not be empty");
-        if (models.size() > 2000) {
-            logger.error("批量插入记录数不能大于2000");
+    public Message<Integer> save(List<T> models) {
+        if (models == null || models.isEmpty()) {
+            logger.error("记录不能为空");
             throw new BusinessException("-10005");
         }
         for (T model : models) {
             setCrtProperties(model);
         }
-        return Message.success(super.saveBatch(models, 1000));
+        for (List<T> list : Lists.partition(models, 1000)) {
+            mapper.insertList(list);
+        }
+        return Message.success(models.size());
     }
 
 
@@ -86,9 +84,9 @@ public abstract class BaseServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> i
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Message<T> update1(T model) {
+    public Message<T> update(T model) {
         setUpdProperties(model);
-        if (super.updateById(model)) {
+        if (mapper.updateByPrimaryKey(model) >= 1) {
             return Message.success(model);
         } else {
             return Message.failure("-20001");
@@ -104,27 +102,20 @@ public abstract class BaseServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> i
     @Override
     @Deprecated
     @Transactional(rollbackFor = Exception.class)
-    public Message<Integer> updateList(List<T> models) {
-        Assert.notEmpty(models, "error: entityList must not be empty");
+    public Message<Integer> update(List<T> models) {
+        if (models == null || models.isEmpty()) {
+            logger.error("记录不能为空");
+            throw new BusinessException("-10005");
+        }
         if (models.size() > 2000) {
             logger.error("批量插入记录数不能大于2000");
             throw new BusinessException("-10005");
         }
-        String sqlStatement = SqlHelper.table((Class<T>) ReflectionKit.getSuperClassGenericType(getClass(), 1)).getSqlStatement(SqlMethod.UPDATE_BY_ID.getMethod());
-        try (SqlSession batchSqlSession = SqlHelper.sqlSessionBatch((Class<T>) ReflectionKit.getSuperClassGenericType(getClass(), 1))) {
-            int i = 0;
-            for (T anEntityList : models) {
-                MapperMethod.ParamMap<T> param = new MapperMethod.ParamMap<>();
-                param.put(Constants.ENTITY, anEntityList);
-                batchSqlSession.update(sqlStatement, param);
-                if (i >= 1 && i % 300 == 0) {
-                    batchSqlSession.flushStatements();
-                }
-                i++;
-            }
-            batchSqlSession.flushStatements();
-            return Message.success(i);
+        int i = 0;
+        for (T model : models) {
+            i += mapper.updateByPrimaryKey(model);
         }
+        return Message.success(i);
     }
 
     /**
@@ -135,13 +126,8 @@ public abstract class BaseServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> i
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Message<T> delete1(T model) {
-        QueryWrapper<T> queryWrapper = new QueryWrapper<>(model);
-        if (super.remove(queryWrapper)) {
-            return Message.success(model);
-        } else {
-            return Message.failure("-30001");
-        }
+    public Message<Integer> delete(T model) {
+        return Message.success(mapper.delete(model));
     }
 
     /**
@@ -152,8 +138,8 @@ public abstract class BaseServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> i
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Message<Boolean> deleteById(String id) {
-        return Message.success(super.removeById(id));
+    public Message<Integer> deleteById(String id) {
+        return Message.success(mapper.deleteByPrimaryKey(id));
     }
 
     /**
@@ -164,8 +150,8 @@ public abstract class BaseServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> i
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Message<Boolean> deleteByIds(List<String> ids) {
-        return Message.success(super.removeByIds(ids));
+    public Message<Integer> deleteByIds(List<String> ids) {
+        return Message.success(mapper.deleteByIds(StringUtils.join(ids, ',')));
     }
 
     /**
@@ -176,7 +162,7 @@ public abstract class BaseServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> i
      */
     @Override
     public Message<T> getById(String id) {
-        return Message.success((T) super.getById(id));
+        return Message.success((T) mapper.selectByPrimaryKey(id));
     }
 
     /**
@@ -187,7 +173,7 @@ public abstract class BaseServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> i
      */
     @Override
     public T getEntityById(String id) {
-        return super.getById(id);
+        return (T) mapper.selectByPrimaryKey(id);
     }
 
     /**
@@ -198,12 +184,12 @@ public abstract class BaseServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> i
      * @return 分页查询结果
      */
     @Override
-    public Message<IPage<T>> findForPageList(Page<T> page, Object parameter) {
+    public Message<Page<T>> findForPageList(Page<T> page, Object parameter) {
         /**
          * 加入数据权限过滤条件
          */
         //parameter.put("_orgAuth", SystemUtil.getOrgAuthStatement());
-        return Message.success(baseMapper.findForList(page, parameter));
+        return Message.success(mapper.findForList(page, parameter));
     }
 
     /**
@@ -215,7 +201,19 @@ public abstract class BaseServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> i
     @Override
     public Message<List<T>> findForList(Object parameter) {
         Map<String, Object> params = new HashMap<String, Object>();
-        return Message.success(baseMapper.findForList(parameter));
+        return Message.success(mapper.findForList(parameter));
+    }
+
+    /**
+     * 公共列表查询方法
+     *
+     * @param parameter 查询条件
+     * @return 查询结果
+     */
+    @Override
+    public List<T> findList(Object parameter) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        return mapper.findForList(parameter);
     }
 
     /**
@@ -227,7 +225,7 @@ public abstract class BaseServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> i
      * @return 分页查询结果
      */
     @Override
-    public Message<IPage<T>> queryPageList(String limit, String offset, Map<String, Object> parameter) {
+    public Message<Page<T>> queryPageList(String limit, String offset, Map<String, Object> parameter) {
         int pageSize = 10;
         int pageNumber = 1;
         if (limit != null) {

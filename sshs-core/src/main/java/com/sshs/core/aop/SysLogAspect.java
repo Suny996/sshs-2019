@@ -1,10 +1,8 @@
 package com.sshs.core.aop;
 
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.sshs.core.util.SystemUtil;
 import com.sshs.core.util.UuidUtil;
-import com.sshs.core.customise.mapper.CommonMapper;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -27,7 +25,7 @@ import java.util.Date;
 public class SysLogAspect {
 
     @Resource
-    BaseMapper<SysLog> mapper;
+    SysLogMapper mapper;
 
     /**
      * 定义切点 @Pointcut

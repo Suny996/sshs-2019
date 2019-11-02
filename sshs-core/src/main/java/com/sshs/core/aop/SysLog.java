@@ -1,7 +1,5 @@
 package com.sshs.core.aop;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import org.apache.ibatis.type.Alias;
 
 import javax.persistence.Column;
@@ -26,8 +24,8 @@ public class SysLog implements Serializable {
     /**
      * ID
      */
-    //@Id
-    @TableId(value = "LOG_ID", type = IdType.UUID)
+    @Id
+    @Column(name = "LOG_ID")
     private String logId;
 
     /**

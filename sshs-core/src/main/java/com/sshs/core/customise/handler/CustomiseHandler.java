@@ -1,11 +1,11 @@
 package com.sshs.core.customise.handler;
 
-import com.sshs.core.util.UuidUtil;
+import com.sshs.core.customise.mapper.CustomiseMapper;
 import com.sshs.core.customise.model.Customise;
 import com.sshs.core.message.Message;
+import com.sshs.core.util.UuidUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyExtractors;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -29,9 +29,9 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Component
 public class CustomiseHandler {
-    Logger logger = LoggerFactory.getLogger(CustomiseHandler.class);
-    @Resource(name = "sqlSessionTemplate")
-    private SqlSessionTemplate sqlSessionTemplate;
+    private static final Logger logger = LoggerFactory.getLogger(CustomiseHandler.class);
+    @Resource
+    CustomiseMapper customiseMapper;
 
     /**
      * 添加自定义查询方法
@@ -42,10 +42,10 @@ public class CustomiseHandler {
     public Mono<ServerResponse> saveCustomise(ServerRequest request) {
         return ServerResponse.ok()
                 .body(request.body(BodyExtractors.toMono(Customise.class)).map(c -> {
-                    c.setCustomiseId(UuidUtil.get32UUID());
+                    c.setId(UuidUtil.get32UUID());
                     c.setUserCode("admin");
                     c.setCrtDate(new Date());
-                    sqlSessionTemplate.insert("CustomiseMapper.save", c);
+                    customiseMapper.insert(c);
                     return c;
                 }), Customise.class);
     }
@@ -59,7 +59,7 @@ public class CustomiseHandler {
     public Mono<ServerResponse> deleteCustomise(ServerRequest request) {
         //System.out.println(">>>>>>>>>del");
         String customiseId = request.pathVariable("customiseId");
-        sqlSessionTemplate.delete("CustomiseMapper.deleteByCustomiseId", customiseId);
+        customiseMapper.deleteByPrimaryKey(customiseId);
         return ServerResponse.ok()//.contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromObject(new Message("100000")));
     }
@@ -76,8 +76,7 @@ public class CustomiseHandler {
         Customise custom = new Customise();
         custom.setPageId(pageId);
         custom.setUserCode("admin");
-        List<Customise> customises = sqlSessionTemplate.selectList("CustomiseMapper.getCustomises",
-                custom);
+        List<Customise> customises = customiseMapper.select(custom);
 
         return ServerResponse.ok().contentType(APPLICATION_JSON)
                 .body(BodyInserters.fromObject(customises)).switchIfEmpty(notFound);

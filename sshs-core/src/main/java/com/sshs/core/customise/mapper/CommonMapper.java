@@ -1,8 +1,8 @@
 package com.sshs.core.customise.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.sshs.core.aop.SysLog;
+import com.sshs.core.base.mapper.BaseMapper;
 import com.sshs.core.customise.model.Customise;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -15,6 +15,7 @@ import java.util.Map;
  * @author Suny
  * @date 2017-10-15
  */
+@Mapper
 public interface CommonMapper extends BaseMapper<Customise> {
     /**
      * 根据机构号查询其下级机构列表

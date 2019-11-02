@@ -75,9 +75,15 @@ allprojects {
         compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.3'
         compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.1.0.RELEASE'
         // https://mvnrepository.com/artifact/tk.mybatis/mapper-spring-boot-starter
-        //compile group: 'tk.mybatis', name: 'mapper-spring-boot-starter', version: '2.1.5'
+        compile group: 'tk.mybatis', name: 'mapper-spring-boot-starter', version: '2.1.5'
+        // https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper-spring-boot-starter
+        compile group: 'com.github.pagehelper', name: 'pagehelper-spring-boot-starter', version: '1.2.12'
+        // https://mvnrepository.com/artifact/com.google.guava/guava
+        compile group: 'com.google.guava', name: 'guava', version: '28.0-jre'
+
+
         // https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-boot-starter
-        compile group: 'com.baomidou', name: 'mybatis-plus-boot-starter', version: '3.2.0'
+        //compile group: 'com.baomidou', name: 'mybatis-plus-boot-starter', version: '3.2.0'
 
         // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-eureka-client
         //compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-client', version: '2.1.0.RELEASE'

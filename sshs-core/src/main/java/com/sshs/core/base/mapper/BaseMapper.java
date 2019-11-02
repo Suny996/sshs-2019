@@ -1,11 +1,14 @@
 package com.sshs.core.base.mapper;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+
 import com.sshs.core.page.Page;
+import tk.mybatis.mapper.common.IdsMapper;
+import tk.mybatis.mapper.common.MySqlMapper;
 
 import java.util.List;
 
-public interface BaseMapper<T> extends com.baomidou.mybatisplus.core.mapper.BaseMapper<T> {
+
+public interface BaseMapper<T> extends tk.mybatis.mapper.common.Mapper<T>, MySqlMapper<T>, IdsMapper<T> {
     /**
      * 默认分页查询
      *
@@ -13,7 +16,7 @@ public interface BaseMapper<T> extends com.baomidou.mybatisplus.core.mapper.Base
      * @param parameter
      * @return
      */
-    IPage<T> findForList(Page<T> page, Object parameter);
+    Page<T> findForList(Page<T> page, Object parameter);
 
     /**
      * 默认不分页查询

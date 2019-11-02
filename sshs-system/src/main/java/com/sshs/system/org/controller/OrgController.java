@@ -37,7 +37,7 @@ public class OrgController extends BaseController {
     public Mono<Message> save(@RequestBody Org org) {
         try {
             logger.debug("开始保存系统管理->系统管理-机构表信息……");
-            return Mono.justOrEmpty(orgService.save1(org));
+            return Mono.justOrEmpty(orgService.save(org));
         } catch (Exception e) {
             logger.error("保存系统管理->系统管理-机构表信息异常！", e);
             throw new BusinessException("SY0001");
@@ -51,7 +51,7 @@ public class OrgController extends BaseController {
     public Mono<Message> update(@RequestBody Org org) {
         try {
             logger.debug("开始更新系统管理->系统管理-机构表信息……");
-            return Mono.justOrEmpty(orgService.update1(org));
+            return Mono.justOrEmpty(orgService.update(org));
         } catch (Exception e) {
             logger.error("更新系统管理->系统管理-机构表信息异常！", e);
             throw new BusinessException("SY0002");

@@ -1,7 +1,6 @@
 package com.sshs.system.menu.service.impl;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.sshs.core.base.service.impl.BaseServiceImpl;
 import com.sshs.core.constant.MenuType;
 import com.sshs.core.exception.BusinessException;
@@ -14,6 +13,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -47,7 +47,7 @@ public class MenuServiceImpl extends BaseServiceImpl<Menu> implements IMenuServi
      * @throws Exception
      */
     @Override
-    public Message<Menu> save1(Menu menu) {
+    public Message<Menu> save(Menu menu) {
         String ccode = mapper.findLastChildCodeById(menu.getParentCode());
         String parentMenuCode = menu.getParentCode();
         if (parentMenuCode == null || parentMenuCode.equals("0") || parentMenuCode.equals("00")) {
@@ -77,7 +77,7 @@ public class MenuServiceImpl extends BaseServiceImpl<Menu> implements IMenuServi
         BigDecimal menuSeq = getMaxMenuSeq(menu.getParentCode());
         menu.setMenuSeq(BusiUtil.nvl(menuSeq, BigDecimal.ZERO).add(new BigDecimal(1)));
         try {
-            return super.save1(menu);
+            return super.save(menu);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("保存系统管理->系统管理-菜单表信息异常！");
@@ -95,9 +95,9 @@ public class MenuServiceImpl extends BaseServiceImpl<Menu> implements IMenuServi
     public Message<Menu> getMenuTree(String rootId) {
         Menu menu = mapper.findMenuById(rootId);
         if (menu != null) {
-            QueryWrapper<Menu> wrapper = new QueryWrapper<>();
-            wrapper.orderByAsc("menuCode");
-            List<Menu> menus = super.list(wrapper);
+            Example wrapper = new Example(Menu.class);
+            wrapper.orderBy("menuCode").asc();
+            List<Menu> menus = mapper.selectByExample(wrapper);
             menu = initChildren(menu, menus);
         }
         return Message.success(menu);

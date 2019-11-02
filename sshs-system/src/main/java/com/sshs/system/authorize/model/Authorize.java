@@ -1,11 +1,10 @@
 package com.sshs.system.authorize.model;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.sshs.system.menu.model.Menu;
 import org.apache.ibatis.type.Alias;
 
 import javax.persistence.Column;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.io.Serializable;
@@ -27,7 +26,8 @@ public class Authorize implements Serializable {
     /**
      * 权限ID
      */
-    @TableId(value = "AUTHORIZE_ID", type = IdType.UUID)
+    @Id
+    @Column(name = "AUTHORIZE_ID")
     private String id;
 
     /**

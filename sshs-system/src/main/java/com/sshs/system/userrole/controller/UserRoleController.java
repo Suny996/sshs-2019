@@ -51,7 +51,7 @@ public class UserRoleController extends BaseController {
     public Mono<Message> update(@RequestBody UserRole userRole) {
         try {
             logger.debug("开始更新系统管理->系统管理-用户角色对照表信息……");
-            return Mono.justOrEmpty(userRoleService.update1(userRole));
+            return Mono.justOrEmpty(userRoleService.update(userRole));
         } catch (Exception e) {
              e.printStackTrace();
              logger.error("更新系统管理->系统管理-用户角色对照表信息异常！");

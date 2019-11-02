@@ -1,12 +1,10 @@
 package com.sshs.core.customise.model;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 import org.apache.ibatis.type.Alias;
 
 import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -17,15 +15,15 @@ import java.util.Date;
  * @date 2017-12-10
  */
 @Alias("Customise")
-@TableName("CORE_CUSTOMISE_QUERY")
-public class Customise extends Model<Customise> implements Serializable {
+@Table(name = "CORE_CUSTOMISE_QUERY")
+public class Customise implements Serializable {
     /**
      *
      */
     private static final long serialVersionUID = 1L;
-    
-    @TableId(value = "customise_id", type = IdType.UUID)
-    private String customiseId;
+    @Id
+    @Column(name = "customise_id")
+    private String id;
     private String userCode;
 
     @Column(name = "org_code", length = 32)
@@ -45,12 +43,12 @@ public class Customise extends Model<Customise> implements Serializable {
     private String updOrgCode;
     private Date updDate;
 
-    public String getCustomiseId() {
-        return customiseId;
+    public String getId() {
+        return id;
     }
 
-    public void setCustomiseId(String customiseId) {
-        this.customiseId = customiseId;
+    public void setId(String customiseId) {
+        this.id = id;
     }
 
     public String getUserCode() {

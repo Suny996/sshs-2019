@@ -1,6 +1,5 @@
 package com.sshs.core.customise.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.customise.mapper.CustomiseMapper;
 import com.sshs.core.customise.model.Customise;
@@ -58,12 +57,10 @@ public class CustomiseController extends BaseController {
     @DeleteMapping("/{pageId}/{customiseName}")
     public Message deleteCustomise(@PathVariable("pageId") String pageId, @PathVariable("customiseName") String customiseName) {
         try {
-            QueryWrapper wrapper = new QueryWrapper<Customise>();
             Customise customise = new Customise();
             customise.setPageId(pageId);
             customise.setCustomiseName(customiseName);
-            wrapper.setEntity(customise);
-            int cnt = customiseMapper.delete(wrapper);
+            int cnt = customiseMapper.delete(customise);
             return Message.success(cnt);
         } catch (Exception e) {
             logger.error("删除失败pageId:{},customiseName:{}", pageId, customiseName);
@@ -79,13 +76,11 @@ public class CustomiseController extends BaseController {
      */
     @GetMapping("/{pageId}")
     public Message<List<Customise>> getCustomiseByPageId(@PathVariable("pageId") String pageId) {
-        QueryWrapper wrapper = new QueryWrapper<Customise>();
         Customise customise = new Customise();
         customise.setPageId(pageId);
         customise.setUserCode("admin");
-        wrapper.setEntity(customise);
 
-        List<Customise> customises = customiseMapper.selectList(wrapper);
+        List<Customise> customises = customiseMapper.select(customise);
         return Message.success(customises);
     }
 }

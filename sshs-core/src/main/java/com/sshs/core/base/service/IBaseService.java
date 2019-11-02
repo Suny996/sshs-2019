@@ -1,6 +1,5 @@
 package com.sshs.core.base.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.message.Message;
 import com.sshs.core.page.Page;
 
@@ -20,7 +19,7 @@ public interface IBaseService<T> {
      * @param model 待保存的对象
      * @return 保存后的对象
      */
-    Message<T> save1(T model);
+    Message<T> save(T model);
 
     /**
      * 批量新增(不推荐使用，且记录数不要超过2000)
@@ -28,7 +27,7 @@ public interface IBaseService<T> {
      * @param models 待保存的对象列表
      * @return 保存成功的记录数
      */
-    Message<Boolean> saveList(List<T> models);
+    Message<Integer> save(List<T> models);
 
     /**
      * 修改
@@ -36,7 +35,7 @@ public interface IBaseService<T> {
      * @param model 要更新的对象
      * @return 更新后的对象
      */
-    Message<T> update1(T model);
+    Message<T> update(T model);
 
     /**
      * 批量修改
@@ -44,7 +43,7 @@ public interface IBaseService<T> {
      * @param models 要更新的记录列表
      * @return 更新成功的记录数
      */
-    Message<Integer> updateList(List<T> models);
+    Message<Integer> update(List<T> models);
 
     /**
      * 删除
@@ -52,7 +51,7 @@ public interface IBaseService<T> {
      * @param model 要删除的对象
      * @return 返回删除的对象
      */
-    Message<T> delete1(T model);
+    Message<Integer> delete(T model);
 
     /**
      * 根据主键删除
@@ -60,7 +59,7 @@ public interface IBaseService<T> {
      * @param id 待删除对象的主键
      * @return 删除成功的数量
      */
-    Message<Boolean> deleteById(String id);
+    Message<Integer> deleteById(String id);
 
     /**
      * 根据主键批量删除
@@ -68,7 +67,7 @@ public interface IBaseService<T> {
      * @param ids 要删除的记录主键列表
      * @return 返回删除记录数
      */
-    Message<Boolean> deleteByIds(List<String> ids);
+    Message<Integer> deleteByIds(List<String> ids);
 
 
     /**
@@ -94,7 +93,7 @@ public interface IBaseService<T> {
      * @param parameter 查询条件
      * @return 分页查询结果
      */
-    Message<IPage<T>> findForPageList(Page<T> page, Object parameter);
+    Message<Page<T>> findForPageList(Page<T> page, Object parameter);
 
     /**
      * 公共列表查询方法
@@ -105,6 +104,14 @@ public interface IBaseService<T> {
     Message<List<T>> findForList(Object parameter);
 
     /**
+     * 公共列表查询方法
+     *
+     * @param parameter 查询条件
+     * @return 查询结果
+     */
+    List<T> findList(Object parameter);
+
+    /**
      * 分页查询方法
      *
      * @param limit     分页信息
@@ -112,5 +119,5 @@ public interface IBaseService<T> {
      * @param parameter 查询条件
      * @return 分页查询结果
      */
-    Message<IPage<T>> queryPageList(String limit, String offset, Map<String, Object> parameter);
+    Message<Page<T>> queryPageList(String limit, String offset, Map<String, Object> parameter);
 }

@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -29,7 +30,7 @@ import java.util.Map;
 @Service("authorizeService")
 public class AuthorizeServiceImpl extends BaseServiceImpl<Authorize> implements IAuthorizeService {
     private static final Logger logger = LoggerFactory.getLogger(AuthorizeServiceImpl.class);
-    @Autowired
+    @Resource
     private AuthorizeMapper mapper;
 
     @Resource
@@ -42,10 +43,12 @@ public class AuthorizeServiceImpl extends BaseServiceImpl<Authorize> implements 
      * @return Message
      */
     @Override
-    public Message<Authorize> save1(Authorize authorize) {
+    public Message<Authorize> save(Authorize authorize) {
         authorize.setId(UuidUtil.get32UUID());
         try {
-            mapper.deleteByRoleCode(authorize.getRoleCode());
+            Example example = new Example(Authorize.class);
+            example.createCriteria().andEqualTo("roleCode",authorize.getRoleCode());
+            mapper.deleteByExample(example);
             for (Menu menu : authorize.getMenus()) {
                 Authorize auth = new Authorize();
                 authorize.setId(UuidUtil.get32UUID());
@@ -79,7 +82,7 @@ public class AuthorizeServiceImpl extends BaseServiceImpl<Authorize> implements 
         Map<String, Object> data = new HashMap<String, Object>();
         Message menus = menuService.getMenuTree("0");
         Menu menu = (Menu) menus.getData();
-        List<Authorize> authorizes = mapper.selectByMap(params);
+        List<Authorize> authorizes = findList(params);
         initAuthData(menu, authorizes);
         data.put("menus", menu);
         data.put("authorizes", authorizes);

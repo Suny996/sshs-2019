@@ -36,7 +36,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements IRoleServi
      * @return Message
      */
     @Override
-    public Message save1(Role role) {
+    public Message save(Role role) {
         role.setRoleId(UuidUtil.get32UUID());
         if (null != mapper.getRoleByRoleCode(role.getRoleCode())) {
             throw new BusinessException("U1001");
@@ -53,7 +53,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements IRoleServi
             throw new BusinessException("R1002", "该角色名称已存在，请重新输入！");
         }
         try {
-            return super.save1(role);
+            return super.save(role);
         } catch (BusinessException e) {
             throw e;
         } catch (Exception e) {

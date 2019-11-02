@@ -1,5 +1,6 @@
 package com.sshs.core.page;
 
+import com.github.pagehelper.PageInfo;
 import com.sshs.core.constant.Global;
 import com.sshs.core.util.ReflectHelper;
 import org.apache.commons.lang.StringUtils;
@@ -17,7 +18,7 @@ import java.util.List;
  * @date 2017年9月28日
  */
 @Alias("Page")
-public class Page<T> extends com.baomidou.mybatisplus.extension.plugins.pagination.Page {
+public class Page<T> extends PageInfo {
     private static Logger logger = LoggerFactory.getLogger(Page.class);
     /**
      * 每页显示记录数
@@ -60,9 +61,10 @@ public class Page<T> extends com.baomidou.mybatisplus.extension.plugins.paginati
     }
 
     public Page(int limit, int offset) {
+        super();
         this.setLimit(limit);
         this.setOffset(offset);
-        super.setCurrent(offset);
+        //super.setCurrent(offset);
         super.setSize(limit);
     }
 /*

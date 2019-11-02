@@ -33,10 +33,10 @@ public class AuthorizeController extends BaseController {
      * 保存系统管理->系统管理-角色权限表数据
      */
     @PostMapping
-    public Mono<Message> save(@RequestBody Authorize authorize) {
+    public Message save(@RequestBody Authorize authorize) {
         try {
             logger.debug("开始保存系统管理->系统管理-角色权限表信息……");
-            return Mono.justOrEmpty(authorizeService.save1(authorize));
+            return authorizeService.save(authorize);
         } catch (Exception e) {
             logger.error("保存系统管理->系统管理-角色权限表信息异常！", e);
             throw new BusinessException("SY0001");
@@ -47,10 +47,10 @@ public class AuthorizeController extends BaseController {
      * 修改系统管理->系统管理-角色权限表数据
      */
     @PutMapping
-    public Mono<Message> update(@RequestBody Authorize authorize) {
+    public Message update(@RequestBody Authorize authorize) {
         try {
             logger.debug("开始更新系统管理->系统管理-角色权限表信息……");
-            return Mono.justOrEmpty(authorizeService.update1(authorize));
+            return authorizeService.update(authorize);
         } catch (Exception e) {
             logger.error("更新系统管理->系统管理-角色权限表信息异常！", e);
             throw new BusinessException("SY0002");
@@ -61,10 +61,10 @@ public class AuthorizeController extends BaseController {
      * 根据主键删除系统管理->系统管理-角色权限表数据
      */
     @DeleteMapping("/{authorizeId}")
-    public Mono<Message> delete(@PathVariable("authorizeId") String authorizeId) {
+    public Message delete(@PathVariable("authorizeId") String authorizeId) {
         try {
             logger.debug("开始删除系统管理->系统管理-角色权限表信息……");
-            return Mono.justOrEmpty(authorizeService.deleteById(authorizeId));
+            return authorizeService.deleteById(authorizeId);
         } catch (Exception e) {
             logger.error("删除系统管理->系统管理-角色权限表信息异常！", e);
             throw new BusinessException("SY0003");
@@ -75,10 +75,10 @@ public class AuthorizeController extends BaseController {
      * 批量删除系统管理->系统管理-角色权限表数据
      */
     @DeleteMapping
-    public Mono<Message> delete(@RequestBody List<String> ids) {
+    public Message delete(@RequestBody List<String> ids) {
         try {
             logger.debug("开始批量删除系统管理->系统管理-角色权限表信息……");
-            return Mono.justOrEmpty(authorizeService.deleteByIds(ids));
+            return authorizeService.deleteByIds(ids);
         } catch (Exception e) {
             logger.error("批量删除系统管理->系统管理-角色权限表信息异常！", e);
             throw new BusinessException("SY0003");
@@ -89,33 +89,16 @@ public class AuthorizeController extends BaseController {
      * 根据主键查找系统管理->系统管理-角色权限表信息
      */
     @GetMapping("/{authorizeId}")
-    public Mono<Message> getById(@PathVariable("authorizeId") String authorizeId) {
+    public Message getById(@PathVariable("authorizeId") String authorizeId) {
         try {
             logger.debug("开始查询系统管理->系统管理-角色权限表信息……");
             Message message = Message.success(authorizeService.getById(authorizeId));
-            return Mono.justOrEmpty(message);
+            return message;
         } catch (Exception e) {
             logger.error("查询系统管理->系统管理-角色权限表信息异常！", e);
             throw new BusinessException("SY0001");
         }
     }
-
-    /**
-     * 查询系统管理->系统管理-角色权限表信息列表
-     */
-   /* @GetMapping
-    public Mono<Message> queryList(@RequestParam(value = "limit", required = false) String limit, @RequestParam String offset, @RequestParam Map<String, Object> params) {
-        try {
-            logger.debug("开始查询系统管理->系统管理-角色权限表列表信息……");
-            Message message = authorizeService.queryPageList(limit, offset, params);
-            return Mono.justOrEmpty(message);
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("查询系统管理->系统管理-角色权限表信息异常！");
-            throw new BusinessException("SY0001");
-        }
-    }*/
-
 
     /**
      * 角色分配菜单查询功能
