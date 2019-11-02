@@ -3,7 +3,6 @@ package com.sshs.system.dictionary.mapper;
 import com.sshs.core.base.mapper.BaseMapper;
 import com.sshs.core.page.Page;
 import com.sshs.system.dictionary.model.Dictionary;
-import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
@@ -11,7 +10,6 @@ import java.util.List;
  * @author Suny
  * @date 2017-10-23
  */
-@Mapper
 public interface DictionaryMapper extends BaseMapper<Dictionary> {
 
     /**

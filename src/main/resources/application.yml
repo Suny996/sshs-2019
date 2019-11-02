@@ -16,7 +16,7 @@ spring:
     name: sshs
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/sshs?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
     username: root
     password: rootroot
@@ -42,11 +42,6 @@ spring:
     multipart:
       maxFileSize: 5MB
       maxRequestSize: 10MB
-#bean别名配置
-mybatis-plus:
-  type-aliases-package: com.sshs
-  mapper-locations: classpath:com.sshs.**.mapper
-#    companycommonlibs: tk/mybatis.*
 
 #代码生成路径配置
 toolkit:

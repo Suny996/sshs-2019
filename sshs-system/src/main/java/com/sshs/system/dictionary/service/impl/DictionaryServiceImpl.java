@@ -57,7 +57,9 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
         if (dict != null) {
             return dict;
         } else {
-            List<Dictionary> dicts = mapper.findByDictCode(dictCode);
+            Example example = new Example(Dictionary.class);
+            example.createCriteria().andEqualTo("dictType", "1").andEqualTo("dictCode", dictCode);
+            List<Dictionary> dicts = mapper.selectByExample(example);
             if (dicts != null && !dicts.isEmpty()) {
                 for (Dictionary d : dicts) {
                     initChildren(d);

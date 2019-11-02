@@ -1,5 +1,6 @@
 package com.sshs.system.dictionary.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.ibatis.type.Alias;
 
 import javax.persistence.Column;
@@ -20,6 +21,7 @@ import java.util.List;
  */
 @Alias("Dictionary")
 @Table(name = "SYS_DICTIONARIES")
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class Dictionary implements Serializable {
 	/**
 	 *

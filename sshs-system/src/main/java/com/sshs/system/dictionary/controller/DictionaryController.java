@@ -89,7 +89,7 @@ public class DictionaryController extends BaseController {
     /**
      * 根据主键查找系统管理->系统管理-数据字典表信息
      */
-    @GetMapping("/{dictionaryId}")
+    @GetMapping("/id/{dictionaryId}")
     public Message<Dictionary> getById(@PathVariable("dictionaryId") String dictionaryId) {
         try {
             logger.debug("开始查询系统管理->系统管理-数据字典表信息……");
