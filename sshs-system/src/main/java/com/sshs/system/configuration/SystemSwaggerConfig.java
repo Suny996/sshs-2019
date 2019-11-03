@@ -3,8 +3,10 @@ package com.sshs.system.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -46,17 +48,16 @@ public class SystemSwaggerConfig implements WebMvcConfigurer {
                 .required(false).build(); //非必需，这里是全局配置，然而在登陆的时候是不用验证的
         List<Parameter> aParameters = new ArrayList<Parameter>();
         aParameters.add(aParameterBuilder.build());*/
-        return new Docket(DocumentationType.SWAGGER_2).groupName("系统管理").select().apis(RequestHandlerSelectors.basePackage("com.sshs.system"))
-                .paths(PathSelectors.ant("/api/**")).build();//.apiInfo(apiInfo1()).globalOperationParameters(aParameters);
+        return new Docket(DocumentationType.SWAGGER_2).groupName("系统管理(SYSTEM)").select().apis(RequestHandlerSelectors.basePackage("com.sshs.system"))
+                .paths(PathSelectors.ant("/api/**")).build().apiInfo(apiInfo1());//.globalOperationParameters(aParameters);
     }
 
-/*
     private ApiInfo apiInfo1() {
         return new ApiInfoBuilder()
-                .title("SSHS-V1")
-                //.termsOfServiceUrl("https://github.com/Suny999")
+                .title("SSHS-系统管理(SYSTEM)")
+                //.termsOfServiceUrl("www.baidu.com").contact("Suny999")
                 //.contact(new Contact("Suny", "https://github.com/Suny999", "mail.suny@qq.com"))
                 //.version("v0.1")
                 .build();
-    }*/
+    }
 }

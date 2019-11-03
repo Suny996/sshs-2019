@@ -6,6 +6,7 @@ import com.sshs.core.message.Message;
 import com.sshs.core.page.Page;
 import com.sshs.system.dictionary.model.Dictionary;
 import com.sshs.system.dictionary.service.IDictionaryService;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +22,9 @@ import java.util.Map;
  * @author 61910
  * @date 2018/11/12
  */
+@Api(tags = "系统管理-字典管理接口")
 @RestController
-@RequestMapping("/system/dictionarys")
+@RequestMapping("/api/v1/system/dictionarys")
 public class DictionaryController extends BaseController {
     @Resource
     private IDictionaryService dictionaryService;

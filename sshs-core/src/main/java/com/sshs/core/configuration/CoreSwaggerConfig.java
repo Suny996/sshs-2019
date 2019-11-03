@@ -48,15 +48,15 @@ public class CoreSwaggerConfig implements WebMvcConfigurer {
                 .required(false).build(); //非必需，这里是全局配置，然而在登陆的时候是不用验证的
         List<Parameter> aParameters = new ArrayList<Parameter>();
         aParameters.add(aParameterBuilder.build());*/
-        return new Docket(DocumentationType.SWAGGER_2).groupName("公共部分").select().apis(RequestHandlerSelectors.basePackage("com.sshs.core"))
+        return new Docket(DocumentationType.SWAGGER_2).groupName("公共部分(CORE)").select().apis(RequestHandlerSelectors.basePackage("com.sshs.core"))
                 .paths(PathSelectors.ant("/api/**")).build().apiInfo(apiInfo1());//.globalOperationParameters(aParameters);
     }
 
 
     private ApiInfo apiInfo1() {
         return new ApiInfoBuilder()
-                .title("SSHS-V1")
-                //.termsOfServiceUrl("https://github.com/Suny999")
+                .title("SSHS-公共接口(ORE)")
+                //.termsOfServiceUrl("www.baidu.com").contact("Suny999")
                 //.contact(new Contact("Suny", "https://github.com/Suny999", "mail.suny@qq.com"))
                 //.version("v0.1")
                 .build();

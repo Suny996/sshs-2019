@@ -5,6 +5,7 @@ import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
 import com.sshs.system.menu.model.Menu;
 import com.sshs.system.menu.service.IMenuService;
+import io.swagger.annotations.Api;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +23,9 @@ import java.util.Map;
  * @author 61910
  * @date 2018/11/12
  */
+@Api(tags = "系统管理-菜单管理接口")
 @RestController
-@RequestMapping("/system/menus")
+@RequestMapping("/api/v1/system/menus")
 public class MenuController extends BaseController {
     @Resource
     private IMenuService menuService;

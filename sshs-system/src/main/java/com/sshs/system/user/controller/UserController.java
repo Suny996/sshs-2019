@@ -5,6 +5,7 @@ import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
 import com.sshs.system.user.model.User;
 import com.sshs.system.user.service.IUserService;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,9 @@ import java.util.Map;
  * @author Suny
  * @date 2017年7月5日 上午10:40:10
  */
+@Api(tags = "系统管理-用户管理")
 @RestController
-@RequestMapping("/system/users")
+@RequestMapping("/api/v1/system/users")
 public class UserController extends BaseController {
     @Autowired
     private IUserService userService;

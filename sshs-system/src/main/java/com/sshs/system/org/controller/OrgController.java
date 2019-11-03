@@ -5,6 +5,7 @@ import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
 import com.sshs.system.org.model.Org;
 import com.sshs.system.org.service.IOrgService;
+import io.swagger.annotations.Api;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import java.util.Map;
  * @author 61910
  * @date 2018/11/07
  */
+@Api(tags = "系统管理-机构管理")
 @RestController
 @RequestMapping("/system/orgs")
 public class OrgController extends BaseController {
