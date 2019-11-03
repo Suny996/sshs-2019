@@ -5,15 +5,12 @@ import com.sshs.core.customise.mapper.CommonMapper;
 import com.sshs.core.message.Message;
 import com.sshs.core.util.DictionaryUtil;
 import com.sshs.core.util.SystemUtil;
+import io.swagger.annotations.Api;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Mono;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -26,7 +23,10 @@ import java.util.Map;
  * @author Suny
  * @date 2017年10月23日
  */
+
+@Api(tags = "公共-字典等公共接口")
 @RestController
+@RequestMapping("/api/v1/core")
 public class CommonController extends BaseController {
     Logger logger = LoggerFactory.getLogger(CommonController.class);
     @Resource
@@ -38,8 +38,8 @@ public class CommonController extends BaseController {
      * @throws Exception
      */
     @GetMapping("/plist")
-    public Mono<Message> getPlist() {
-        return Mono.justOrEmpty(Message.success(DictionaryUtil.getAllList()));
+    public Message getPlist() {
+        return (Message.success(DictionaryUtil.getAllList()));
     }
 
     /**
@@ -49,13 +49,13 @@ public class CommonController extends BaseController {
      * @throws Exception
      */
     @GetMapping("/plist/{dictCode}")
-    public Mono<Message> getPlistByDictCode(@PathVariable(value = "dictCode", required = true) String dictCode, @RequestParam(value = "locale", required = false) String locale) {
+    public Message getPlistByDictCode(@PathVariable(value = "dictCode", required = true) String dictCode, @RequestParam(value = "locale", required = false) String locale) {
         if (StringUtils.isEmpty(locale)) {
             locale = SystemUtil.getLocale();
         } else {
             locale = locale.replace("-", "_");
         }
-        return Mono.justOrEmpty(Message.success(DictionaryUtil.getList(dictCode, null, locale)));
+        return Message.success(DictionaryUtil.getList(dictCode, null, locale));
     }
 
     /**
@@ -65,11 +65,11 @@ public class CommonController extends BaseController {
      * @throws Exception
      */
     @GetMapping("/plist/{dictCode}/{subCode}")
-    public Mono<Message> getPlistByDictCode2(@PathVariable(value = "dictCode", required = true) String dictCode, @PathVariable(value = "subCode", required = false) String subCode, @RequestParam(value = "locale", required = false) String locale) {
+    public Message getPlistByDictCode2(@PathVariable(value = "dictCode", required = true) String dictCode, @PathVariable(value = "subCode", required = false) String subCode, @RequestParam(value = "locale", required = false) String locale) {
         if (StringUtils.isEmpty(locale)) {
             locale = SystemUtil.getLocale();
         }
-        return Mono.justOrEmpty(Message.success(DictionaryUtil.getList(dictCode, subCode, locale)));
+        return (Message.success(DictionaryUtil.getList(dictCode, subCode, locale)));
     }
 
     /**
@@ -77,9 +77,9 @@ public class CommonController extends BaseController {
      */
     @GetMapping("/postlist")
     @Cacheable("postList_cache")
-    public Mono<Message> getPostList() {
+    public Message getPostList() {
         List<Map<String, Object>> posts = commonMapper.findPosts();
-        return Mono.justOrEmpty(Message.success(posts));
+        return (Message.success(posts));
     }
 
     /**
@@ -90,9 +90,9 @@ public class CommonController extends BaseController {
      */
     @GetMapping("/orglist/{orgCode}")
     @Cacheable("orgList_cache")
-    public Mono<Message> getOrgTreeByOrgCode(@PathVariable("orgCode") String orgCode) {
+    public Message getOrgTreeByOrgCode(@PathVariable("orgCode") String orgCode) {
         Map<String, Object> org = commonMapper.findOrgInfoByOrgCode(orgCode);
-        return Mono.justOrEmpty(Message.success(getOrgListByOrgCode(org)));
+        return (Message.success(getOrgListByOrgCode(org)));
     }
 
     private Map<String, Object> getOrgListByOrgCode(Map<String, Object> org) {
@@ -119,11 +119,11 @@ public class CommonController extends BaseController {
      * @throws Exception
      */
     @GetMapping("/menus/{userCode}/{parentId}")
-    public Mono<Message> getUserMenu(@PathVariable("userCode") String userCode, @PathVariable("parentId") String parentId) {
+    public Message getUserMenu(@PathVariable("userCode") String userCode, @PathVariable("parentId") String parentId) {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("userCode", userCode);
         params.put("parentId", parentId);
-        return Mono.justOrEmpty(Message.success(initMenu(userCode, parentId)));
+        return (Message.success(initMenu(userCode, parentId)));
     }
 
     /**

@@ -1,12 +1,14 @@
 package com.sshs.core.customise.model;
 
+import com.sshs.core.model.BaseEntity;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.ibatis.type.Alias;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 自定义查询
@@ -14,9 +16,10 @@ import java.util.Date;
  * @author Suny
  * @date 2017-12-10
  */
+@ApiModel(description = "自定义查询")
 @Alias("Customise")
 @Table(name = "CORE_CUSTOMISE_QUERY")
-public class Customise implements Serializable {
+public class Customise extends BaseEntity {
     /**
      *
      */
@@ -26,22 +29,18 @@ public class Customise implements Serializable {
     private String id;
     private String userCode;
 
+    @ApiModelProperty(value = "机构编号", dataType = "String", example = "10010")
     @Column(name = "org_code", length = 32)
     private String orgCode;
+    @ApiModelProperty(value = "字段备注", dataType = "String")
     private String pageId;
+    @ApiModelProperty(value = "查询条件名称", dataType = "String", example = "简易查询")
     private String customiseName;
 
     private String fieldContents;
 
     private String fieldAddons;
 
-    private String crtUserCode;
-
-    private String crtOrgCode;
-    private Date crtDate;
-    private String updUserCode;
-    private String updOrgCode;
-    private Date updDate;
 
     public String getId() {
         return id;
@@ -99,52 +98,17 @@ public class Customise implements Serializable {
         this.fieldAddons = fieldAddons;
     }
 
-    public String getCrtUserCode() {
-        return crtUserCode;
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("id", id)
+                .append("userCode", userCode)
+                .append("orgCode", orgCode)
+                .append("pageId", pageId)
+                .append("customiseName", customiseName)
+                .append("fieldContents", fieldContents)
+                .append("fieldAddons", fieldAddons)
+                .append(super.toString())
+                .toString();
     }
-
-    public void setCrtUserCode(String crtUserCode) {
-        this.crtUserCode = crtUserCode;
-    }
-
-    public String getCrtOrgCode() {
-        return crtOrgCode;
-    }
-
-    public void setCrtOrgCode(String crtOrgCode) {
-        this.crtOrgCode = crtOrgCode;
-    }
-
-    public Date getCrtDate() {
-        return crtDate;
-    }
-
-    public void setCrtDate(Date crtDate) {
-        this.crtDate = crtDate;
-    }
-
-    public String getUpdUserCode() {
-        return updUserCode;
-    }
-
-    public void setUpdUserCode(String updUserCode) {
-        this.updUserCode = updUserCode;
-    }
-
-    public String getUpdOrgCode() {
-        return updOrgCode;
-    }
-
-    public void setUpdOrgCode(String updOrgCode) {
-        this.updOrgCode = updOrgCode;
-    }
-
-    public Date getUpdDate() {
-        return updDate;
-    }
-
-    public void setUpdDate(Date updDate) {
-        this.updDate = updDate;
-    }
-
 }

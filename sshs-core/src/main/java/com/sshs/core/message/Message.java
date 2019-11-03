@@ -187,7 +187,7 @@ public class Message<T> {
     }
 
     public static void main(String[] args) {
-       // System.out.println(Message.success());
+        // System.out.println(Message.success());
     }
 
     /**

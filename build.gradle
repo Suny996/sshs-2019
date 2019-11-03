@@ -81,6 +81,10 @@ allprojects {
         // https://mvnrepository.com/artifact/com.google.guava/guava
         compile group: 'com.google.guava', name: 'guava', version: '28.0-jre'
 
+        // https://mvnrepository.com/artifact/io.springfox/springfox-swagger2
+        compile ('io.springfox:springfox-swagger2:2.9.2' , 'io.springfox:springfox-swagger-ui:2.9.2')
+        // https://mvnrepository.com/artifact/com.github.xiaoymin/swagger-bootstrap-ui
+        compile group: 'com.github.xiaoymin', name: 'swagger-bootstrap-ui', version: '1.9.6'
 
         // https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-boot-starter
         //compile group: 'com.baomidou', name: 'mybatis-plus-boot-starter', version: '3.2.0'

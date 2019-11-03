@@ -5,6 +5,9 @@ import com.sshs.core.customise.mapper.CustomiseMapper;
 import com.sshs.core.customise.model.Customise;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +23,9 @@ import java.util.List;
  * @author Suny
  * @date 2017年10月23日
  */
+@Api(tags = "公共-自定义查询条件接口")
 @RestController
-@RequestMapping(value = "/core/custmise")
+@RequestMapping("/api/v1/core/custmise")
 public class CustomiseController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(CustomiseController.class);
     @Resource
@@ -33,8 +37,11 @@ public class CustomiseController extends BaseController {
      * @param customise
      * @throws Exception
      */
+    @ApiOperation(value="自定义查询保存")
+    @ApiImplicitParam(name = "customise", value = "查询对象", required = true, dataType="Customise",paramType="body")
+    //@ApiResponses()
     @PostMapping
-    public Message saveCustomise(@RequestBody Customise customise) {
+    public Message<Customise> saveCustomise(@RequestBody Customise customise) {
         try {
             //customise.setCustomiseId(UuidUtil.get32UUID());
             customise.setUserCode("admin");
@@ -42,7 +49,7 @@ public class CustomiseController extends BaseController {
             customiseMapper.insert(customise);
             return Message.success(customise);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("保存失败", e);
             throw new BusinessException("SY0001");
         }
     }
@@ -55,7 +62,7 @@ public class CustomiseController extends BaseController {
      * @throws Exception
      */
     @DeleteMapping("/{pageId}/{customiseName}")
-    public Message deleteCustomise(@PathVariable("pageId") String pageId, @PathVariable("customiseName") String customiseName) {
+    public Message<Integer> deleteCustomise(@PathVariable("pageId") String pageId, @PathVariable("customiseName") String customiseName) {
         try {
             Customise customise = new Customise();
             customise.setPageId(pageId);
