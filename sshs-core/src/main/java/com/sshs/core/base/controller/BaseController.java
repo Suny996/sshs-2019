@@ -1,17 +1,9 @@
 package com.sshs.core.base.controller;
 
 import com.sshs.core.util.UuidUtil;
-import com.sshs.core.exception.BusinessException;
-import com.sshs.core.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Suny
@@ -78,7 +70,7 @@ public abstract class BaseController {
     /**
      * 基于@ExceptionHandler异常处理
      */
-    @ExceptionHandler
+    /*@ExceptionHandler
     @ResponseBody
     public Map<String, Object> handleAndReturnData(Exception e) {
         logger.info("-------------------------错误信息处理开始---------------------------");
@@ -95,5 +87,5 @@ public abstract class BaseController {
         }
         data.put("excetion", e.getClass().getSimpleName());
         return data;
-    }
+    }*/
 }

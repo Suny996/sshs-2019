@@ -10,7 +10,7 @@ import java.io.IOException;
 public class DocsController {
     @RequestMapping("/doc")
     public void doc(HttpServletResponse response) throws IOException {
-        response.sendRedirect("/swagger-ui.html");
+        response.sendRedirect("/doc.html");
     }
 
     @RequestMapping("/docs")
