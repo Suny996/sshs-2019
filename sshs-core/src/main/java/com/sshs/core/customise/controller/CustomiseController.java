@@ -5,9 +5,7 @@ import com.sshs.core.customise.mapper.CustomiseMapper;
 import com.sshs.core.customise.model.Customise;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -37,9 +35,8 @@ public class CustomiseController extends BaseController {
      * @param customise
      * @throws Exception
      */
-    @ApiOperation(value="自定义查询保存")
-    @ApiImplicitParam(name = "customise", value = "查询对象", required = true, dataType="Customise",paramType="body")
-    //@ApiResponses()
+    @ApiOperation(value = "自定义查询保存")
+    @ApiImplicitParam(name = "customise", value = "查询对象", required = true, dataType = "Customise", paramType = "body")
     @PostMapping
     public Message<Customise> saveCustomise(@RequestBody Customise customise) {
         try {
@@ -81,6 +78,7 @@ public class CustomiseController extends BaseController {
      * @param pageId
      * @return
      */
+    @ApiImplicitParam(paramType = "path", name = "pageId", value = "页面ID", dataType = "String", required = true)
     @GetMapping("/{pageId}")
     public Message<List<Customise>> getCustomiseByPageId(@PathVariable("pageId") String pageId) {
         Customise customise = new Customise();
