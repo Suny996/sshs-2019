@@ -288,12 +288,12 @@
         </if>
         ORDER BY MENU_LEVEL,MENU_SEQ
     </select>
-    <select id="getMaxMenuSeq" parameterType="String" resultType="BigDecimal">
+    <!--<select id="getMaxMenuSeq" parameterType="String" resultType="BigDecimal">
         SELECT MAX(MENU_SEQ) as MENU_SEQ
         FROM
         <include refid="tableName"></include>
         WHERE PARENT_CODE= #{_parameter}
-    </select>
+    </select>-->
     <select id="getMenuByName" parameterType="String" resultType="Menu">
         SELECT
         <include refid="Field"></include>

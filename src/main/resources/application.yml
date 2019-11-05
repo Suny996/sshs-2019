@@ -42,6 +42,8 @@ spring:
     multipart:
       maxFileSize: 5MB
       maxRequestSize: 10MB
+mybatis:
+  typeAliasesPackage: com.sshs
 
 #代码生成路径配置
 toolkit:
