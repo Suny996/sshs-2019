@@ -106,7 +106,7 @@ public class DictionaryController extends BaseController {
      * 查询系统管理->系统管理-数据字典表信息列表
      */
     @GetMapping
-    public Message<Page<Dictionary>> queryList(@RequestParam(value = "limit", required = false) String limit, @RequestParam String offset, @RequestParam Map<String, Object> params) {
+    public Message<Page<Dictionary>> queryList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam Map<String, Object> params) {
         try {
             logger.debug("开始查询系统管理->系统管理-数据字典表列表信息……");
             return dictionaryService.queryPageList(limit, offset, params);

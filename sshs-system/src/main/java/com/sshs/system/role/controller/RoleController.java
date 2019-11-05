@@ -38,8 +38,7 @@ public class RoleController extends BaseController {
             logger.debug("开始保存系统管理->系统管理-角色表信息……");
             return Mono.justOrEmpty(roleService.save(role));
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("保存系统管理->系统管理-角色表信息异常！");
+            logger.error("保存系统管理->系统管理-角色表信息异常！", e);
             throw new BusinessException("SY0001");
         }
     }
@@ -53,8 +52,7 @@ public class RoleController extends BaseController {
             logger.debug("开始更新系统管理->系统管理-角色表信息……");
             return Mono.justOrEmpty(roleService.update(role));
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("更新系统管理->系统管理-角色表信息异常！");
+            logger.error("更新系统管理->系统管理-角色表信息异常！", e);
             throw new BusinessException("SY0002");
         }
     }
@@ -68,8 +66,7 @@ public class RoleController extends BaseController {
             logger.debug("开始删除系统管理->系统管理-角色表信息……");
             return Mono.justOrEmpty(roleService.deleteById(roleId));
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("删除系统管理->系统管理-角色表信息异常！");
+            logger.error("删除系统管理->系统管理-角色表信息异常！", e);
             throw new BusinessException("SY0003");
         }
     }
@@ -83,8 +80,7 @@ public class RoleController extends BaseController {
             logger.debug("开始批量删除系统管理->系统管理-角色表信息……");
             return Mono.justOrEmpty(roleService.deleteByIds(ids));
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("批量删除系统管理->系统管理-角色表信息异常！");
+            logger.error("批量删除系统管理->系统管理-角色表信息异常！", e);
             throw new BusinessException("SY0003");
         }
     }
@@ -110,15 +106,14 @@ public class RoleController extends BaseController {
      * 查询系统管理->系统管理-角色表信息列表
      */
     @GetMapping
-    public Mono<Message> queryList(@RequestParam(value = "limit", required = false) String limit, @RequestParam(value = "offset", required = false) String offset, @RequestParam Map
+    public Mono<Message> queryList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam Map
             <String, Object> params) {
         try {
             logger.debug("开始查询系统管理->系统管理-角色表列表信息……");
             Message message = roleService.queryPageList(limit, offset, params);
             return Mono.justOrEmpty(message);
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("查询系统管理->系统管理-角色表信息异常！");
+            logger.error("查询系统管理->系统管理-角色表信息异常！", e);
             throw new BusinessException("SY0001");
         }
     }

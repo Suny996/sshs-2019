@@ -130,7 +130,7 @@ public class MenuController extends BaseController {
                     @ApiImplicitParam(name = "offset", value = "页码", dataType = "String", paramType = "path"),
                     @ApiImplicitParam(name = "param", value = "条件", dataType = "Map", paramType = "path")})
     @GetMapping
-    public Mono<Message> queryList(@RequestParam(value = "limit", required = false) String limit, @RequestParam(value = "offset", required = false) String offset, @RequestParam(required = false) Map<String, Object> params) {
+    public Mono<Message> queryList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam(required = false) Map<String, Object> params) {
         try {
             logger.debug("开始查询系统管理->系统管理-菜单表列表信息……");
             Message message = menuService.queryPageList(limit, offset, params);

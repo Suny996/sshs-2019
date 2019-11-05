@@ -225,16 +225,13 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
      * @return 分页查询结果
      */
     @Override
-    public Message<Page<T>> queryPageList(String limit, String offset, Map<String, Object> parameter) {
+    public Message<Page<T>> queryPageList(int limit, int offset, Map<String, Object> parameter) {
         int pageSize = 10;
         int pageNumber = 1;
-        if (limit != null) {
-            pageSize = Integer.min(1000, Integer.valueOf(limit, 10));
+        if (limit <= 0) {
+            pageSize = Integer.min(1000, limit);
         }
-        if (offset != null) {
-            pageNumber = Integer.valueOf(offset, 10);
-        }
-        Page<T> page = new Page<>(pageSize, pageNumber);
+        Page<T> page = new Page<>(pageSize, offset);
         return findForPageList(page, parameter);
     }
 

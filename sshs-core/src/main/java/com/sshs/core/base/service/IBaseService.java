@@ -119,5 +119,5 @@ public interface IBaseService<T> {
      * @param parameter 查询条件
      * @return 分页查询结果
      */
-    Message<Page<T>> queryPageList(String limit, String offset, Map<String, Object> parameter);
+    Message<Page<T>> queryPageList(int limit, int offset, Map<String, Object> parameter);
 }

@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 
@@ -23,7 +24,7 @@ import javax.annotation.Resource;
  */
 @Service("userService")
 public class UserServiceImpl extends BaseServiceImpl<User> implements IUserService {
-   private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     @Resource
     private UserMapper mapper;
     /**
@@ -36,8 +37,10 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
      * 根据userCode查询User
      */
     @Override
-    public User getByUserCode(String userCode){
-        return mapper.getByUserCode(userCode);
+    public User getByUserCode(String userCode) {
+        Example example = new Example(User.class);
+        example.createCriteria().andEqualTo("userCode", userCode);
+        return mapper.selectOneByExample(example);
     }
 
     /**
@@ -53,7 +56,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
         try {
             return super.save(user);
         } catch (Exception e) {
-            logger.error("保存用户信息异常！",e);
+            logger.error("保存用户信息异常！", e);
             throw new BusinessException("SY0001");
         }
     }

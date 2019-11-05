@@ -55,8 +55,7 @@ public class UserRoleServiceImpl extends BaseServiceImpl<UserRole> implements IU
             }
             return Message.success();
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("保存系统管理->系统管理-用户角色对照表信息异常！");
+            logger.error("保存系统管理->系统管理-用户角色对照表信息异常！", e);
             throw new BusinessException("SY0001");
         }
     }
@@ -76,8 +75,7 @@ public class UserRoleServiceImpl extends BaseServiceImpl<UserRole> implements IU
             }
             return super.save(userRoles);
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("批量保存系统管理->系统管理-用户角色对照表信息异常！");
+            logger.error("批量保存系统管理->系统管理-用户角色对照表信息异常！", e);
             throw new BusinessException("SY0001");
         }
     }

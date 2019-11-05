@@ -4,8 +4,10 @@ import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.Column;
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
 public abstract class BaseEntity implements Serializable {
     @ApiModelProperty(value = "创建人编号", dataType = "String", example = "020001")
@@ -26,7 +28,11 @@ public abstract class BaseEntity implements Serializable {
     @ApiModelProperty(value = "最后修改时间", dataType = "Date", example = "2019-10-10 23:00:07")
     @Column(name = "UPD_DATE")
     private Date updDate;
-
+    /**
+     * 查询条件匹配方式
+     */
+    @Transient
+    public Map<String, String> operators;
 
     public String getCrtUserCode() {
         return crtUserCode;
@@ -74,6 +80,14 @@ public abstract class BaseEntity implements Serializable {
 
     public void setUpdDate(Date updDate) {
         this.updDate = updDate;
+    }
+
+    public Map<String, String> getOperators() {
+        return operators;
+    }
+
+    public void setOperators(Map<String, String> operators) {
+        this.operators = operators;
     }
 
     @Override

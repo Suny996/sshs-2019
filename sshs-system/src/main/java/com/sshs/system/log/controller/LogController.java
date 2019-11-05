@@ -114,7 +114,7 @@ public class LogController extends BaseController {
      * 查询系统管理->系统管理-系统操作日志表信息列表
      */
     @GetMapping
-    public Message<Page<Log>> queryList(@RequestParam(value = "limit", required = true) String limit, @RequestParam(value = "offset", required = false) String offset, @RequestParam Map<String, Object> params) {
+    public Message<Page<Log>> queryList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam(required = false) Map<String, Object> params) {
         try {
             logger.debug("开始查询系统管理->系统管理-系统操作日志表列表信息……");
             return logService.queryPageList(limit, offset, params);
