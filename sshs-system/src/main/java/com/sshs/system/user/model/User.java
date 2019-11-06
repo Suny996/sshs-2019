@@ -1,5 +1,7 @@
 package com.sshs.system.user.model;
 
+import com.sshs.core.model.BaseEntity;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.ibatis.type.Alias;
 
 import javax.persistence.Column;
@@ -18,7 +20,7 @@ import java.util.List;
  */
 @Alias("User")
 @Table(name = "SYS_USER")
-public class User implements Serializable {
+public class User extends BaseEntity implements Serializable {
     /**
      *
      */
@@ -29,9 +31,8 @@ public class User implements Serializable {
      * 主键
      */
     @Id
-    //@GeneratedValue(generator = "UUID")
-    @Column(name = "USER_ID")
-    private String userId;
+    @Column(name = "USER_ID", length = 32)
+    private String id;
 
     /**
      * 用户编号
@@ -226,54 +227,18 @@ public class User implements Serializable {
     private String legalOrg;
 
     /**
-     * 创建人
-     */
-    @Column(name = "CRT_USER_CODE")
-    private String crtUserCode;
-
-    /**
-     * 创建机构
-     */
-    @Column(name = "CRT_ORG_CODE")
-    private String crtOrgCode;
-
-    /**
-     * 创建日期
-     */
-    @Column(name = "CRT_DATE")
-    private Date crtDate;
-
-    /**
-     * 修改人
-     */
-    @Column(name = "UPD_USER_CODE")
-    private String updUserCode;
-
-    /**
-     * 修改机构
-     */
-    @Column(name = "UPD_ORG_CODE")
-    private String updOrgCode;
-
-    /**
-     * 修改日期
-     */
-    @Column(name = "UPD_DATE")
-    private Date updDate;
-
-    /**
      * role角色
      */
     @Transient
     private List<String> roleCodes;
 
 
-    public String getUserId() {
-        return this.userId;
+    public String getId() {
+        return this.id;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getUserCode() {
@@ -533,59 +498,51 @@ public class User implements Serializable {
         this.legalOrg = legalOrg;
     }
 
-    public String getCrtUserCode() {
-        return this.crtUserCode;
-    }
-
-    public void setCrtUserCode(String crtUserCode) {
-        this.crtUserCode = crtUserCode;
-    }
-
-    public String getCrtOrgCode() {
-        return this.crtOrgCode;
-    }
-
-    public void setCrtOrgCode(String crtOrgCode) {
-        this.crtOrgCode = crtOrgCode;
-    }
-
-    public Date getCrtDate() {
-        return this.crtDate;
-    }
-
-    public void setCrtDate(Date crtDate) {
-        this.crtDate = crtDate;
-    }
-
-    public String getUpdUserCode() {
-        return this.updUserCode;
-    }
-
-    public void setUpdUserCode(String updUserCode) {
-        this.updUserCode = updUserCode;
-    }
-
-    public String getUpdOrgCode() {
-        return this.updOrgCode;
-    }
-
-    public void setUpdOrgCode(String updOrgCode) {
-        this.updOrgCode = updOrgCode;
-    }
-
-    public Date getUpdDate() {
-        return this.updDate;
-    }
-
-    public void setUpdDate(Date updDate) {
-        this.updDate = updDate;
-    }
-
     public List<String> getRoleCodes() {
         return roleCodes;
     }
 
     public void setRoleCodes(List<String> roleCodes) {
         this.roleCodes = roleCodes;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("userId", id)
+                .append("userCode", userCode)
+                .append("userName", userName)
+                .append("userNameEn", userNameEn)
+                .append("userNamePy", userNamePy)
+                .append("userNameFr", userNameFr)
+                .append("orgCode", orgCode)
+                .append("postNo", postNo)
+                .append("userSex", userSex)
+                .append("nationality", nationality)
+                .append("ethnic", ethnic)
+                .append("nativePlace", nativePlace)
+                .append("birthPlace", birthPlace)
+                .append("birthDate", birthDate)
+                .append("idDecimal", idDecimal)
+                .append("photoId", photoId)
+                .append("joinDate", joinDate)
+                .append("status", status)
+                .append("tellerId", tellerId)
+                .append("residentialAddress", residentialAddress)
+                .append("mobilePhone", mobilePhone)
+                .append("remark", remark)
+                .append("password", password)
+                .append("salt", salt)
+                .append("onlineStatus", onlineStatus)
+                .append("ipAddr", ipAddr)
+                .append("userTheme", userTheme)
+                .append("pdCount", pdCount)
+                .append("pdModtime", pdModtime)
+                .append("pdLocktime", pdLocktime)
+                .append("lastSignonTime", lastSignonTime)
+                .append("lastSignoutTime", lastSignoutTime)
+                .append("legalOrg", legalOrg)
+                .append("roleCodes", roleCodes)
+                .toString();
     }
 }

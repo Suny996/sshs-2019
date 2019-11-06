@@ -5,12 +5,8 @@ server:
     session:
       timeout: 600s
 logging:
-  level:
-    com:
-      sshs:
-        core:
-          customise:
-            mapper: debug
+  path: logs
+  file: sshs
 spring:
   application:
     name: sshs
@@ -44,8 +40,10 @@ spring:
       maxRequestSize: 10MB
 mybatis:
   typeAliasesPackage: com.sshs
+  mapperLocations: classpath*:*Mapper.xml
+  configuration:
+    mapUnderscoreToCamelCase: true
 
-#代码生成路径配置
 toolkit:
   coder:
     path:

@@ -28,7 +28,7 @@ public class Menu implements Serializable {
      */
     @Id
     @Column(name = "MENU_CODE")
-    private String menuCode;
+    private String id;
 
     /**
      * 菜单名称
@@ -172,13 +172,12 @@ public class Menu implements Serializable {
         this.children.add(child);
     }
 
-    @GeneratedValue(generator="UUID")
-    public String getMenuCode() {
-        return this.menuCode;
+    public String getId() {
+        return this.id;
     }
 
-    public void setMenuCode(String menuCode) {
-        this.menuCode = menuCode;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getMenuName() {

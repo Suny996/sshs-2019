@@ -5,10 +5,9 @@
     <sql id="tableName">
 		SYS_USER
 	</sql>
-
     <!-- 字段 -->
     <sql id="Field">
-				USER_ID,
+				USER_ID as id,
 				USER_CODE,
 				USER_NAME,
 				USER_NAME_EN,
@@ -47,49 +46,6 @@
 				UPD_USER_CODE,
 				UPD_ORG_CODE,
 				UPD_DATE
-	</sql>
-
-    <!-- 字段值 -->
-    <sql id="FieldValue">
-				#{userId},
-				#{userCode},
-				#{userName},
-				#{userNameEn},
-				#{userNamePy},
-				#{userNameFr},
-				#{orgCode},
-				#{postNo},
-				#{userSex},
-				#{nationality},
-				#{ethnic},
-				#{nativePlace},
-				#{birthPlace},
-				#{birthDate},
-				#{idDecimal},
-				#{photoId},
-				#{joinDate},
-				#{status},
-				#{tellerId},
-				#{residentialAddress},
-				#{mobilePhone},
-				#{remark},
-				#{password},
-				#{salt},
-				#{onlineStatus},
-				#{ipAddr},
-				#{userTheme},
-				#{pdCount},
-				#{pdModtime},
-				#{pdLocktime},
-				#{lastSignonTime},
-				#{lastSignoutTime},
-				#{legalOrg},
-				#{crtUserCode},
-				#{crtOrgCode},
-				#{crtDate},
-				#{updUserCode},
-				#{updOrgCode},
-				#{updDate}
 	</sql>
 
     <!-- 系统管理->系统管理-用户表-分页查询列信息 -->
@@ -259,10 +215,10 @@
         <if test="updDate != null and updDate != ''">
             AND UPD_DATE = #{updDate}
         </if>
-        <if test="_orgAuth != null and _orgAuth != ''">
+        <if test="@orgAuth != null and @orgAuth != ''">
             AND ORG_CODE ${_orgAuth}
         </if>
-        <if test="_userAuth != null and _userAuth != ''">
+        <if test="@userAuth != null and @userAuth != ''">
             AND USER_CODE ${_userAuth}
         </if>
     </select>

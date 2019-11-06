@@ -1,11 +1,12 @@
 package com.sshs.system.post.model;
 
-import java.io.Serializable;
-import java.util.Date;
+import org.apache.ibatis.type.Alias;
+
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Column;
-import org.apache.ibatis.type.Alias;
+import java.io.Serializable;
+import java.util.Date;
 
 /** 
  * 系统管理->系统管理-岗位表bean Post类
@@ -22,9 +23,8 @@ private static final long serialVersionUID = 1L;
     * 岗位主键
     */
 	@Id
-	//@GeneratedValue(generator = "UUID")
 	@Column(name="POST_ID")
-	private String postId;
+	private String id;
 
     /**
     * 创建日期
@@ -99,12 +99,12 @@ private static final long serialVersionUID = 1L;
 	private String crtOrgCode;
 
 
-	public String getPostId(){
-		return this.postId;
+	public String getId(){
+		return this.id;
 	}
 	
-	public void setPostId(String postId){
-		this.postId = postId;
+	public void setId(String postId){
+		this.id = id;
 	}
 
 	public Date getCrtDate(){

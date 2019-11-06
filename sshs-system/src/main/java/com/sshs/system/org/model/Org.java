@@ -31,9 +31,8 @@ public class Org implements Serializable {
      * 机构ID
      */
     @Id
-    //@GeneratedValue(generator = "UUID")
     @Column(name = "ORG_ID")
-    private String orgId;
+    private String id;
 
     /**
      * 状态：01--启用,02--停用
@@ -283,12 +282,12 @@ public class Org implements Serializable {
     @Transient
     private List<Org> children;
 
-    public String getOrgId() {
-        return this.orgId;
+    public String getId() {
+        return this.id;
     }
 
-    public void setOrgId(String orgId) {
-        this.orgId = orgId;
+    public void setId(String orgId) {
+        this.id = id;
     }
 
     public String getStatus() {

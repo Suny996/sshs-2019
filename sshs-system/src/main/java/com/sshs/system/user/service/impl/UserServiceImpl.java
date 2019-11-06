@@ -3,7 +3,6 @@ package com.sshs.system.user.service.impl;
 import com.sshs.core.base.service.impl.BaseServiceImpl;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
-import com.sshs.core.util.UuidUtil;
 import com.sshs.system.user.mapper.UserMapper;
 import com.sshs.system.user.model.User;
 import com.sshs.system.user.service.IUserService;
@@ -51,7 +50,6 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
      */
     @Override
     public Message<User> save(User user) {
-        user.setUserId(UuidUtil.get32UUID());
         user.setPassword(defaultPassword);
         try {
             return super.save(user);

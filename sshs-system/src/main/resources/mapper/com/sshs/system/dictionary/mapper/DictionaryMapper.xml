@@ -11,7 +11,7 @@
 
 	<!-- 字段 -->
 	<sql id="Field">
-		DICT_ID ,
+		DICT_ID as id,
 		PARENT_ID ,
 		DICT_TYPE ,
 		DICT_CODE ,
@@ -30,47 +30,25 @@
 		UPD_DATE
 	</sql>
 
-	<!-- 字段值 -->
-	<sql id="FieldValue">
-		#{dictId},
-		#{parentId},
-		#{dictType},
-		#{dictCode},
-		#{dictName},
-		#{dictNameEn},
-		#{dictDesc},
-		#{status},
-		#{sortNo},
-		#{IsSystem},
-		#{module},
-		#{legalOrg},
-		#{crtUserCode},
-		#{crtOrgCode},
-		#{crtDate},
-		#{updUserCode},
-		#{updOrgCode},
-		#{updDate}
-	</sql>
-
-	<select id="findById" parameterType="int" resultType="Dictionary">
+	<!--<select id="findById" parameterType="int" resultType="Dictionary">
 		select
 		<include refid="Field"></include>
 		from
 		<include refid="tableName"></include>
 		where
 		user_id=#{id}
-	</select>
+	</select>-->
 	<!-- 初始化字典项 根据dictCode查询 -->
-	<select id="findByDictCode" parameterType="String" resultType="Dictionary">
+	<!--<select id="findByDictCode" parameterType="String" resultType="Dictionary">
 		SELECT
 		<include refid="Field"></include>
 		FROM
 		<include refid="tableName"></include>
 		WHERE DICT_TYPE='1' AND DICT_CODE=#{dictCode}
-	</select>
+	</select>-->
 
 	<!-- 初始化字典项 根据parentId查询 -->
-	<select id="findByParentId" parameterType="java.lang.String"
+	<!--<select id="findByParentId" parameterType="java.lang.String"
 		resultType="Dictionary">
 		SELECT
 		<include refid="Field"></include>
@@ -78,19 +56,19 @@
 		<include refid="tableName"></include>
 		WHERE PARENT_ID=#{parentId} order by
 		sort_no asc
-	</select>
+	</select>-->
 	<!-- 初始化所有字典项目 -->
-	<select id="findAllDictCodes" resultType="Dictionary">
+	<!--<select id="findAllDictCodes" resultType="Dictionary">
 		select
 		<include refid="Field"></include>
 		from
 		<include refid="tableName">
 		</include>
 		where DICT_TYPE='1' and STATUS='1'
-	</select>
+	</select>-->
 
 	<!-- 初始化所有字典项目 -->
-	<select id="findI18nByDictId" parameterType="String" resultType="DictionaryI18n">
+	<!--<select id="findI18nByDictId" parameterType="String" resultType="DictionaryI18n">
 		select I18N_ID,
 		DICT_ID,
 		DICT_CODE,
@@ -105,151 +83,151 @@
 		from
 		SYS_DICTIONARY_I18N
 		where DICT_ID=#{dictId}
-	</select>
+	</select>-->
 
 	<!-- 分页查询系统管理->系统管理-数据字典表-查询列信息 -->
-	<select id="findForPageList" parameterType="Page"
+	<select id="findForList" parameterType="Page"
 			resultType="Dictionary">
 		SELECT
 		<include refid="Field"></include>
 		FROM
 		<include refid="tableName"></include>
 		WHERE 1=1
-		<if test="variables.dictId != null and variables.dictId != ''">
+		<if test="dictId != null and dictId != ''">
 			AND DICT_ID
 			<choose>
 				<when test="operators.dictId != null and operators.dictId != '' ">${operators.dictId}</when>
 				<otherwise> = </otherwise>
 			</choose>
-			#{variables.dictId}
+			#{dictId}
 		</if>
-		<if test="variables.module != null and variables.module != ''">
+		<if test="module != null and module != ''">
 			AND MODULE
 			<choose>
 				<when test="operators.module != null and operators.module != '' ">${operators.module}</when>
 				<otherwise> = </otherwise>
 			</choose>
-			#{variables.module}
+			#{module}
 		</if>
-		<if test="variables.legalOrg != null and variables.legalOrg != ''">
+		<if test="legalOrg != null and legalOrg != ''">
 			AND LEGAL_ORG
 			<choose>
 				<when test="operators.legalOrg != null and operators.legalOrg != '' ">${operators.legalOrg}</when>
 				<otherwise> = </otherwise>
 			</choose>
-			#{variables.legalOrg}
+			#{legalOrg}
 		</if>
-		<if test="variables.crtUserCode != null and variables.crtUserCode != ''">
+		<if test="crtUserCode != null and crtUserCode != ''">
 			AND CRT_USER_CODE
 			<choose>
 				<when test="operators.crtUserCode != null and operators.crtUserCode != '' ">${operators.crtUserCode}</when>
 				<otherwise> = </otherwise>
 			</choose>
-			#{variables.crtUserCode}
+			#{crtUserCode}
 		</if>
-		<if test="variables.crtOrgCode != null and variables.crtOrgCode != ''">
+		<if test="crtOrgCode != null and crtOrgCode != ''">
 			AND CRT_ORG_CODE
 			<choose>
 				<when test="operators.crtOrgCode != null and operators.crtOrgCode != '' ">${operators.crtOrgCode}</when>
 				<otherwise> = </otherwise>
 			</choose>
-			#{variables.crtOrgCode}
+			#{crtOrgCode}
 		</if>
-		<if test="variables.crtDate != null and variables.crtDate != ''">
+		<if test="crtDate != null and crtDate != ''">
 			AND CRT_DATE
 			<choose>
 				<when test="operators.crtDate != null and operators.crtDate != '' ">${operators.crtDate}</when>
 				<otherwise> = </otherwise>
 			</choose>
-			#{variables.crtDate}
+			#{crtDate}
 		</if>
-		<if test="variables.updUserCode != null and variables.updUserCode != ''">
+		<if test="updUserCode != null and updUserCode != ''">
 			AND UPD_USER_CODE
 			<choose>
 				<when test="operators.updUserCode != null and operators.updUserCode != '' ">${operators.updUserCode}</when>
 				<otherwise> = </otherwise>
 			</choose>
-			#{variables.updUserCode}
+			#{updUserCode}
 		</if>
-		<if test="variables.updOrgCode != null and variables.updOrgCode != ''">
+		<if test="updOrgCode != null and updOrgCode != ''">
 			AND UPD_ORG_CODE
 			<choose>
 				<when test="operators.updOrgCode != null and operators.updOrgCode != '' ">${operators.updOrgCode}</when>
 				<otherwise> = </otherwise>
 			</choose>
-			#{variables.updOrgCode}
+			#{updOrgCode}
 		</if>
-		<if test="variables.updDate != null and variables.updDate != ''">
+		<if test="updDate != null and updDate != ''">
 			AND UPD_DATE
 			<choose>
 				<when test="operators.updDate != null and operators.updDate != '' ">${operators.updDate}</when>
 				<otherwise> = </otherwise>
 			</choose>
-			#{variables.updDate}
+			#{updDate}
 		</if>
-		<if test="variables.parentId != null and variables.parentId != ''">
+		<if test="parentId != null and parentId != ''">
 			AND PARENT_ID
 			<choose>
 				<when test="operators.parentId != null and operators.parentId != '' ">${operators.parentId}</when>
 				<otherwise> = </otherwise>
 			</choose>
-			#{variables.parentId}
+			#{parentId}
 		</if>
-		<if test="variables.dictType != null and variables.dictType != ''">
+		<if test="dictType != null and dictType != ''">
 			AND DICT_TYPE
 			<choose>
 				<when test="operators.dictType != null and operators.dictType != '' ">${operators.dictType}</when>
 				<otherwise> = </otherwise>
 			</choose>
-			#{variables.dictType}
+			#{dictType}
 		</if>
-		<if test="variables.dictCode != null and variables.dictCode != ''">
+		<if test="dictCode != null and dictCode != ''">
 			AND DICT_CODE
 			<choose>
 				<when test="operators.dictCode != null and operators.dictCode != '' ">${operators.dictCode}</when>
 				<otherwise> = </otherwise>
 			</choose>
-			#{variables.dictCode}
+			#{dictCode}
 		</if>
-		<if test="variables.dictName != null and variables.dictName != ''">
+		<if test="dictName != null and dictName != ''">
 			AND DICT_NAME
 			<choose>
 				<when test="operators.dictName != null and operators.dictName != '' ">${operators.dictName}</when>
 				<otherwise> = </otherwise>
 			</choose>
-			#{variables.dictName}
+			#{dictName}
 		</if>
-		<if test="variables.dictDesc != null and variables.dictDesc != ''">
+		<if test="dictDesc != null and dictDesc != ''">
 			AND DICT_DESC
 			<choose>
 				<when test="operators.dictDesc != null and operators.dictDesc != '' ">${operators.dictDesc}</when>
 				<otherwise> = </otherwise>
 			</choose>
-			#{variables.dictDesc}
+			#{dictDesc}
 		</if>
-		<if test="variables.status != null and variables.status != ''">
+		<if test="status != null and status != ''">
 			AND STATUS
 			<choose>
 				<when test="operators.status != null and operators.status != '' ">${operators.status}</when>
 				<otherwise> = </otherwise>
 			</choose>
-			#{variables.status}
+			#{status}
 		</if>
-		<if test="variables.sortNo != null and variables.sortNo != ''">
+		<if test="sortNo != null and sortNo != ''">
 			AND SORT_NO
 			<choose>
 				<when test="operators.sortNo != null and operators.sortNo != '' ">${operators.sortNo}</when>
 				<otherwise> = </otherwise>
 			</choose>
-			#{variables.sortNo}
+			#{sortNo}
 		</if>
-		<if test="variables.isSystem != null and variables.isSystem != ''">
+		<if test="isSystem != null and isSystem != ''">
 			AND IS_SYSTEM
 			<choose>
 				<when test="operators.isSystem != null and operators.isSystem != '' ">${operators.isSystem}</when>
 				<otherwise> = </otherwise>
 			</choose>
-			#{variables.isSystem}
+			#{isSystem}
 		</if>
 	</select>
 </mapper>

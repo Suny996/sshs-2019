@@ -3,6 +3,7 @@ package com.sshs.system.user.controller;
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
+import com.sshs.core.page.Page;
 import com.sshs.system.user.model.User;
 import com.sshs.system.user.service.IUserService;
 import io.swagger.annotations.Api;
@@ -38,14 +39,14 @@ public class UserController extends BaseController {
         try {
             User u = userService.getByUserCode(user.getUserCode());
             if (u != null) {
+                logger.error("保存用户信息异常！");
                 throw new BusinessException("US3002");
             }
-
             logger.debug("开始保存用户信息……");
             return userService.save(user);
 
         } catch (BusinessException e) {
-            e.printStackTrace();
+            logger.error("保存用户信息异常！", e);
             throw e;
         } catch (Exception e) {
             logger.error("保存用户信息异常！", e);
@@ -76,8 +77,7 @@ public class UserController extends BaseController {
             logger.debug("开始删除用户信息……");
             return userService.deleteById(userId);
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("删除用户信息异常！");
+            logger.error("删除用户信息异常！", e);
             throw new BusinessException("SY0003");
         }
     }
@@ -91,8 +91,7 @@ public class UserController extends BaseController {
             logger.debug("开始批量删除用户信息……");
             return userService.deleteByIds(ids);
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("批量删除用户信息异常！");
+            logger.error("批量删除用户信息异常！", e);
             throw new BusinessException("SY0003");
         }
     }
@@ -106,8 +105,7 @@ public class UserController extends BaseController {
             logger.debug("开始查询用户信息……");
             return Message.success(userService.getById(userId));
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("查询用户信息异常！");
+            logger.error("查询用户信息异常！", e);
             throw new BusinessException("SY0001");
         }
     }
@@ -116,7 +114,7 @@ public class UserController extends BaseController {
      * 查询用户信息列表
      */
     @GetMapping
-    public Message queryList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam(required = false) Map<String, Object> params) {
+    public Message<Page<User>> queryList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam(required = false) Map<String, Object> params) {
         try {
             logger.debug("开始查询用户列表信息……");
             return userService.queryPageList(limit, offset, params);

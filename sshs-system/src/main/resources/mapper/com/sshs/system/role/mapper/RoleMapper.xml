@@ -9,7 +9,7 @@
 	
 	<!-- 字段 -->
 	<sql id="Field">
-				ROLE_ID,
+				ROLE_ID AS id,
 				UPD_USER_CODE,
 				UPD_ORG_CODE,
 				UPD_DATE,
@@ -22,23 +22,6 @@
 				CRT_ORG_CODE,
 				CRT_DATE
 	</sql>
-	
-	<!-- 字段值 -->
-	<sql id="FieldValue">
-				#{roleId},
-				#{updUserCode},
-				#{updOrgCode},
-				#{updDate},
-				#{roleCode},
-				#{roleName},
-				#{remark},
-				#{roleLevel},
-				#{status},
-				#{crtUserCode},
-				#{crtOrgCode},
-				#{crtDate}
-	</sql>
-	
 	  <!-- 查询系统管理->系统管理-角色表-查询列信息 -->
 	<select id="findForList" parameterType="Page"
 		resultType="Role">

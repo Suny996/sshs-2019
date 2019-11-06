@@ -9,7 +9,7 @@
 	
 	<!-- 字段 -->
 	<sql id="Field">
-				POST_ID,
+				POST_ID as id,
 				CRT_DATE,
 				UPD_USER_CODE,
 				UPD_ORG_CODE,
@@ -23,135 +23,119 @@
 				CRT_USER_CODE,
 				CRT_ORG_CODE
 	</sql>
-	
-	<!-- 字段值 -->
-	<sql id="FieldValue">
-				#{postId},
-				#{crtDate},
-				#{updUserCode},
-				#{updOrgCode},
-				#{updDate},
-				#{postNo},
-				#{postName},
-				#{postSerial},
-				#{postSerialChild},
-				#{postDesc},
-				#{standOrgCode},
-				#{crtUserCode},
-				#{crtOrgCode}
-	</sql>
+
 	 
     <!-- 分页查询系统管理->系统管理-岗位表-查询列信息 -->
-	<select id="findForPageList" parameterType="Page"
+	<select id="findForList" parameterType="Map"
 		resultType="Post">
 		SELECT  
 		<include refid="Field"></include>
 		FROM 
 		<include refid="tableName"></include>
 		WHERE 1=1
-			<if test="variables.postId != null and variables.postId != ''">
+			<if test="postId != null and postId != ''">
 				AND POST_ID 
 				<choose>
 					<when test="operators.postId != null and operators.postId != '' ">${operators.postId}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.postId}
+			#{postId}
 			</if>	
-			<if test="variables.crtDate != null and variables.crtDate != ''">
+			<if test="crtDate != null and crtDate != ''">
 				AND CRT_DATE 
 				<choose>
 					<when test="operators.crtDate != null and operators.crtDate != '' ">${operators.crtDate}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.crtDate}
+			#{crtDate}
 			</if>	
-			<if test="variables.updUserCode != null and variables.updUserCode != ''">
+			<if test="updUserCode != null and updUserCode != ''">
 				AND UPD_USER_CODE 
 				<choose>
 					<when test="operators.updUserCode != null and operators.updUserCode != '' ">${operators.updUserCode}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.updUserCode}
+			#{updUserCode}
 			</if>	
-			<if test="variables.updOrgCode != null and variables.updOrgCode != ''">
+			<if test="updOrgCode != null and updOrgCode != ''">
 				AND UPD_ORG_CODE 
 				<choose>
 					<when test="operators.updOrgCode != null and operators.updOrgCode != '' ">${operators.updOrgCode}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.updOrgCode}
+			#{updOrgCode}
 			</if>	
-			<if test="variables.updDate != null and variables.updDate != ''">
+			<if test="updDate != null and updDate != ''">
 				AND UPD_DATE 
 				<choose>
 					<when test="operators.updDate != null and operators.updDate != '' ">${operators.updDate}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.updDate}
+			#{updDate}
 			</if>	
-			<if test="variables.postNo != null and variables.postNo != ''">
+			<if test="postNo != null and postNo != ''">
 				AND POST_NO 
 				<choose>
 					<when test="operators.postNo != null and operators.postNo != '' ">${operators.postNo}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.postNo}
+			#{postNo}
 			</if>	
-			<if test="variables.postName != null and variables.postName != ''">
+			<if test="postName != null and postName != ''">
 				AND POST_NAME 
 				<choose>
 					<when test="operators.postName != null and operators.postName != '' ">${operators.postName}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.postName}
+			#{postName}
 			</if>	
-			<if test="variables.postSerial != null and variables.postSerial != ''">
+			<if test="postSerial != null and postSerial != ''">
 				AND POST_SERIAL 
 				<choose>
 					<when test="operators.postSerial != null and operators.postSerial != '' ">${operators.postSerial}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.postSerial}
+			#{postSerial}
 			</if>	
-			<if test="variables.postSerialChild != null and variables.postSerialChild != ''">
+			<if test="postSerialChild != null and postSerialChild != ''">
 				AND POST_SERIAL_CHILD 
 				<choose>
 					<when test="operators.postSerialChild != null and operators.postSerialChild != '' ">${operators.postSerialChild}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.postSerialChild}
+			#{postSerialChild}
 			</if>	
-			<if test="variables.postDesc != null and variables.postDesc != ''">
+			<if test="postDesc != null and postDesc != ''">
 				AND POST_DESC 
 				<choose>
 					<when test="operators.postDesc != null and operators.postDesc != '' ">${operators.postDesc}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.postDesc}
+			#{postDesc}
 			</if>	
-			<if test="variables.standOrgCode != null and variables.standOrgCode != ''">
+			<if test="standOrgCode != null and standOrgCode != ''">
 				AND STAND_ORG_CODE 
 				<choose>
 					<when test="operators.standOrgCode != null and operators.standOrgCode != '' ">${operators.standOrgCode}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.standOrgCode}
+			#{standOrgCode}
 			</if>	
-			<if test="variables.crtUserCode != null and variables.crtUserCode != ''">
+			<if test="crtUserCode != null and crtUserCode != ''">
 				AND CRT_USER_CODE 
 				<choose>
 					<when test="operators.crtUserCode != null and operators.crtUserCode != '' ">${operators.crtUserCode}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.crtUserCode}
+			#{crtUserCode}
 			</if>	
-			<if test="variables.crtOrgCode != null and variables.crtOrgCode != ''">
+			<if test="crtOrgCode != null and crtOrgCode != ''">
 				AND CRT_ORG_CODE 
 				<choose>
 					<when test="operators.crtOrgCode != null and operators.crtOrgCode != '' ">${operators.crtOrgCode}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.crtOrgCode}
+			#{crtOrgCode}
 			</if>	
 	</select>
 </mapper>

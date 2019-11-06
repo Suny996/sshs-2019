@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Alias("Page")
 public class Page<T> extends PageInfo {
-    private static Logger logger = LoggerFactory.getLogger(Page.class);
+    private static final Logger logger = LoggerFactory.getLogger(Page.class);
     /**
      * 每页显示记录数
      */
@@ -54,10 +54,14 @@ public class Page<T> extends PageInfo {
      */
     private String sort, order = "";
     private String orderBy = "";
-    List<T> rows;
+    //List<T> rows;
 
     public Page() {
         super();
+    }
+
+    public Page(List<T> rows) {
+        super(rows);
     }
 
     public Page(int limit, int offset) {
@@ -175,14 +179,14 @@ public class Page<T> extends PageInfo {
         this.limit = limit;
     }
 
-    public List<T> getRows() {
+    /*public List<T> getRows() {
         return rows;
     }
 
     public void setRows(List<T> rows) {
         this.rows = rows;
     }
-
+*/
     public String getSort() {
         return sort;
     }

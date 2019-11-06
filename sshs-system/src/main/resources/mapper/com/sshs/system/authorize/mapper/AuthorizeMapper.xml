@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sshs.system.authorize.mapper.AuthorizeMapper">
-	
-	<!--表名 -->
-	<sql id="tableName">
+
+    <!--表名 -->
+    <sql id="tableName">
 		SYS_AUTHORIZE
 	</sql>
-	
-	<!-- 字段 -->
-	<sql id="Field">
-				AUTHORIZE_ID,
+
+    <!-- 字段 -->
+    <sql id="Field">
+				AUTHORIZE_ID as id,
 				CRT_DATE,
 				UPD_USER_CODE,
 				UPD_ORG_CODE,
@@ -23,251 +23,134 @@
 				CRT_USER_CODE,
 				CRT_ORG_CODE
 	</sql>
-	
-	<!-- 字段值 -->
-	<sql id="FieldValue">
-				#{authorizeId},
-				#{crtDate},
-				#{updUserCode},
-				#{updOrgCode},
-				#{updDate},
-				#{resourceId},
-				#{resourceName},
-				#{roleCode},
-				#{resourceType},
-				#{authorizeType},
-				#{dataAuthType},
-				#{crtUserCode},
-				#{crtOrgCode}
-	</sql>
-    <delete id="deleteByRoleCode" parameterType="String">
-		delete from  <include refid="tableName"></include> where role_code=#{_parameter}
-	</delete>
+
+    <!-- <delete id="deleteByRoleCode" parameterType="String">
+         delete from  <include refid="tableName"></include> where role_code=#{_parameter}
+     </delete>-->
+
+
     <!-- 分页查询系统管理->系统管理-角色权限表-查询列信息 -->
-    <select id="findForList" parameterType="Map"
+    <select id="findForList" parameterType="Page"
             resultType="Authorize">
         SELECT
         <include refid="Field"></include>
         FROM
         <include refid="tableName"></include>
         WHERE 1=1
-			<if test="variables.authorizeId != null and variables.authorizeId != ''">
-                AND AUTHORIZE_ID
-                <choose>
-                    <when test="operators.authorizeId != null and operators.authorizeId != '' ">${operators.authorizeId}</when>
-                    <otherwise> = </otherwise>
-                </choose>
-				#{variables.authorizeId}
-            </if>
-			<if test="variables.crtDate != null and variables.crtDate != ''">
-                AND CRT_DATE
-                <choose>
-                    <when test="operators.crtDate != null and operators.crtDate != '' ">${operators.crtDate}</when>
-                    <otherwise> = </otherwise>
-                </choose>
-				#{variables.crtDate}
-            </if>
-			<if test="variables.updUserCode != null and variables.updUserCode != ''">
-                AND UPD_USER_CODE
-                <choose>
-                    <when test="operators.updUserCode != null and operators.updUserCode != '' ">${operators.updUserCode}</when>
-                    <otherwise> = </otherwise>
-                </choose>
-				#{variables.updUserCode}
-            </if>
-			<if test="variables.updOrgCode != null and variables.updOrgCode != ''">
-                AND UPD_ORG_CODE
-                <choose>
-                    <when test="operators.updOrgCode != null and operators.updOrgCode != '' ">${operators.updOrgCode}</when>
-                    <otherwise> = </otherwise>
-                </choose>
-				#{variables.updOrgCode}
-            </if>
-			<if test="variables.updDate != null and variables.updDate != ''">
-                AND UPD_DATE
-                <choose>
-                    <when test="operators.updDate != null and operators.updDate != '' ">${operators.updDate}</when>
-                    <otherwise> = </otherwise>
-                </choose>
-				#{variables.updDate}
-            </if>
-			<if test="variables.resourceId != null and variables.resourceId != ''">
-                AND RESOURCE_ID
-                <choose>
-                    <when test="operators.resourceId != null and operators.resourceId != '' ">${operators.resourceId}</when>
-                    <otherwise> = </otherwise>
-                </choose>
-				#{variables.resourceId}
-            </if>
-			<if test="variables.resourceName != null and variables.resourceName != ''">
-                AND RESOURCE_NAME
-                <choose>
-                    <when test="operators.resourceName != null and operators.resourceName != '' ">${operators.resourceName}</when>
-                    <otherwise> = </otherwise>
-                </choose>
-				#{variables.resourceName}
-            </if>
-			<if test="variables.roleCode != null and variables.roleCode != ''">
-                AND ROLE_CODE
-                <choose>
-                    <when test="operators.roleCode != null and operators.roleCode != '' ">${operators.roleCode}</when>
-                    <otherwise> = </otherwise>
-                </choose>
-				#{variables.roleCode}
-            </if>
-			<if test="variables.resourceType != null and variables.resourceType != ''">
-                AND RESOURCE_TYPE
-                <choose>
-                    <when test="operators.resourceType != null and operators.resourceType != '' ">${operators.resourceType}</when>
-                    <otherwise> = </otherwise>
-                </choose>
-				#{variables.resourceType}
-            </if>
-			<if test="variables.authorizeType != null and variables.authorizeType != ''">
-                AND AUTHORIZE_TYPE
-                <choose>
-                    <when test="operators.authorizeType != null and operators.authorizeType != '' ">${operators.authorizeType}</when>
-                    <otherwise> = </otherwise>
-                </choose>
-				#{variables.authorizeType}
-            </if>
-			<if test="variables.dataAuthType != null and variables.dataAuthType != ''">
-                AND DATA_AUTH_TYPE
-                <choose>
-                    <when test="operators.dataAuthType != null and operators.dataAuthType != '' ">${operators.dataAuthType}</when>
-                    <otherwise> = </otherwise>
-                </choose>
-				#{variables.dataAuthType}
-            </if>
-			<if test="variables.crtUserCode != null and variables.crtUserCode != ''">
-                AND CRT_USER_CODE
-                <choose>
-                    <when test="operators.crtUserCode != null and operators.crtUserCode != '' ">${operators.crtUserCode}</when>
-                    <otherwise> = </otherwise>
-                </choose>
-				#{variables.crtUserCode}
-            </if>
-			<if test="variables.crtOrgCode != null and variables.crtOrgCode != ''">
-                AND CRT_ORG_CODE
-                <choose>
-                    <when test="operators.crtOrgCode != null and operators.crtOrgCode != '' ">${operators.crtOrgCode}</when>
-                    <otherwise> = </otherwise>
-                </choose>
-				#{variables.crtOrgCode}
-            </if>
+        <if test="authorizeId != null and authorizeId != ''">
+            AND AUTHORIZE_ID
+            <choose>
+                <when test="operators.authorizeId != null and operators.authorizeId != '' ">${operators.authorizeId}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{authorizeId}
+        </if>
+        <if test="crtDate != null and crtDate != ''">
+            AND CRT_DATE
+            <choose>
+                <when test="operators.crtDate != null and operators.crtDate != '' ">${operators.crtDate}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{crtDate}
+        </if>
+        <if test="updUserCode != null and updUserCode != ''">
+            AND UPD_USER_CODE
+            <choose>
+                <when test="operators.updUserCode != null and operators.updUserCode != '' ">${operators.updUserCode}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{updUserCode}
+        </if>
+        <if test="updOrgCode != null and updOrgCode != ''">
+            AND UPD_ORG_CODE
+            <choose>
+                <when test="operators.updOrgCode != null and operators.updOrgCode != '' ">${operators.updOrgCode}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{updOrgCode}
+        </if>
+        <if test="updDate != null and updDate != ''">
+            AND UPD_DATE
+            <choose>
+                <when test="operators.updDate != null and operators.updDate != '' ">${operators.updDate}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{updDate}
+        </if>
+        <if test="resourceId != null and resourceId != ''">
+            AND RESOURCE_ID
+            <choose>
+                <when test="operators.resourceId != null and operators.resourceId != '' ">${operators.resourceId}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{resourceId}
+        </if>
+        <if test="resourceName != null and resourceName != ''">
+            AND RESOURCE_NAME
+            <choose>
+                <when test="operators.resourceName != null and operators.resourceName != '' ">
+                    ${operators.resourceName}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{resourceName}
+        </if>
+        <if test="roleCode != null and roleCode != ''">
+            AND ROLE_CODE
+            <choose>
+                <when test="operators.roleCode != null and operators.roleCode != '' ">${operators.roleCode}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{roleCode}
+        </if>
+        <if test="resourceType != null and resourceType != ''">
+            AND RESOURCE_TYPE
+            <choose>
+                <when test="operators.resourceType != null and operators.resourceType != '' ">
+                    ${operators.resourceType}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{resourceType}
+        </if>
+        <if test="authorizeType != null and authorizeType != ''">
+            AND AUTHORIZE_TYPE
+            <choose>
+                <when test="operators.authorizeType != null and operators.authorizeType != '' ">
+                    ${operators.authorizeType}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{authorizeType}
+        </if>
+        <if test="dataAuthType != null and dataAuthType != ''">
+            AND DATA_AUTH_TYPE
+            <choose>
+                <when test="operators.dataAuthType != null and operators.dataAuthType != '' ">
+                    ${operators.dataAuthType}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{dataAuthType}
+        </if>
+        <if test="crtUserCode != null and crtUserCode != ''">
+            AND CRT_USER_CODE
+            <choose>
+                <when test="operators.crtUserCode != null and operators.crtUserCode != '' ">${operators.crtUserCode}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{crtUserCode}
+        </if>
+        <if test="crtOrgCode != null and crtOrgCode != ''">
+            AND CRT_ORG_CODE
+            <choose>
+                <when test="operators.crtOrgCode != null and operators.crtOrgCode != '' ">${operators.crtOrgCode}</when>
+                <otherwise>=</otherwise>
+            </choose>
+            #{crtOrgCode}
+        </if>
     </select>
-
-    <!-- 分页查询系统管理->系统管理-角色权限表-查询列信息 -->
-	<select id="findForPageList" parameterType="Page"
-		resultType="Authorize">
-		SELECT  
-		<include refid="Field"></include>
-		FROM 
-		<include refid="tableName"></include>
-		WHERE 1=1
-			<if test="variables.authorizeId != null and variables.authorizeId != ''">
-				AND AUTHORIZE_ID 
-				<choose>
-					<when test="operators.authorizeId != null and operators.authorizeId != '' ">${operators.authorizeId}</when>
-					<otherwise> = </otherwise>
-				</choose> 
-			#{variables.authorizeId}
-			</if>	
-			<if test="variables.crtDate != null and variables.crtDate != ''">
-				AND CRT_DATE 
-				<choose>
-					<when test="operators.crtDate != null and operators.crtDate != '' ">${operators.crtDate}</when>
-					<otherwise> = </otherwise>
-				</choose> 
-			#{variables.crtDate}
-			</if>	
-			<if test="variables.updUserCode != null and variables.updUserCode != ''">
-				AND UPD_USER_CODE 
-				<choose>
-					<when test="operators.updUserCode != null and operators.updUserCode != '' ">${operators.updUserCode}</when>
-					<otherwise> = </otherwise>
-				</choose> 
-			#{variables.updUserCode}
-			</if>	
-			<if test="variables.updOrgCode != null and variables.updOrgCode != ''">
-				AND UPD_ORG_CODE 
-				<choose>
-					<when test="operators.updOrgCode != null and operators.updOrgCode != '' ">${operators.updOrgCode}</when>
-					<otherwise> = </otherwise>
-				</choose> 
-			#{variables.updOrgCode}
-			</if>	
-			<if test="variables.updDate != null and variables.updDate != ''">
-				AND UPD_DATE 
-				<choose>
-					<when test="operators.updDate != null and operators.updDate != '' ">${operators.updDate}</when>
-					<otherwise> = </otherwise>
-				</choose> 
-			#{variables.updDate}
-			</if>	
-			<if test="variables.resourceId != null and variables.resourceId != ''">
-				AND RESOURCE_ID 
-				<choose>
-					<when test="operators.resourceId != null and operators.resourceId != '' ">${operators.resourceId}</when>
-					<otherwise> = </otherwise>
-				</choose> 
-			#{variables.resourceId}
-			</if>	
-			<if test="variables.resourceName != null and variables.resourceName != ''">
-				AND RESOURCE_NAME 
-				<choose>
-					<when test="operators.resourceName != null and operators.resourceName != '' ">${operators.resourceName}</when>
-					<otherwise> = </otherwise>
-				</choose> 
-			#{variables.resourceName}
-			</if>	
-			<if test="variables.roleCode != null and variables.roleCode != ''">
-				AND ROLE_CODE 
-				<choose>
-					<when test="operators.roleCode != null and operators.roleCode != '' ">${operators.roleCode}</when>
-					<otherwise> = </otherwise>
-				</choose> 
-			#{variables.roleCode}
-			</if>	
-			<if test="variables.resourceType != null and variables.resourceType != ''">
-				AND RESOURCE_TYPE 
-				<choose>
-					<when test="operators.resourceType != null and operators.resourceType != '' ">${operators.resourceType}</when>
-					<otherwise> = </otherwise>
-				</choose> 
-			#{variables.resourceType}
-			</if>	
-			<if test="variables.authorizeType != null and variables.authorizeType != ''">
-				AND AUTHORIZE_TYPE 
-				<choose>
-					<when test="operators.authorizeType != null and operators.authorizeType != '' ">${operators.authorizeType}</when>
-					<otherwise> = </otherwise>
-				</choose> 
-			#{variables.authorizeType}
-			</if>	
-			<if test="variables.dataAuthType != null and variables.dataAuthType != ''">
-				AND DATA_AUTH_TYPE 
-				<choose>
-					<when test="operators.dataAuthType != null and operators.dataAuthType != '' ">${operators.dataAuthType}</when>
-					<otherwise> = </otherwise>
-				</choose> 
-			#{variables.dataAuthType}
-			</if>	
-			<if test="variables.crtUserCode != null and variables.crtUserCode != ''">
-				AND CRT_USER_CODE 
-				<choose>
-					<when test="operators.crtUserCode != null and operators.crtUserCode != '' ">${operators.crtUserCode}</when>
-					<otherwise> = </otherwise>
-				</choose> 
-			#{variables.crtUserCode}
-			</if>	
-			<if test="variables.crtOrgCode != null and variables.crtOrgCode != ''">
-				AND CRT_ORG_CODE 
-				<choose>
-					<when test="operators.crtOrgCode != null and operators.crtOrgCode != '' ">${operators.crtOrgCode}</when>
-					<otherwise> = </otherwise>
-				</choose> 
-			#{variables.crtOrgCode}
-			</if>	
-	</select>
 </mapper>

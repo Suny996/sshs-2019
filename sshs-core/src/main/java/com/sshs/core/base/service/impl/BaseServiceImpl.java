@@ -1,6 +1,7 @@
 package com.sshs.core.base.service.impl;
 
 
+import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
 import com.sshs.core.base.mapper.BaseMapper;
 import com.sshs.core.base.service.IBaseService;
@@ -189,7 +190,9 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
          * 加入数据权限过滤条件
          */
         //parameter.put("_orgAuth", SystemUtil.getOrgAuthStatement());
-        return Message.success(mapper.findForList(page, parameter));
+        PageHelper.startPage(page.getPageNum(), page.getPageSize());
+        List<T> list = mapper.findForList(parameter);
+        return Message.success(new Page(list));
     }
 
     /**
@@ -228,7 +231,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     public Message<Page<T>> queryPageList(int limit, int offset, Map<String, Object> parameter) {
         int pageSize = 10;
         int pageNumber = 1;
-        if (limit <= 0) {
+        if (limit > 0) {
             pageSize = Integer.min(1000, limit);
         }
         Page<T> page = new Page<>(pageSize, offset);

@@ -27,7 +27,7 @@ public class Log implements Serializable {
      */
     @Id
     @Column(name = "LOG_ID")
-    private String logId;
+    private String id;
 
     /**
      * 法人行社
@@ -136,12 +136,12 @@ public class Log implements Serializable {
         this.optDateEnd = optDateEnd;
     }
 
-    public String getLogId() {
-        return this.logId;
+    public String getId() {
+        return this.id;
     }
 
-    public void setLogId(String logId) {
-        this.logId = logId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getLegalOrg() {
