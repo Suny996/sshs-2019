@@ -3,7 +3,6 @@ package com.sshs.system.log.service.impl;
 import com.sshs.core.base.service.impl.BaseServiceImpl;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
-import com.sshs.core.util.UuidUtil;
 import com.sshs.system.log.model.Log;
 import com.sshs.system.log.service.ILogService;
 import org.slf4j.Logger;
@@ -29,7 +28,7 @@ public class LogServiceImpl extends BaseServiceImpl<Log> implements ILogService 
      */
     @Override
     public Message<Log> save(Log log) {
-        log.setLogId(UuidUtil.get32UUID());
+        //log.setLogId(UuidUtil.get32UUID());
         try {
             return super.save(log);
         } catch (Exception e) {

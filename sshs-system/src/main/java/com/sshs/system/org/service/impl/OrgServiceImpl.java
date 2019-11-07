@@ -4,7 +4,6 @@ import com.sshs.core.base.service.impl.BaseServiceImpl;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
 import com.sshs.core.util.SystemUtil;
-import com.sshs.core.util.UuidUtil;
 import com.sshs.system.org.mapper.OrgMapper;
 import com.sshs.system.org.model.Org;
 import com.sshs.system.org.service.IOrgService;
@@ -36,12 +35,11 @@ public class OrgServiceImpl extends BaseServiceImpl<Org> implements IOrgService 
      */
     @Override
     public Message<Org> save(Org org) {
-        org.setOrgId(UuidUtil.get32UUID());
+        //org.setOrgId(UuidUtil.get32UUID());
         try {
             return super.save(org);
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("保存系统管理->系统管理-机构表信息异常！");
+            logger.error("保存系统管理->系统管理-机构表信息异常！",e);
             throw new BusinessException("SY0001");
         }
     }

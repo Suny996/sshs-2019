@@ -37,7 +37,7 @@ public class RoleServiceImpl extends BaseServiceImpl<Role> implements IRoleServi
      */
     @Override
     public Message save(Role role) {
-        role.setRoleId(UuidUtil.get32UUID());
+        //role.setRoleId(UuidUtil.get32UUID());
         if (null != mapper.getRoleByRoleCode(role.getRoleCode())) {
             throw new BusinessException("U1001");
         }

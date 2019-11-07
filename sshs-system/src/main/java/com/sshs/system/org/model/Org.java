@@ -1,6 +1,8 @@
 package com.sshs.system.org.model;
 
+import com.sshs.core.util.UUIdGenId;
 import org.apache.ibatis.type.Alias;
+import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -31,7 +33,8 @@ public class Org implements Serializable {
      * 机构ID
      */
     @Id
-    @Column(name = "ORG_ID")
+    @KeySql(genId = UUIdGenId.class)
+    @Column(name = "ORG_ID", length = 32)
     private String id;
 
     /**

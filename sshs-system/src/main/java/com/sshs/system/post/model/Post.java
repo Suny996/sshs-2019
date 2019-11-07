@@ -1,6 +1,8 @@
 package com.sshs.system.post.model;
 
+import com.sshs.core.util.UUIdGenId;
 import org.apache.ibatis.type.Alias;
+import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -23,7 +25,8 @@ private static final long serialVersionUID = 1L;
     * 岗位主键
     */
 	@Id
-	@Column(name="POST_ID")
+	@KeySql(genId = UUIdGenId.class)
+	@Column(name="POST_ID",length = 32)
 	private String id;
 
     /**

@@ -1,8 +1,10 @@
 package com.sshs.system.user.model;
 
 import com.sshs.core.model.BaseEntity;
+import com.sshs.core.util.UUIdGenId;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.ibatis.type.Alias;
+import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -31,8 +33,9 @@ public class User extends BaseEntity implements Serializable {
      * 主键
      */
     @Id
+    @KeySql(genId = UUIdGenId.class)
     @Column(name = "USER_ID", length = 32)
-    private String id;
+    private String userId;
 
     /**
      * 用户编号
@@ -233,12 +236,12 @@ public class User extends BaseEntity implements Serializable {
     private List<String> roleCodes;
 
 
-    public String getId() {
-        return this.id;
+    public String getUserId() {
+        return this.userId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUserId(String id) {
+        this.userId = id;
     }
 
     public String getUserCode() {
@@ -509,7 +512,7 @@ public class User extends BaseEntity implements Serializable {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .append("userId", id)
+                .append("userId", userId)
                 .append("userCode", userCode)
                 .append("userName", userName)
                 .append("userNameEn", userNameEn)

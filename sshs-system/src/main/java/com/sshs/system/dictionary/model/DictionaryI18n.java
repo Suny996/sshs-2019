@@ -1,6 +1,8 @@
 package com.sshs.system.dictionary.model;
 
+import com.sshs.core.util.UUIdGenId;
 import org.apache.ibatis.type.Alias;
+import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -22,6 +24,7 @@ public class DictionaryI18n implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	@Id
+	@KeySql(genId = UUIdGenId.class)
 	private String i18nId;
 	private String dictId;
 	private String dictCode;

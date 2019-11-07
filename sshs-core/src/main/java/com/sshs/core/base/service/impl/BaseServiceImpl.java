@@ -9,7 +9,6 @@ import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
 import com.sshs.core.page.Page;
 import com.sshs.core.util.SystemUtil;
-import com.sshs.core.util.UuidUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +33,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
      */
     private final static Logger logger = LoggerFactory.getLogger(BaseServiceImpl.class);
 
-    @Autowired
+    @Autowired(required = false)
     BaseMapper<T> mapper;
 
     /**
@@ -244,14 +243,6 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     private void setCrtProperties(T object) {
         try {
             Class<?> clazz = object.getClass();
-            try {
-                Method setId = clazz.getDeclaredMethod("setId", String.class);
-                if (setId != null) {
-                    setId.invoke(object, UuidUtil.get32UUID());
-                }
-            } catch (Exception e) {
-                logger.warn("设置新增相关公共字段出错可以忽略{}", "setId");
-            }
             try {
                 Method setCrtUserCode = clazz.getDeclaredMethod("setCrtUserCode", String.class);
                 if (setCrtUserCode != null) {

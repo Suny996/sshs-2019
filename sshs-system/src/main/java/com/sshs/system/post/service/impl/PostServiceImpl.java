@@ -3,7 +3,6 @@ package com.sshs.system.post.service.impl;
 import com.sshs.core.base.service.impl.BaseServiceImpl;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
-import com.sshs.core.util.UuidUtil;
 import com.sshs.system.post.mapper.PostMapper;
 import com.sshs.system.post.model.Post;
 import com.sshs.system.post.service.IPostService;
@@ -34,7 +33,7 @@ public class PostServiceImpl extends BaseServiceImpl<Post> implements IPostServi
      */
     @Override
     public Message save(Post post) {
-        post.setPostId(UuidUtil.get32UUID());
+        //post.setPostId(UuidUtil.get32UUID());
         try {
             return super.save(post);
         } catch (Exception e) {

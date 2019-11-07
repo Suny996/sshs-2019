@@ -1,7 +1,9 @@
 package com.sshs.system.authorize.model;
 
+import com.sshs.core.util.UUIdGenId;
 import com.sshs.system.menu.model.Menu;
 import org.apache.ibatis.type.Alias;
+import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -27,7 +29,8 @@ public class Authorize implements Serializable {
      * 权限ID
      */
     @Id
-    @Column(name = "AUTHORIZE_ID")
+    @KeySql(genId = UUIdGenId.class)
+    @Column(name = "AUTHORIZE_ID", length = 32)
     private String id;
 
     /**

@@ -1,6 +1,9 @@
 package com.sshs.system.log.model;
 
+import com.sshs.core.util.UUIdGenId;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.ibatis.type.Alias;
+import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -26,8 +29,9 @@ public class Log implements Serializable {
      * ID
      */
     @Id
-    @Column(name = "LOG_ID")
-    private String id;
+    @KeySql(genId = UUIdGenId.class)
+    @Column(name = "LOG_ID",length = 32)
+    private String logId;
 
     /**
      * 法人行社
@@ -136,12 +140,12 @@ public class Log implements Serializable {
         this.optDateEnd = optDateEnd;
     }
 
-    public String getId() {
-        return this.id;
+    public String getLogId() {
+        return this.logId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setLogId(String logId) {
+        this.logId = logId;
     }
 
     public String getLegalOrg() {
@@ -270,5 +274,29 @@ public class Log implements Serializable {
 
     public void setOptDate(Date optDate) {
         this.optDate = optDate;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("logId", logId)
+                .append("legalOrg", legalOrg)
+                .append("crtUserCode", crtUserCode)
+                .append("crtOrgCode", crtOrgCode)
+                .append("crtDate", crtDate)
+                .append("updUserCode", updUserCode)
+                .append("updOrgCode", updOrgCode)
+                .append("updDate", updDate)
+                .append("userCode", userCode)
+                .append("userName", userName)
+                .append("module", module)
+                .append("action", action)
+                .append("optDate", optDate)
+                .append("clientIp", clientIp)
+                .append("method", method)
+                .append("params", params)
+                .append("optDesc", optDesc)
+                .append("optDateEnd", optDateEnd)
+                .toString();
     }
 }
