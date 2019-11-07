@@ -3,10 +3,6 @@ package com.sshs.toolkit.coder.controller;
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
-import com.sshs.core.util.ReflectHelper;
-import com.sshs.core.util.Serializabler;
-import com.sshs.core.util.UuidUtil;
-import com.sshs.toolkit.coder.helper.CoderGenerator;
 import com.sshs.toolkit.coder.model.Coder;
 import com.sshs.toolkit.coder.model.Column;
 import com.sshs.toolkit.coder.service.ICoderService;
@@ -14,7 +10,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,60 +43,29 @@ public class CoderController extends BaseController {
     public Message<Coder> save(@RequestBody Coder coder) {
         try {
             logger.debug("开始保存代码信息……");
-            coder.setCoderId(UuidUtil.get32UUID());
-            logger.debug("===========>" + coder.getTableName());
-            for (Column col : coder.getFields()) {
-                if (StringUtils.isEmpty(coder.getTableName())) {
-                    coder.setTableName(col.getTableName());
-                    coder.setTableComment(col.getTableComment());
-                }
-                col.setPropertyName(ReflectHelper.getPropertyName(col.getColumnName()));
-                col.setPropertyType(CoderGenerator.getPropertyType(col.getColumnType()));
-            }
-
-            coder.setColumns(Serializabler.object2Bytes(coder.getFields()));
-
-            CoderGenerator.generate(coder);
-            coderService.save(coder);
-            return Message.success(coder);
+            return coderService.save(coder);
         } catch (Exception e) {
-            logger.error("保存代码信息异常！",e);
+            logger.error("保存代码信息异常！", e);
             throw new BusinessException("SY0001");
         }
     }
+
     /**
      * 保存代码
      */
     @ApiOperation(value = "代碼生成(快速版)", notes = "")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "tableName", value = "表名", required = true),})
-    @GetMapping("/gen")
-    public Message run(String tableName) {
+    @GetMapping("/generate")
+    public Message generate(String tableName) {
         try {
             logger.debug("开始生成代码信息……");
-            Coder coder =new Coder();
-            coder.setCoderId(UuidUtil.get32UUID());
-            coder.setTableName(tableName);
-            logger.debug("===========>" + coder.getTableName());
-            coder.setFields(coderService.findColumnForList(tableName));
-            for (Column col : coder.getFields()) {
-                if (StringUtils.isEmpty(coder.getTableName())) {
-                    coder.setTableName(col.getTableName());
-                    coder.setTableComment(col.getTableComment());
-                }
-                col.setPropertyName(ReflectHelper.getPropertyName(col.getColumnName()));
-                col.setPropertyType(CoderGenerator.getPropertyType(col.getColumnType()));
-            }
-
-            coder.setColumns(Serializabler.object2Bytes(coder.getFields()));
-
-            CoderGenerator.generate(coder);
-           // coderService.save(coder);
-            return Message.success(coder);
+            return coderService.run(tableName);
         } catch (Exception e) {
-            logger.error("保存代码信息异常！",e);
+            logger.error("保存代码信息异常！", e);
             throw new BusinessException("SY0001");
         }
     }
+
     /**
      * 修改代码
      */

@@ -41,7 +41,7 @@
 		WHERE
 			(
 				( ttable.TABLE_NAME = ctable.TABLE_NAME )
-				AND ( ttable.TABLE_SCHEMA = ctable.TABLE_SCHEMA ) AND ctable.TABLE_SCHEMA = 'UOP_DB' 
+				AND ( ttable.TABLE_SCHEMA = ctable.TABLE_SCHEMA ) AND ctable.TABLE_SCHEMA = #{dbUser}
 				AND ( ttable.TABLE_TYPE = 'BASE TABLE' )
 			)
 	)
@@ -69,7 +69,7 @@
 	</sql>
 
     <!-- 通过ID获取数据 -->
-    <select id="findById" parameterType="Page" resultType="Page">
+    <select id="findById" parameterType="Map" resultType="Page">
         select
         <include refid="Field"></include>
         from
@@ -88,15 +88,8 @@
             #{item}
         </foreach>
     </delete>
-    <!-- 根据表面删除 -->
-    <delete id="deleteByTableName" parameterType="String">
-        delete from
-        <include refid="tableName"></include>
-        where
-        TABLE_NAME = #{tableName}
-    </delete>
     <!-- 代码生成-查询表信息 -->
-    <select id="findDbTableForPageList" parameterType="Page"
+    <select id="findDbTableForPageList" parameterType="Map"
             resultType="Coder">
         SELECT DISTINCT
         C.CODER_ID,
@@ -173,7 +166,7 @@
         FROM
         <include refid="v_tool_table"></include>
         t
-        WHERE t.TABLE_NAME =#{_parameter}
+        WHERE t.TABLE_NAME =#{tableName}
         ORDER BY t.COLUMN_ID
     </select>
 </mapper>

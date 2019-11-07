@@ -43,9 +43,3 @@ mybatis:
   mapperLocations: classpath*:*Mapper.xml
   configuration:
     mapUnderscoreToCamelCase: true
-
-toolkit:
-  coder:
-    path:
-      java: /Users/sunyonggang/coder/sshs/src/main/java
-      view: /Users/sunyonggang/coder/scaiui/src/main/view

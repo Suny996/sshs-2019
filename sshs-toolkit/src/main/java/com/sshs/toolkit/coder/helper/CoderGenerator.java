@@ -1,16 +1,19 @@
 package com.sshs.toolkit.coder.helper;
 
-import com.sshs.toolkit.coder.model.Coder;
-import com.sshs.toolkit.coder.model.Column;
 import com.sshs.core.constant.Global;
 import com.sshs.core.util.Configure;
 import com.sshs.core.util.ReflectHelper;
+import com.sshs.toolkit.coder.model.Coder;
+import com.sshs.toolkit.coder.model.Column;
+import com.sshs.toolkit.configuration.ToolketConfigProp;
 import com.sshs.toolkit.util.Freemarker;
 import org.apache.commons.lang.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
 import java.util.*;
 
@@ -20,10 +23,25 @@ import java.util.*;
  * @author Suny
  * @date 2017-10-23
  */
+@Component
 public class CoderGenerator {
-    public static void generate(Coder coder) throws Exception {
-        CoderGenerator.processProperties(coder);
-        String xml = Freemarker.printFreemarkerString("/templates/coder/config.xml", CoderGenerator.toMap(coder),
+    @Resource
+    Freemarker freemarker;
+    @Resource
+    Configure configure;
+
+    @Resource
+    ToolketConfigProp toolketConfigProp;
+
+    /**
+     * 代码生成主方法
+     *
+     * @param coder
+     * @throws Exception
+     */
+    public void generate(Coder coder) throws Exception {
+        processProperties(coder);
+        String xml = freemarker.printFreemarkerString("/templates/coder/config.xml", toMap(coder),
                 "UTF-8");
         Document document = null;
         SAXReader reader = null;
@@ -44,20 +62,20 @@ public class CoderGenerator {
             }
             String outFileName = "";
             if ("view".equalsIgnoreCase(packageName)) {
-                outFileName = Configure.getProperty("toolkit.coder.path.view", "d:/coder/view") + "/"
+                outFileName = toolketConfigProp.getPathView() == null ? "coder/view" : toolketConfigProp.getPathView() + "/"
                         + coder.getModelName() + "/" + coder.getFunctionName() + "/" + className;
             } else {
-                outFileName = Configure.getProperty("toolkit.coder.path.java", "d:/coder/java") + "/"
+                outFileName = toolketConfigProp.getPathView() == null ? "coder/java" : toolketConfigProp.getPathView() + "/"
                         + coder.getPackageName().replaceAll("\\.", "/") + "/" + packageName.replaceAll("\\.", "/") + "/"
                         + className;
             }
             if (templateFileName != null && templateFileName.toLowerCase().endsWith(".ftl")) {
-                Freemarker.printFreemarkerFile("/templates/coder/" + templateFileName, outFileName,
-                        CoderGenerator.toMap(coder), encoding);
+                freemarker.printFreemarkerFile("/templates/coder/" + templateFileName, outFileName,
+                        toMap(coder), encoding);
             }
             if (templateFileName != null && templateFileName.toLowerCase().endsWith(".vm")) {
-                Freemarker.printVelocityFile("/templates/coder/" + templateFileName, outFileName,
-                        CoderGenerator.toMap(coder));
+                freemarker.printVelocityFile("/templates/coder/" + templateFileName, outFileName,
+                        toMap(coder));
             }
         }
     }
@@ -75,7 +93,7 @@ public class CoderGenerator {
         return map;
     }
 
-    private static Map<String, String> map;
+    /*private static Map<String, String> map;
 
     static {
         map = new HashMap<String, String>();
@@ -95,16 +113,16 @@ public class CoderGenerator {
         map.put("blob", "Blob");
         map.put("clob", "String");
         map.put("text", "String");
-    }
+    }*/
 
-    public static String getPropertyType(String dataType) {
+    public String getPropertyType(String dataType) {
         String tmp = dataType.toLowerCase();
         StringTokenizer st = new StringTokenizer(tmp);
         tmp = st.nextToken();
-        String prop = (String) map.get(tmp);
+        String prop = (String) toolketConfigProp.getColumnTypeMapping().get(tmp);
         if (StringUtils.isEmpty(prop) && tmp.contains("(")) {
             tmp = tmp.substring(0, tmp.indexOf("(")).trim();
-            prop = (String) map.get(tmp);
+            prop = (String) toolketConfigProp.getColumnTypeMapping().get(tmp);
         }
         if (StringUtils.isEmpty(prop)) {
             prop = "String";
@@ -141,13 +159,13 @@ public class CoderGenerator {
      *
      * @param coder
      */
-    public static void processProperties(Coder coder) {
-        CoderGenerator.processClassName(coder);
-        CoderGenerator.processModelName(coder);
-        CoderGenerator.processFunctionName(coder);
-        CoderGenerator.processPackageName(coder);
-        CoderGenerator.processFields(coder);
-        CoderGenerator.processTitle(coder);
+    public void processProperties(Coder coder) {
+        processClassName(coder);
+        processModelName(coder);
+        processFunctionName(coder);
+        processPackageName(coder);
+        processFields(coder);
+        processTitle(coder);
         if (coder.getCrtDate() == null) {
             coder.setCrtDate(new Date());
         }
@@ -233,16 +251,16 @@ public class CoderGenerator {
      *
      * @param coder
      */
-    public static void processPackageName(Coder coder) {
+    public void processPackageName(Coder coder) {
         String tableName = coder.getTableName();
         String subPackageName = tableName.substring(tableName.indexOf("_") + 1);
-        if(subPackageName!=null && subPackageName.indexOf("_")>0){
-            subPackageName = subPackageName.substring(0,subPackageName.indexOf("_"));
+        if (subPackageName != null && subPackageName.indexOf("_") > 0) {
+            subPackageName = subPackageName.substring(0, subPackageName.indexOf("_"));
         }
-        subPackageName =  ReflectHelper.getPropertyName(subPackageName).toLowerCase();
+        subPackageName = ReflectHelper.getPropertyName(subPackageName).toLowerCase();
         coder.setSubModelName(subPackageName);
         if (StringUtils.isEmpty(coder.getPackageName())) {
-            coder.setPackageName(Configure.getProperty("coder.package.prefix", "com.sshs") + "." + coder.getModelName()
+            coder.setPackageName(configure.getProperty("coder.package.prefix", "com.sshs") + "." + coder.getModelName()
                     + "." + subPackageName);
         }
     }

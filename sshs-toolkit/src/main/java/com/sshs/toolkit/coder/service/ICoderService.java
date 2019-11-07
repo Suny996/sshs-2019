@@ -34,4 +34,11 @@ public interface ICoderService extends IBaseService<Coder> {
      */
     Message<Page<Coder>> findDbTableForPageList(int limit, int offset, Map<String, Object> params);
 
+    /**
+     * 生成代码
+     * @param tableName
+     * @return
+     */
+    Message<Coder> run(String tableName);
+
 }

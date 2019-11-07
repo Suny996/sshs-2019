@@ -1,0 +1,12 @@
+toolkit:
+  coder:
+    #数据库schema
+    dbUser: sshs
+    #后端java代码生成路径
+    pathJava: /Users/sunyonggang/coder/sshs/src/main/java
+    #前端js等代码生成路径
+    pathView: /Users/sunyonggang/coder/scaiui/src/main/view
+    #模块前缀对应关系
+    modelMapping: {"sys": "system","dev": "develop","cfg": "config"}
+    #数据库字段对应关系
+    columnTypeMapping: {"varchar2":"String","varchar":"String","int": "Integer","datetime": "Date","date": "Date","timestamp": "Date","nvarchar":"String","char": "String","uniqueidentifier": "String","number": "BigDecimal","decimal": "BigDecimal","bigint": "Long","tinyint": "Integer","blob": "Blob","clob": "String","text": "String"}
