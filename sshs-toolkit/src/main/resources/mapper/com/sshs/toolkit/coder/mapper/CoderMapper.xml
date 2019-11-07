@@ -69,16 +69,16 @@
 	</sql>
 
     <!-- 通过ID获取数据 -->
-    <select id="findById" parameterType="Map" resultType="Page">
+   <!-- <select id="findById" parameterType="Map" resultType="Page">
         select
         <include refid="Field"></include>
         from
         <include refid="tableName"></include>
         where
         CREATECODE_ID = #{CREATECODE_ID}
-    </select>
+    </select>-->
     <!-- 批量删除 -->
-    <delete id="deleteAll" parameterType="String">
+    <!--<delete id="deleteAll" parameterType="String">
         delete from
         <include refid="tableName"></include>
         where
@@ -87,7 +87,7 @@
                  separator="," close=")">
             #{item}
         </foreach>
-    </delete>
+    </delete>-->
     <!-- 代码生成-查询表信息 -->
     <select id="findDbTableForPageList" parameterType="Map"
             resultType="Coder">

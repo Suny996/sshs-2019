@@ -1,6 +1,8 @@
 package com.sshs.toolkit.coder.model;
 
+import com.sshs.core.model.BaseEntity;
 import com.sshs.core.util.UUIdGenId;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.ibatis.type.Alias;
 import tk.mybatis.mapper.annotation.KeySql;
 
@@ -8,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ import java.util.List;
  */
 @Alias("Coder")
 @Table(name = "TOO_CODER")
-public class Coder implements Serializable {
+public class Coder extends BaseEntity implements Serializable {
 
     /**
      *
@@ -28,25 +29,36 @@ public class Coder implements Serializable {
     @Id
     @KeySql(genId = UUIdGenId.class)
     private String coderId;
+    @ApiModelProperty(value = "包名", dataType = "String", example = "com.sshs.system")
     private String packageName;
-
+    @ApiModelProperty(value = "类名", dataType = "String", example = "User")
     private String className;
     /**
      * 首字母小写
      */
     @Transient
+    @ApiModelProperty(value = "类名声明", dataType = "String", example = "user")
     private String classDeclare;
+
+    @ApiModelProperty(value = "模块名", dataType = "String", example = "System")
     private String modelName;
+    @ApiModelProperty(value = "模块名", dataType = "String", example = "系统管理")
     private String modelNameCn;
     @Transient
+    @ApiModelProperty(value = "子模块名", dataType = "String", example = "User")
     private String subModelName;
     /**
      * 功能
      */
+    @ApiModelProperty(value = "功能名称", dataType = "String", example = "User")
     private String functionName;
+    @ApiModelProperty(value = "表名", dataType = "String", example = "SYS_USER")
     private String tableName;
+    @ApiModelProperty(value = "表描述", dataType = "String", example = "用户基本信息表")
     private String tableComment;
+    @ApiModelProperty(value = "标题", dataType = "String", example = "用户管理")
     private String title;
+
     private String coderType;
     @Transient
     private List<com.sshs.toolkit.coder.model.Column> fields;
@@ -67,35 +79,6 @@ public class Coder implements Serializable {
     @Transient
     private String coderFlag;
 
-    /**
-     * CRT_USER_CODE 创建人
-     */
-    private String crtUserCode;
-
-    /**
-     * CRT_ORG_CODE 创建机构
-     */
-    private String crtOrgCode;
-
-    /**
-     * CRT_DATE 创建日期
-     */
-    private Date crtDate;
-
-    /**
-     * UPD_USER_CODE 修改人
-     */
-    private String updUserCode;
-
-    /**
-     * UPD_ORG_CODE 修改机构
-     */
-    private String updOrgCode;
-
-    /**
-     * UPD_DATE 修改日期
-     */
-    private Date updDate;
 
     public String getCoderId() {
         return coderId;
@@ -231,54 +214,6 @@ public class Coder implements Serializable {
 
     public void setCoderFlag(String coderFlag) {
         this.coderFlag = coderFlag;
-    }
-
-    public String getCrtUserCode() {
-        return crtUserCode;
-    }
-
-    public void setCrtUserCode(String crtUserCode) {
-        this.crtUserCode = crtUserCode;
-    }
-
-    public String getCrtOrgCode() {
-        return crtOrgCode;
-    }
-
-    public void setCrtOrgCode(String crtOrgCode) {
-        this.crtOrgCode = crtOrgCode;
-    }
-
-    public Date getCrtDate() {
-        return crtDate;
-    }
-
-    public void setCrtDate(Date crtDate) {
-        this.crtDate = crtDate;
-    }
-
-    public String getUpdUserCode() {
-        return updUserCode;
-    }
-
-    public void setUpdUserCode(String updUserCode) {
-        this.updUserCode = updUserCode;
-    }
-
-    public String getUpdOrgCode() {
-        return updOrgCode;
-    }
-
-    public void setUpdOrgCode(String updOrgCode) {
-        this.updOrgCode = updOrgCode;
-    }
-
-    public Date getUpdDate() {
-        return updDate;
-    }
-
-    public void setUpdDate(Date updDate) {
-        this.updDate = updDate;
     }
 
     public String getIdName() {

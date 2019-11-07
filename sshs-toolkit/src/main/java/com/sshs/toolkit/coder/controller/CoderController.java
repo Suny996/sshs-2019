@@ -38,7 +38,6 @@ public class CoderController extends BaseController {
      * 保存代码
      */
     @ApiOperation(value = "代碼生成", notes = "")
-    @ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "tableName", value = "表名", required = true),})
     @PostMapping("/run")
     public Message<Coder> save(@RequestBody Coder coder) {
         try {
@@ -54,9 +53,9 @@ public class CoderController extends BaseController {
      * 保存代码
      */
     @ApiOperation(value = "代碼生成(快速版)", notes = "")
-    @ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "tableName", value = "表名", required = true),})
-    @GetMapping("/generate")
-    public Message generate(String tableName) {
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "tableName", value = "表名", required = true)})
+    @GetMapping("/generate/{tableName}")
+    public Message generate(@PathVariable("tableName") String tableName) {
         try {
             logger.debug("开始生成代码信息……");
             return coderService.run(tableName);
@@ -69,6 +68,7 @@ public class CoderController extends BaseController {
     /**
      * 修改代码
      */
+    @ApiOperation(value = "代碼生成修改", notes = "")
     @PutMapping
     public Message<Coder> update(@RequestBody Coder coder) {
         try {
@@ -83,6 +83,8 @@ public class CoderController extends BaseController {
     /**
      * 删除代码
      */
+    @ApiOperation(value = "代碼生成记录删除", notes = "")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "tableName", value = "表名", required = true)})
     @DeleteMapping("/{coderId}")
     public Message<Integer> delete(@PathVariable("coderId") String coderId) {
         try {
@@ -97,6 +99,8 @@ public class CoderController extends BaseController {
     /**
      * 根据主键查找代码信息
      */
+    @ApiOperation(value = "代碼生成记录查询", notes = "")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "coderId", value = "表名", required = true)})
     @GetMapping("/{coderId}")
     public Message<Coder> getById(@PathVariable("coderId") String coderId) {
         try {
@@ -111,6 +115,8 @@ public class CoderController extends BaseController {
     /**
      * 查询表信息列表
      */
+    @ApiOperation(value = "代碼生成列信息查询", notes = "")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "tableName", value = "表名", required = true)})
     @GetMapping("/columnList/{tableName}")
     public Message queryList(@PathVariable("tableName") String tableName) {
         try {
@@ -126,6 +132,9 @@ public class CoderController extends BaseController {
     /**
      * 分页查表户信息
      */
+    @ApiOperation(value = "代碼生成列信息查询", notes = "")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "limit", value = "页大小", required = false),
+            @ApiImplicitParam(paramType = "query", name = "offset", value = "页码", required = false)})
     @GetMapping("/tableList")
     public Message queryPageList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam(required = false) Map<String, Object> params) {
         try {
