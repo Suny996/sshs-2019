@@ -1,10 +1,12 @@
 package com.sshs.core.customise.model;
 
 import com.sshs.core.model.BaseEntity;
+import com.sshs.core.util.UUIdGenId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.ibatis.type.Alias;
+import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -25,8 +27,10 @@ public class Customise extends BaseEntity {
      */
     private static final long serialVersionUID = 1L;
     @Id
+    @KeySql(genId = UUIdGenId.class)
     @Column(name = "customise_id")
-    private String id;
+    private String customiseId;
+
     private String userCode;
 
     @ApiModelProperty(value = "机构编号", dataType = "String", example = "10010")
@@ -42,12 +46,12 @@ public class Customise extends BaseEntity {
     private String fieldAddons;
 
 
-    public String getId() {
-        return id;
+    public String getCustomiseId() {
+        return customiseId;
     }
 
-    public void setId(String customiseId) {
-        this.id = id;
+    public void setCustomiseId(String customiseId) {
+        this.customiseId = customiseId;
     }
 
     public String getUserCode() {
@@ -101,7 +105,7 @@ public class Customise extends BaseEntity {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .append("id", id)
+                .append("customiseId", customiseId)
                 .append("userCode", userCode)
                 .append("orgCode", orgCode)
                 .append("pageId", pageId)

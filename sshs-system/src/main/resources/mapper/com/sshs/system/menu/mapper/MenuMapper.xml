@@ -9,7 +9,7 @@
 
     <!-- 字段 -->
     <sql id="Field">
-				MENU_CODE as id,
+				MENU_CODE ,
 				MENU_NAME,
 				MENU_TYPE,
 				MENU_URL,

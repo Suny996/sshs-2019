@@ -7,7 +7,7 @@
 	</sql>
     <!-- 字段 -->
     <sql id="Field">
-				USER_ID as id,
+				USER_ID,
 				USER_CODE,
 				USER_NAME,
 				USER_NAME_EN,

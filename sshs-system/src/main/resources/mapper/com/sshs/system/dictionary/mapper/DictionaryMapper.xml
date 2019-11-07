@@ -11,7 +11,7 @@
 
 	<!-- 字段 -->
 	<sql id="Field">
-		DICT_ID as id,
+		DICT_ID ,
 		PARENT_ID ,
 		DICT_TYPE ,
 		DICT_CODE ,

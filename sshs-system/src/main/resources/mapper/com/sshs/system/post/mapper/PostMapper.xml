@@ -9,7 +9,7 @@
 	
 	<!-- 字段 -->
 	<sql id="Field">
-				POST_ID as id,
+				POST_ID ,
 				CRT_DATE,
 				UPD_USER_CODE,
 				UPD_ORG_CODE,

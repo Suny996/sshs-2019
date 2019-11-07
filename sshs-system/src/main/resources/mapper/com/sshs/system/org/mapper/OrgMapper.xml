@@ -9,7 +9,7 @@
 
     <!-- 字段 -->
     <sql id="Field">
-				ORG_ID as id,
+				ORG_ID ,
 				STATUS,
 				COUNTRY,
 				EMAIL,
