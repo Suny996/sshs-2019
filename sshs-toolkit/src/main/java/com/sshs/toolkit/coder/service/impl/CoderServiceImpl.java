@@ -13,7 +13,7 @@ import com.sshs.toolkit.coder.mapper.CoderMapper;
 import com.sshs.toolkit.coder.model.Coder;
 import com.sshs.toolkit.coder.model.Column;
 import com.sshs.toolkit.coder.service.ICoderService;
-import com.sshs.toolkit.configuration.ToolketConfigProp;
+import com.sshs.toolkit.configuration.ToolkitConfigProp;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,7 @@ public class CoderServiceImpl extends BaseServiceImpl<Coder> implements ICoderSe
     @Resource
     CoderGenerator coderGenerator;
     @Resource
-    ToolketConfigProp toolketConfigProp;
+    ToolkitConfigProp toolketConfigProp;
 
     /**
      * 新增

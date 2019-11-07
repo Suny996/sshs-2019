@@ -5,7 +5,7 @@ import com.sshs.core.util.Configure;
 import com.sshs.core.util.ReflectHelper;
 import com.sshs.toolkit.coder.model.Coder;
 import com.sshs.toolkit.coder.model.Column;
-import com.sshs.toolkit.configuration.ToolketConfigProp;
+import com.sshs.toolkit.configuration.ToolkitConfigProp;
 import com.sshs.toolkit.util.Freemarker;
 import org.apache.commons.lang.StringUtils;
 import org.dom4j.Document;
@@ -31,7 +31,7 @@ public class CoderGenerator {
     Configure configure;
 
     @Resource
-    ToolketConfigProp toolketConfigProp;
+    ToolkitConfigProp toolkitConfigProp;
 
     /**
      * 代码生成主方法
@@ -62,10 +62,10 @@ public class CoderGenerator {
             }
             String outFileName = "";
             if ("view".equalsIgnoreCase(packageName)) {
-                outFileName = toolketConfigProp.getPathView() == null ? "coder/view" : toolketConfigProp.getPathView() + "/"
+                outFileName = toolkitConfigProp.getPathView() == null ? "coder/view" : toolkitConfigProp.getPathView() + "/"
                         + coder.getModelName() + "/" + coder.getFunctionName() + "/" + className;
             } else {
-                outFileName = toolketConfigProp.getPathView() == null ? "coder/java" : toolketConfigProp.getPathView() + "/"
+                outFileName = toolkitConfigProp.getPathView() == null ? "coder/java" : toolkitConfigProp.getPathView() + "/"
                         + coder.getPackageName().replaceAll("\\.", "/") + "/" + packageName.replaceAll("\\.", "/") + "/"
                         + className;
             }
@@ -119,10 +119,10 @@ public class CoderGenerator {
         String tmp = dataType.toLowerCase();
         StringTokenizer st = new StringTokenizer(tmp);
         tmp = st.nextToken();
-        String prop = (String) toolketConfigProp.getColumnTypeMapping().get(tmp);
+        String prop = (String) toolkitConfigProp.getColumnTypeMapping().get(tmp);
         if (StringUtils.isEmpty(prop) && tmp.contains("(")) {
             tmp = tmp.substring(0, tmp.indexOf("(")).trim();
-            prop = (String) toolketConfigProp.getColumnTypeMapping().get(tmp);
+            prop = (String) toolkitConfigProp.getColumnTypeMapping().get(tmp);
         }
         if (StringUtils.isEmpty(prop)) {
             prop = "String";
@@ -130,7 +130,7 @@ public class CoderGenerator {
         return prop;
     }
 
-    private static Map<String, String> modelMapping;
+    /*private static Map<String, String> modelMapping;
 
     static {
         modelMapping = new HashMap<String, String>();
@@ -144,10 +144,10 @@ public class CoderGenerator {
         modelMapping.put("ie", "index");
         // 关系管理
         modelMapping.put("prm", "relation");
-    }
+    }*/
 
-    public static String getModel(String model) {
-        String model1 = modelMapping.get(model.toLowerCase());
+    public String getModel(String model) {
+        String model1 = toolkitConfigProp.getModelMapping().get(model.toLowerCase());
         if (model1 == null) {
             model1 = model;
         }
@@ -198,7 +198,7 @@ public class CoderGenerator {
      *
      * @param coder
      */
-    public static void processModelName(Coder coder) {
+    public void processModelName(Coder coder) {
         String tableName = coder.getTableName();
         if (StringUtils.isEmpty(coder.getModelName())) {
             String modelPrefix = tableName;
@@ -228,7 +228,7 @@ public class CoderGenerator {
      *
      * @param coder
      */
-    public static void processFunctionName(Coder coder) {
+    public void processFunctionName(Coder coder) {
         String tableName = coder.getTableName();
         if (StringUtils.isEmpty(coder.getFunctionName())) {
             coder.setFunctionName(ReflectHelper.getPropertyName(tableName.substring(tableName.indexOf("_") + 1)));
@@ -240,7 +240,7 @@ public class CoderGenerator {
      *
      * @param coder
      */
-    public static void processTitle(Coder coder) {
+    public void processTitle(Coder coder) {
         if (StringUtils.isEmpty(coder.getTitle())) {
             coder.setTitle(coder.getModelNameCn() + "->" + coder.getTableComment());
         }
@@ -270,7 +270,7 @@ public class CoderGenerator {
      *
      * @param coder
      */
-    public static void processFields(Coder coder) {
+    public void processFields(Coder coder) {
         for (Column column : coder.getFields()) {
             column.setPropFuncName(ReflectHelper.capitalName(column.getPropertyName()));
             if ("1".equals(column.getPrimaryKeyFlag())) {
@@ -280,8 +280,6 @@ public class CoderGenerator {
             if (column.getColumnSize() == null) {
                 column.setColumnSize(0);
             }
-            // System.out.println(column.getPropertyName() + "=====>>>>>" +
-            // column.getRequiredFlag());
         }
     }
 }

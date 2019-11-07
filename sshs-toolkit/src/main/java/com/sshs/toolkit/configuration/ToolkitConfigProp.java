@@ -17,7 +17,7 @@ import java.util.Map;
 @Component
 @Configuration
 @ConfigurationProperties(prefix = "toolkit.coder", ignoreUnknownFields = true)
-public class ToolketConfigProp {
+public class ToolkitConfigProp {
     String pathJava;
     String pathView;
     String dbUser;
