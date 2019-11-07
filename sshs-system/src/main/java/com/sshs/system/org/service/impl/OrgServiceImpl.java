@@ -1,7 +1,6 @@
 package com.sshs.system.org.service.impl;
 
 import com.sshs.core.base.service.impl.BaseServiceImpl;
-import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
 import com.sshs.core.util.SystemUtil;
 import com.sshs.system.org.mapper.OrgMapper;
@@ -26,23 +25,6 @@ public class OrgServiceImpl extends BaseServiceImpl<Org> implements IOrgService 
     Logger logger = LoggerFactory.getLogger(OrgServiceImpl.class);
     @Resource
     private OrgMapper mapper;
-
-    /**
-     * 保存系统管理->系统管理-机构表方法
-     *
-     * @param org
-     * @return Message
-     */
-    @Override
-    public Message<Org> save(Org org) {
-        //org.setOrgId(UuidUtil.get32UUID());
-        try {
-            return super.save(org);
-        } catch (Exception e) {
-            logger.error("保存系统管理->系统管理-机构表信息异常！",e);
-            throw new BusinessException("SY0001");
-        }
-    }
 
 
     /**

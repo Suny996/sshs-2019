@@ -9,7 +9,7 @@
 
     <!-- 字段 -->
     <sql id="Field">
-				USER_ROLE_ID as id,
+				USER_ROLE_ID ,
 				USER_CODE,
 				ROLE_CODE,
 				CRT_USER_CODE,

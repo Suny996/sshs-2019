@@ -1,10 +1,7 @@
 package com.sshs.system.dictionary.mapper;
 
 import com.sshs.core.base.mapper.BaseMapper;
-import com.sshs.core.page.Page;
 import com.sshs.system.dictionary.model.Dictionary;
-
-import java.util.List;
 
 /**
  * @author Suny
@@ -18,8 +15,8 @@ public interface DictionaryMapper extends BaseMapper<Dictionary> {
      * @param dictCode
      * @return
      */
-    List<Dictionary> findByDictCode(String dictCode);
+    //List<Dictionary> findByDictCode(String dictCode);
 
 
-    Page<Dictionary> findForPageList();
+    //Page<Dictionary> findForPageList();
 }

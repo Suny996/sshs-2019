@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sshs.toolkit.coder.mapper.CoderMapper">
+
+    <!--表名 -->
+    <sql id="tableName">
+		TOO_CODER
+	</sql>
+    <sql id="v_tool_table">
+          ( SELECT DISTINCT
+	ttable.TABLE_NAME AS TABLE_NAME,
+	ttable.TABLE_COMMENT AS TABLE_COMMENT,
+	cast( ctable.ORDINAL_POSITION AS CHAR charset utf8 ) AS COLUMN_ID,
+	ctable.COLUMN_NAME AS COLUMN_NAME,
+	ctable.COLUMN_COMMENT AS COLUMN_COMMENT,
+	ctable.DATA_TYPE AS COLUMN_TYPE,
+	( CASE WHEN ( ctable.DATA_TYPE = 'decimal' ) THEN
+				ctable.NUMERIC_PRECISION
+				WHEN ( ctable.DATA_TYPE LIKE '%time%' ) THEN
+				ctable.DATETIME_PRECISION ELSE ctable.CHARACTER_MAXIMUM_LENGTH
+			END
+			) AS COLUMN_SIZE,
+			ctable.NUMERIC_SCALE AS COLUMN_SCALE,
+			ctable.COLUMN_DEFAULT AS DEFAULT_VALUE,
+			( CASE WHEN ( ktable.CONSTRAINT_NAME = 'PRIMARY' ) THEN '1' ELSE '0' END ) AS PRIMARY_KEY_FLAG,
+			( CASE WHEN ( ctable.IS_NULLABLE = 'NO' ) THEN 'on' ELSE 'off' END ) AS REQUIRED_FLAG
+		FROM
+			(
+				information_schema.TABLES ttable
+				JOIN (
+					information_schema.COLUMNS ctable
+					LEFT JOIN information_schema.KEY_COLUMN_USAGE ktable ON (
+						(
+							( ctable.TABLE_NAME = ktable.TABLE_NAME )
+							AND ( ctable.COLUMN_NAME = ktable.COLUMN_NAME )
+							AND ( ctable.TABLE_SCHEMA = ktable.TABLE_SCHEMA )
+						)
+					)
+				)
+			)
+		WHERE
+			(
+				( ttable.TABLE_NAME = ctable.TABLE_NAME )
+				AND ( ttable.TABLE_SCHEMA = ctable.TABLE_SCHEMA ) AND ctable.TABLE_SCHEMA = 'UOP_DB' 
+				AND ( ttable.TABLE_TYPE = 'BASE TABLE' )
+			)
+	)
+    </sql>
+
+    <!-- 字段 -->
+    <sql id="Field">
+		CODER_ID ,
+		TITLE ,
+		MODEL_NAME ,
+		MODEL_NAME_CN ,
+		FUNCTION_NAME,
+		PACKAGE_NAME ,
+		CLASS_NAME ,
+		TABLE_NAME ,
+		TABLE_COMMENT,
+		FIELDS ,
+		CODER_TYPE ,
+		CRT_USER_CODE ,
+		CRT_ORG_CODE ,
+		CRT_DATE ,
+		UPD_USER_CODE ,
+		UPD_ORG_CODE ,
+		UPD_DATE
+	</sql>
+
+    <!-- 通过ID获取数据 -->
+    <select id="findById" parameterType="Page" resultType="Page">
+        select
+        <include refid="Field"></include>
+        from
+        <include refid="tableName"></include>
+        where
+        CREATECODE_ID = #{CREATECODE_ID}
+    </select>
+    <!-- 批量删除 -->
+    <delete id="deleteAll" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where
+        CREATECODE_ID in
+        <foreach item="item" index="index" collection="array" open="("
+                 separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+    <!-- 根据表面删除 -->
+    <delete id="deleteByTableName" parameterType="String">
+        delete from
+        <include refid="tableName"></include>
+        where
+        TABLE_NAME = #{tableName}
+    </delete>
+    <!-- 代码生成-查询表信息 -->
+    <select id="findDbTableForPageList" parameterType="Page"
+            resultType="Coder">
+        SELECT DISTINCT
+        C.CODER_ID,
+        T.TABLE_NAME,
+        T.TABLE_COMMENT,'0' AS CODER_FLAG,
+        TITLE,
+        MODEL_NAME,
+        MODEL_NAME_CN,
+        PACKAGE_NAME,
+        CLASS_NAME,
+        FUNCTION_NAME
+        FROM
+        <include refid="v_tool_table"></include>
+        T
+        WHERE 1=1
+        <if
+                test="variables.title != null and variables.title != ''">
+            AND C.TITLE
+            <choose>
+                <when
+                        test="operators.title != null and operators.title != '' ">${operators.title}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            upper(#{variables.title})
+        </if>
+        <if
+                test="variables.tableName != null and variables.tableName != ''">
+            AND T.TABLE_NAME
+            <choose>
+                <when
+                        test="operators.tableName != null and operators.tableName != '' ">${operators.tableName}
+                </when>
+                <otherwise>=</otherwise>
+            </choose>
+            upper(#{variables.tableName})
+        </if>
+        <if
+                test="variables.tableComment != null and variables.tableComment != ''">
+            AND T.TABLE_COMMENT LIKE #{variables.tableComment}
+        </if>
+        <if
+                test="variables.coderFlag != null and variables.coderFlag != ''">
+            AND ((C.CODER_ID IS NOT NULL AND '1' = #{variables.coderFlag} ) OR (C.CODER_ID IS
+            NULL AND '0' = #{variables.coderFlag}))
+        </if>
+        <if test="orderBy != null and orderBy != ''">
+            ORDER BY ${orderBy}
+        </if>
+        <if test="orderBy == null or orderBy == ''">
+            ORDER BY T.TABLE_NAME
+        </if>
+    </select>
+
+    <!-- 代码生成-查询列信息 -->
+    <select id="findColumnAll" parameterType="String"
+            resultType="Column">
+        SELECT COLUMN_ID,
+        TABLE_NAME,
+        TABLE_COMMENT,
+        COLUMN_NAME,
+        COLUMN_COMMENT,
+        COLUMN_TYPE,
+        COLUMN_SIZE,
+        COLUMN_SCALE,
+        DEFAULT_VALUE,
+        PRIMARY_KEY_FLAG,
+        REQUIRED_FLAG,
+        'on' AS
+        SEARCH_FLAG,'on' AS
+        LIST_FLAG,'on' AS
+        MODIFY_FLAG,'on' AS
+        ADD_FLAG
+        FROM
+        <include refid="v_tool_table"></include>
+        t
+        WHERE t.TABLE_NAME =#{_parameter}
+        ORDER BY t.COLUMN_ID
+    </select>
+</mapper>

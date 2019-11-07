@@ -33,7 +33,7 @@ dependencies {
     compile project(":sshs-system")
     //compile project(":scais-develop")
     //compile project(":scais-report")
-    //compile project(":scais-toolkit")
+    compile project(":sshs-toolkit")
     //compile project(":scais-sigma")
     //compile project(":scais-screen")
 }

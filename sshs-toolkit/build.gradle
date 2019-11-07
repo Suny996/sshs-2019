@@ -1,0 +1,19 @@
+apply plugin: 'application'
+
+group = "com.sshs"
+version '0.0.1-SNAPSHOT'
+description = "开发工具包（开发人员使用）"
+archivesBaseName = 'sshs-toolkit'
+
+dependencies {
+    compile project(":sshs-core")
+}
+dependencies {
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-freemarker
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-freemarker', version: '2.1.0.RELEASE'
+    // https://mvnrepository.com/artifact/org.apache.poi/poi
+    compile group: 'org.apache.poi', name: 'poi', version: '3.7'
+    // https://mvnrepository.com/artifact/dom4j/dom4j
+    compile group: 'dom4j', name: 'dom4j', version: '1.6.1'
+
+}

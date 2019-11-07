@@ -47,5 +47,5 @@ mybatis:
 toolkit:
   coder:
     path:
-      java: d:/coder/sshs/src/main/java
-      view: d:/coder/scaiui/src/main/view
+      java: /Users/sunyonggang/coder/sshs/src/main/java
+      view: /Users/sunyonggang/coder/scaiui/src/main/view
