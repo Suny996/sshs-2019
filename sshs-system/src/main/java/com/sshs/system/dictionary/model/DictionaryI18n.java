@@ -1,11 +1,10 @@
 package com.sshs.system.dictionary.model;
 
-import com.sshs.core.util.UUIdGenId;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import org.apache.ibatis.type.Alias;
-import tk.mybatis.mapper.annotation.KeySql;
 
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,15 +15,15 @@ import java.util.Date;
  * 
  */
 @Alias("DictionaryI18n")
-@Table(name = "SYS_DICTIONARIES_I18N")
+@TableName("SYS_DICTIONARIES_I18N")
 public class DictionaryI18n implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@Id
-	@KeySql(genId = UUIdGenId.class)
+
+	@TableId(type = IdType.ID_WORKER_STR)
 	private String i18nId;
 	private String dictId;
 	private String dictCode;

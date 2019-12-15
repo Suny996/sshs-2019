@@ -1,16 +1,14 @@
 package com.sshs.system.dictionary.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.sshs.core.util.UUIdGenId;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.sshs.core.model.BaseEntity;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.ibatis.type.Alias;
-import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,9 +20,8 @@ import java.util.List;
  * @author Suny
  */
 @Alias("Dictionary")
-@Table(name = "SYS_DICTIONARIES")
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class Dictionary implements Serializable {
+@TableName( "SYS_DICTIONARIES")
+public class Dictionary extends BaseEntity {
     /**
      *
      */
@@ -32,10 +29,10 @@ public class Dictionary implements Serializable {
     /**
      * ID
      */
-    @Id
-    @KeySql(genId = UUIdGenId.class)
+
+    @TableId(type = IdType.ID_WORKER_STR)
     @Column(name = "DICT_ID", length = 32)
-    private String id;
+    private String dictId;
 
     /**
      * 模块
@@ -133,17 +130,17 @@ public class Dictionary implements Serializable {
     @Column(name = "IS_SYSTEM")
     private String isSystem;
 
-    @Transient
+    @TableField(exist = false)
     private List<Dictionary> children = new ArrayList<Dictionary>();
-    @Transient
+    @TableField(exist = false)
     private List<DictionaryI18n> i18ns = new ArrayList<DictionaryI18n>();
 
-    public String getId() {
-        return id;
+    public String getDictId() {
+        return dictId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setDictId(String id) {
+        this.dictId = id;
     }
 
     public String getParentId() {
@@ -300,7 +297,7 @@ public class Dictionary implements Serializable {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .append("id", id)
+                .append("dictId", dictId)
                 .append("module", module)
                 .append("legalOrg", legalOrg)
                 .append("crtUserCode", crtUserCode)

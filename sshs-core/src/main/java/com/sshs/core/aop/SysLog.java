@@ -1,10 +1,10 @@
 package com.sshs.core.aop;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import org.apache.ibatis.type.Alias;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,7 +15,7 @@ import java.util.Date;
  * @date 2019/02/21
  */
 @Alias("SysLog")
-@Table(name = "SYS_LOG")
+@TableName("SYS_LOG")
 public class SysLog implements Serializable {
 
     private static final long serialVersionUID = 1L;

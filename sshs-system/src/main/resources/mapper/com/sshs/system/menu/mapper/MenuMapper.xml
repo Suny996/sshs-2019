@@ -80,8 +80,8 @@
     </select>-->
 
     <!-- 分页查询系统管理->系统管理-菜单表-查询列信息 -->
-    <select id="findForList" parameterType="Page"
-            resultType="Menu">
+    <select id="findForList" parameterType="com.sshs.core.page.Page"
+            resultType="com.sshs.system.menu.model.Menu">
         SELECT
         <include refid="Field"></include>
         FROM

@@ -17,7 +17,6 @@ import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -128,12 +127,12 @@ public class MenuController extends BaseController {
     @ApiImplicitParams
             ({@ApiImplicitParam(name = "limit", value = "分页大小", dataType = "String", paramType = "path"),
                     @ApiImplicitParam(name = "offset", value = "页码", dataType = "String", paramType = "path"),
-                    @ApiImplicitParam(name = "param", value = "条件", dataType = "Map", paramType = "path")})
+                    @ApiImplicitParam(name = "param", value = "条件", dataType = "Map", paramType = "query")})
     @GetMapping
-    public Mono<Message> queryList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam(required = false) Map<String, Object> params) {
+    public Mono<Message> queryPageList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @ModelAttribute Menu params) {
         try {
             logger.debug("开始查询系统管理->系统管理-菜单表列表信息……");
-            Message message = menuService.queryPageList(limit, offset, params);
+            Message message = menuService.findForPageList(limit, offset, params);
             return Mono.justOrEmpty(message);
         } catch (Exception e) {
             logger.error("查询系统管理->系统管理-菜单表信息异常！", e);

@@ -1,6 +1,7 @@
 package com.sshs.system.menu.service.impl;
 
 
+import com.sshs.core.wrapper.QueryWrapper;
 import com.sshs.core.base.service.impl.BaseServiceImpl;
 import com.sshs.core.constant.MenuType;
 import com.sshs.core.exception.BusinessException;
@@ -13,7 +14,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -26,7 +26,7 @@ import java.util.List;
  * @date 2018/03/13
  */
 @Service("menuService")
-public class MenuServiceImpl extends BaseServiceImpl<Menu> implements IMenuService {
+public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implements IMenuService {
     private static final Logger logger = LoggerFactory.getLogger(MenuServiceImpl.class);
     @Resource
     private MenuMapper mapper;
@@ -95,9 +95,9 @@ public class MenuServiceImpl extends BaseServiceImpl<Menu> implements IMenuServi
     public Message<Menu> getMenuTree(String rootId) {
         Menu menu = mapper.findMenuById(rootId);
         if (menu != null) {
-            Example wrapper = new Example(Menu.class);
-            wrapper.orderBy("menuCode").asc();
-            List<Menu> menus = mapper.selectByExample(wrapper);
+            QueryWrapper<Menu> wrapper = new QueryWrapper<>();
+            wrapper.orderByAsc("menuCode");
+            List<Menu> menus = mapper.selectList(wrapper);
             menu = initChildren(menu, menus);
         }
         return Message.success(menu);

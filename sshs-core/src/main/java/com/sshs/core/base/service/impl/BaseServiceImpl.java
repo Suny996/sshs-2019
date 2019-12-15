@@ -1,22 +1,16 @@
 package com.sshs.core.base.service.impl;
 
-
-import com.github.pagehelper.PageHelper;
-import com.google.common.collect.Lists;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.base.mapper.BaseMapper;
 import com.sshs.core.base.service.IBaseService;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
 import com.sshs.core.page.Page;
-import com.sshs.core.util.SystemUtil;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Method;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,14 +21,18 @@ import java.util.Map;
  * @author Suny
  * @date 2017-10-20
  */
-public abstract class BaseServiceImpl<T> implements IBaseService<T> {
+public class BaseServiceImpl<M extends BaseMapper<T>, T> implements IBaseService<T> {
     /**
      * 日志工具
      */
     private final static Logger logger = LoggerFactory.getLogger(BaseServiceImpl.class);
 
     @Autowired(required = false)
-    BaseMapper<T> mapper;
+    private M mapper;
+
+    @Autowired
+    ServiceImpl<M, T> service;
+
 
     /**
      * 新增
@@ -45,8 +43,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Message<T> save(T model) {
-        setCrtProperties(model);
-        if (mapper.insertSelective(model) >= 1) {
+        if (mapper.insert(model) >= 1) {
             return Message.success(model);
         } else {
             return Message.failure("-100001");
@@ -61,18 +58,13 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Message<Integer> save(List<T> models) {
+    public Message<List<T>> save(List<T> models) {
         if (models == null || models.isEmpty()) {
             logger.error("记录不能为空");
             throw new BusinessException("-10005");
         }
-        for (T model : models) {
-            setCrtProperties(model);
-        }
-        for (List<T> list : Lists.partition(models, 1000)) {
-            mapper.insertList(list);
-        }
-        return Message.success(models.size());
+        service.saveBatch(models, 1000);
+        return Message.success(models);
     }
 
 
@@ -85,8 +77,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Message<T> update(T model) {
-        setUpdProperties(model);
-        if (mapper.updateByPrimaryKey(model) >= 1) {
+        if (mapper.updateById(model) >= 1) {
             return Message.success(model);
         } else {
             return Message.failure("-20001");
@@ -102,7 +93,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     @Override
     @Deprecated
     @Transactional(rollbackFor = Exception.class)
-    public Message<Integer> update(List<T> models) {
+    public Message<List<T>> update(List<T> models) {
         if (models == null || models.isEmpty()) {
             logger.error("记录不能为空");
             throw new BusinessException("-10005");
@@ -111,23 +102,20 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
             logger.error("批量插入记录数不能大于2000");
             throw new BusinessException("-10005");
         }
-        int i = 0;
-        for (T model : models) {
-            i += mapper.updateByPrimaryKey(model);
-        }
-        return Message.success(i);
+        service.updateBatchById(models, 1000);
+        return Message.success(models);
     }
 
     /**
      * 删除
      *
-     * @param model 要删除的对象
+     * @param wrapper 要删除的对象
      * @return 返回删除的对象
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Message<Integer> delete(T model) {
-        return Message.success(mapper.delete(model));
+    public Message<Integer> delete(com.baomidou.mybatisplus.core.conditions.Wrapper<T> wrapper) {
+        return Message.success(mapper.delete(wrapper));
     }
 
     /**
@@ -139,7 +127,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Message<Integer> deleteById(String id) {
-        return Message.success(mapper.deleteByPrimaryKey(id));
+        return Message.success(mapper.deleteById(id));
     }
 
     /**
@@ -151,7 +139,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Message<Integer> deleteByIds(List<String> ids) {
-        return Message.success(mapper.deleteByIds(StringUtils.join(ids, ',')));
+        return Message.success(mapper.deleteBatchIds(ids));
     }
 
     /**
@@ -162,7 +150,7 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
      */
     @Override
     public Message<T> getById(String id) {
-        return Message.success((T) mapper.selectByPrimaryKey(id));
+        return Message.success((T) mapper.selectById(id));
     }
 
     /**
@@ -173,26 +161,9 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
      */
     @Override
     public T getEntityById(String id) {
-        return (T) mapper.selectByPrimaryKey(id);
+        return (T) mapper.selectById(id);
     }
 
-    /**
-     * 分页查询方法
-     *
-     * @param page      分页信息
-     * @param parameter 查询条件
-     * @return 分页查询结果
-     */
-    @Override
-    public Message<Page<T>> findForPageList(Page<T> page, Object parameter) {
-        /**
-         * 加入数据权限过滤条件
-         */
-        //parameter.put("_orgAuth", SystemUtil.getOrgAuthStatement());
-        PageHelper.startPage(page.getPageNum(), page.getPageSize());
-        List<T> list = mapper.findForList(parameter);
-        return Message.success(new Page(list));
-    }
 
     /**
      * 公共列表查询方法
@@ -227,99 +198,16 @@ public abstract class BaseServiceImpl<T> implements IBaseService<T> {
      * @return 分页查询结果
      */
     @Override
-    public Message<Page<T>> queryPageList(int limit, int offset, Map<String, Object> parameter) {
-        int pageSize = 10;
-        int pageNumber = 1;
-        if (limit > 0) {
-            pageSize = Integer.min(1000, limit);
+    public Message<IPage<T>> findForPageList(Integer limit, Integer offset, T parameter) {
+        long pageSize = 10;
+        if (limit != null && limit > 0) {
+            pageSize = Long.min(1000, limit);
         }
-        Page<T> page = new Page<>(pageSize, offset);
-        return findForPageList(page, parameter);
-    }
-
-    /**
-     * @param object
-     */
-    private void setCrtProperties(T object) {
-        try {
-            Class<?> clazz = object.getClass();
-            try {
-                Method setCrtUserCode = clazz.getDeclaredMethod("setCrtUserCode", String.class);
-                if (setCrtUserCode != null) {
-                    setCrtUserCode.invoke(object, SystemUtil.getCurrentUser().getUserCode());
-                }
-            } catch (Exception e) {
-                logger.warn("设置新增相关公共字段出错可以忽略{}", "setCrtUserCode");
-            }
-            try {
-                Method setCrtOrgCode = clazz.getDeclaredMethod("setCrtOrgCode", String.class);
-                if (setCrtOrgCode != null) {
-                    setCrtOrgCode.invoke(object, SystemUtil.getCurrentUser().getOrgCode());
-                }
-            } catch (Exception e) {
-                logger.warn("设置新增相关公共字段出错可以忽略{}", "setCrtOrgCode");
-            }
-            try {
-                Method setCrtDate = clazz.getDeclaredMethod("setCrtDate", java.util.Date.class);
-                if (setCrtDate != null) {
-                    setCrtDate.invoke(object, new Date());
-                }
-            } catch (Exception e) {
-                logger.warn("设置新增相关公共字段出错可以忽略{}", "setCrtDate");
-            }
-            // 处理法人行问题，全省权限时不设置法人行号
-            /*String authType = "01";
-            if (authType != null && !authType.contains(Global.AUTH_LEVEL_TOP)) {
-                Method getLegalOrg = clazz.getDeclaredMethod("getLegalOrg");
-                if (getLegalOrg != null && getLegalOrg.invoke(object) == null) {
-                    Method setLegalOrg = clazz.getDeclaredMethod("setLegalOrg", String.class);
-                    if (setLegalOrg != null) {
-                        setLegalOrg.invoke(object, "admin");
-                    }
-                }
-            }*/
-
-        } catch (SecurityException e) {
-            logger.warn("设置新增相关公共字段出错可以忽略");
-        } catch (IllegalArgumentException e) {
-            logger.warn("设置新增相关公共字段出错可以忽略");
+        long current = 1;
+        if (offset != null && offset > 0) {
+            current = offset;
         }
-    }
-
-    /**
-     * @param object
-     */
-    private void setUpdProperties(T object) {
-        try {
-            Class<?> clazz = object.getClass();
-            try {
-                Method setUpdUserCode = clazz.getDeclaredMethod("setUpdUserCode", String.class);
-                if (setUpdUserCode != null) {
-                    setUpdUserCode.invoke(object, SystemUtil.getCurrentUser().getUserCode());
-                }
-            } catch (Exception e) {
-                logger.warn("设置修改相关公共字段出错可以忽略{}", "setUpdUserCode");
-            }
-            try {
-                Method setUpdOrgCode = clazz.getDeclaredMethod("setUpdOrgCode", String.class);
-                if (setUpdOrgCode != null) {
-                    setUpdOrgCode.invoke(object, SystemUtil.getCurrentUser().getOrgCode());
-                }
-            } catch (Exception e) {
-                logger.warn("设置修改相关公共字段出错可以忽略{}", "setUpdOrgCode");
-            }
-            try {
-                Method setUpdDate = clazz.getDeclaredMethod("setUpdDate", java.util.Date.class);
-                if (setUpdDate != null) {
-                    setUpdDate.invoke(object, new Date());
-                }
-            } catch (Exception e) {
-                logger.warn("设置修改相关公共字段出错可以忽略{}", "setUpdDate");
-            }
-        } catch (SecurityException e) {
-            logger.warn("设置修改相关公共字段出错可以忽略");
-        } catch (IllegalArgumentException e) {
-            logger.warn("设置修改相关公共字段出错可以忽略");
-        }
+        IPage<T> page = new Page<>(current, pageSize);
+        return Message.success(mapper.findForList(page, parameter));
     }
 }

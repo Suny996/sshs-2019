@@ -1,20 +1,26 @@
 package com.sshs.core.base.mapper;
 
 
-import tk.mybatis.mapper.annotation.RegisterMapper;
-import tk.mybatis.mapper.common.IdsMapper;
-import tk.mybatis.mapper.common.Mapper;
-import tk.mybatis.mapper.common.MySqlMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-@RegisterMapper
-public interface BaseMapper<T> extends Mapper<T>, MySqlMapper<T>, IdsMapper<T> {
+
+public interface BaseMapper<T> extends com.baomidou.mybatisplus.core.mapper.BaseMapper<T> {
     /**
-     * 列表查询可分页查询
+     * 列表查询不可分页
      *
      * @param parameter
      * @return
      */
-    List<T> findForList(Object parameter);
+    List<T> findForList(@Param("variable") Object parameter);
+
+    /**
+     * 列表查询可分页
+     *
+     * @param parameter
+     * @return
+     */
+    IPage<T> findForList( @Param("page") IPage<T> page, @Param("variable") Object parameter);
 }

@@ -49,176 +49,83 @@
 	</sql>
 
     <!-- 系统管理->系统管理-用户表-分页查询列信息 -->
-    <select id="findForList" parameterType="Map"
-            resultType="User">
+    <select id="findForList" parameterType="com.sshs.system.user.model.User"
+            resultType="com.sshs.system.user.model.User">
         SELECT
         <include refid="Field"></include>
         FROM
         <include refid="tableName"></include>
         WHERE 1=1
-        <if test="userId != null and userId != ''">
-            AND USER_ID
-            <choose>
-                <when
-                        test="operators.userId != null and operators.userId != '' ">${operators.userId}
-                </when>
-                <otherwise>=</otherwise>
-            </choose>
-            #{userId}
+        <if test="variable.userId != null and variable.userId != ''">
+            AND USER_ID=#{userId}
         </if>
-        <if test="userCode != null and userCode != ''">
-            AND USER_CODE
-            <choose>
-                <when
-                        test="operators.userCode != null and operators.userCode != '' ">${operators.userCode}
-                </when>
-                <otherwise>=</otherwise>
-            </choose>
-            #{userCode}
+        <if test="variable.userCode != null and variable.userCode != ''">
+            AND USER_CODE=#{userCode}
         </if>
-        <if test="userName != null and userName != ''">
+        <if test="variable.userName != null and variable.userName != ''">
             AND USER_NAME
             <choose>
                 <when
-                        test="operators.userName != null and operators.userName != '' ">${operators.userName}
+                        test="variable.operators.userName != null and variable.operators.userName != '' ">
+                    ${variable.operators.userName}
                 </when>
                 <otherwise>=</otherwise>
             </choose>
-            #{userName}
+            #{variable.userName}
         </if>
-        <if test="userNameEn != null and userNameEn != ''">
+        <if test="variable.userNameEn != null and variable.userNameEn != ''">
             AND USER_NAME_EN
             <choose>
                 <when
-                        test="operators.userNameEn != null and operators.userNameEn != '' ">${operators.userNameEn}
+                        test="variable.operators.userNameEn != null and variable.operators.userNameEn != '' ">${variable.operators.userNameEn}
                 </when>
                 <otherwise>=</otherwise>
             </choose>
-            #{userNameEn}
+            #{variable.userNameEn}
         </if>
-        <if test="userNamePy != null and userNamePy != ''">
+        <if test="variable.userNamePy != null and variable.userNamePy != ''">
             AND USER_NAME_PY
             <choose>
                 <when
-                        test="operators.userNamePy != null and operators.userNamePy != '' ">${operators.userNamePy}
+                        test="variable.operators.userNamePy != null and variable.operators.userNamePy != '' ">${variable.operators.userNamePy}
                 </when>
                 <otherwise>=</otherwise>
             </choose>
-            #{userNamePy}
+            #{variable.userNamePy}
         </if>
-        <if test="userNameFr != null and userNameFr != ''">
+        <if test="variable.userNameFr != null and variable.userNameFr != ''">
             AND USER_NAME_FR
             <choose>
                 <when
-                        test="operators.userNameFr != null and operators.userNameFr != '' ">${operators.userNameFr}
+                        test="variable.operators.userNameFr != null and variable.operators.userNameFr != '' ">${operators.userNameFr}
                 </when>
                 <otherwise>=</otherwise>
             </choose>
-            #{userNameFr}
+            #{variable.userNameFr}
         </if>
-        <if test="orgCode != null and orgCode != ''">
-            AND ORG_CODE = #{orgCode}
+        <if test="variable.orgCode != null and variable.orgCode != ''">
+            AND ORG_CODE = #{variable.orgCode}
         </if>
-        <if test="postNo != null and postNo != ''">
-            AND POST_NO = #{postNo}
+        <if test="variable.postNo != null and variable.postNo != ''">
+            AND POST_NO = #{variable.postNo}
         </if>
-        <if test="userSex != null and userSex != ''">
-            AND USER_SEX = #{userSex}
+        <if test="variable.userSex != null and variable.userSex != ''">
+            AND USER_SEX = #{variable.userSex}
         </if>
-        <if test="nationality != null and nationality != ''">
-            AND NATIONALITY = #{nationality}
+        <if test="variable.nationality != null and variable.nationality != ''">
+            AND NATIONALITY = #{variable.nationality}
         </if>
-        <if test="ethnic != null and ethnic != ''">
-            AND ETHNIC = #{ethnic}
+        <if test="variable.ethnic != null and variable.ethnic != ''">
+            AND ETHNIC = #{variable.ethnic}
         </if>
-        <if test="nativePlace != null and nativePlace != ''">
+        <if test="variable.nativePlace != null and variable.nativePlace != ''">
             AND NATIVE_PLACE = #{nativePlace}
         </if>
-        <if test="birthPlace != null and birthPlace != ''">
-            AND BIRTH_PLACE = #{birthPlace}
-        </if>
-        <if test="birthDate != null and birthDate != ''">
-            AND BIRTH_DATE = #{birthDate}
-        </if>
-        <if test="idDecimal != null and idDecimal != ''">
-            AND ID_DECIMAL = #{idDecimal}
-        </if>
-        <if test="photoId != null and photoId != ''">
-            AND PHOTO_ID = #{photoId}
-        </if>
-        <if test="joinDate != null and joinDate != ''">
-            AND JOIN_DATE = #{joinDate}
-        </if>
-        <if test="status != null and status != ''">
-            AND STATUS = #{status}
-        </if>
-        <if test="tellerId != null and tellerId != ''">
-            AND TELLER_ID = #{tellerId}
-        </if>
-        <if test="residentialAddress != null and residentialAddress != ''">
-            AND RESIDENTIAL_ADDRESS = #{residentialAddress}
-        </if>
-        <if test="mobilePhone != null and mobilePhone != ''">
-            AND MOBILE_PHONE = #{mobilePhone}
-        </if>
-        <if test="remark != null and remark != ''">
-            AND REMARK = #{remark}
-        </if>
-        <if test="password != null and password != ''">
-            AND PASSWORD = #{password}
-        </if>
-        <if test="salt != null and salt != ''">
-            AND SALT = #{salt}
-        </if>
-        <if test="onlineStatus != null and onlineStatus != ''">
-            AND ONLINE_STATUS = #{onlineStatus}
-        </if>
-        <if test="ipAddr != null and ipAddr != ''">
-            AND IP_ADDR = #{ipAddr}
-        </if>
-        <if test="userTheme != null and userTheme != ''">
-            AND USER_THEME = #{userTheme}
-        </if>
-        <if test="pdCount != null and pdCount != ''">
-            AND PD_COUNT = #{pdCount}
-        </if>
-        <if test="pdModtime != null and pdModtime != ''">
-            AND PD_MODTIME = #{pdModtime}
-        </if>
-        <if test="pdLocktime != null and pdLocktime != ''">
-            AND PD_LOCKTIME = #{pdLocktime}
-        </if>
-        <if test="lastSignonTime != null and lastSignonTime != ''">
-            AND LAST_SIGNON_TIME = #{lastSignonTime}
-        </if>
-        <if test="lastSignoutTime != null and lastSignoutTime != ''">
-            AND LAST_SIGNOUT_TIME = #{lastSignoutTime}
-        </if>
-        <if test="legalOrg != null and legalOrg != ''">
-            AND LEGAL_ORG = #{legalOrg}
-        </if>
-        <if test="crtUserCode != null and crtUserCode != ''">
-            AND CRT_USER_CODE = #{crtUserCode}
-        </if>
-        <if test="crtOrgCode != null and crtOrgCode != ''">
-            AND CRT_ORG_CODE = #{crtOrgCode}
-        </if>
-        <if test="crtDate != null and crtDate != ''">
-            AND CRT_DATE = #{crtDate}
-        </if>
-        <if test="updUserCode != null and updUserCode != ''">
-            AND UPD_USER_CODE = #{updUserCode}
-        </if>
-        <if test="updOrgCode != null and updOrgCode != ''">
-            AND UPD_ORG_CODE = #{updOrgCode}
-        </if>
-        <if test="updDate != null and updDate != ''">
-            AND UPD_DATE = #{updDate}
-        </if>
-        <if test="@orgAuth != null and @orgAuth != ''">
+
+        <if test="variable._orgAuth != null and variable._orgAuth != ''">
             AND ORG_CODE ${_orgAuth}
         </if>
-        <if test="@userAuth != null and @userAuth != ''">
+        <if test="variable._userAuth != null and variable._userAuth != ''">
             AND USER_CODE ${_userAuth}
         </if>
     </select>

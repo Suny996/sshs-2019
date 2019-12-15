@@ -30,8 +30,8 @@
 
 
     <!-- 分页查询系统管理->系统管理-角色权限表-查询列信息 -->
-    <select id="findForList" parameterType="Page"
-            resultType="Authorize">
+    <select id="findForList" parameterType="com.sshs.core.page.Page"
+            resultType="com.sshs.system.authorize.model.Authorize">
         SELECT
         <include refid="Field"></include>
         FROM

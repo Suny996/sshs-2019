@@ -1,9 +1,10 @@
 package com.sshs.toolkit.coder.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.sshs.core.base.mapper.BaseMapper;
 import com.sshs.toolkit.coder.model.Coder;
 import com.sshs.toolkit.coder.model.Column;
 import org.apache.ibatis.annotations.Param;
-import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,7 @@ import java.util.Map;
  * @author Suny
  * @date 2017-10-15
  */
-public interface CoderMapper extends Mapper<Coder> {
+public interface CoderMapper extends BaseMapper<Coder> {
     /**
      * 查询所有字段
      *
@@ -29,5 +30,5 @@ public interface CoderMapper extends Mapper<Coder> {
      * @param params
      * @return
      */
-    List<Coder> findDbTableForPageList(Map params);
+    IPage<Coder> findDbTableForPageList(IPage<Coder> page, Map params);
 }

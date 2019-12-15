@@ -14,7 +14,6 @@ import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -92,10 +91,10 @@ public class OrgController extends BaseController {
      * 查询系统管理->系统管理-机构表信息列表
      */
     @GetMapping
-    public Mono<Message> queryList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam(required = false) Map<String, Object> params) {
+    public Mono<Message> queryPageList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam(required = false) Org params) {
         try {
             logger.debug("开始查询系统管理->系统管理-机构表列表信息……");
-            Message message = orgService.queryPageList(limit, offset, params);
+            Message message = orgService.findForPageList(limit, offset, params);
             return Mono.justOrEmpty(message);
         } catch (Exception e) {
             logger.error("查询系统管理->系统管理-机构表信息异常！", e);

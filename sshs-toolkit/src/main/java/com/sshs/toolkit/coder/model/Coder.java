@@ -1,13 +1,12 @@
 package com.sshs.toolkit.coder.model;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.sshs.core.model.BaseEntity;
-import com.sshs.core.util.UUIdGenId;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.ibatis.type.Alias;
-import tk.mybatis.mapper.annotation.KeySql;
 
-import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.List;
@@ -19,15 +18,15 @@ import java.util.List;
  * @date 2017-11-10
  */
 @Alias("Coder")
-@Table(name = "TOO_CODER")
+@TableName("TOO_CODER")
 public class Coder extends BaseEntity implements Serializable {
 
     /**
      *
      */
     private static final long serialVersionUID = 1L;
-    @Id
-    @KeySql(genId = UUIdGenId.class)
+
+    @TableId(type = IdType.ID_WORKER_STR)
     private String coderId;
     @ApiModelProperty(value = "包名", dataType = "String", example = "com.sshs.system")
     private String packageName;

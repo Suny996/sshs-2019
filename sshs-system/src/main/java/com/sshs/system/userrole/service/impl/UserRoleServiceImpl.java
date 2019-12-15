@@ -27,7 +27,7 @@ import java.util.Map;
  * @date 2018/11/16
  */
 @Service("userRoleService")
-public class UserRoleServiceImpl extends BaseServiceImpl<UserRole> implements IUserRoleService {
+public class UserRoleServiceImpl extends BaseServiceImpl<UserRoleMapper,UserRole> implements IUserRoleService {
     Logger logger = LoggerFactory.getLogger(UserRoleServiceImpl.class);
     @Resource
     private UserRoleMapper mapper;
@@ -88,9 +88,9 @@ public class UserRoleServiceImpl extends BaseServiceImpl<UserRole> implements IU
      * @return
      */
     @Override
-    public Message queryForList(Map<String, Object> params) {
+    public Message queryForList(UserRole params) {
         Map<String, Object> data = new HashMap<String, Object>();
-        List<Role> roles = (List<Role>) roleService.findForList(data).getData();
+        List<Role> roles = (List<Role>) roleService.findForList(new Role()).getData();
         List<UserRole> userRoles = (List<UserRole>) queryForList(params).getData();
         data.put("roles", roles);
         data.put("userRoles", userRoles);

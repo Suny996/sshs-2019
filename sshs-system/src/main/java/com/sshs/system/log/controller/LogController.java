@@ -1,9 +1,9 @@
 package com.sshs.system.log.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
-import com.sshs.core.page.Page;
 import com.sshs.system.log.model.Log;
 import com.sshs.system.log.service.ILogService;
 import org.slf4j.Logger;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -114,10 +113,10 @@ public class LogController extends BaseController {
      * 查询系统管理->系统管理-系统操作日志表信息列表
      */
     @GetMapping
-    public Message<Page<Log>> queryList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam(required = false) Map<String, Object> params) {
+    public Message<IPage<Log>> queryList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam(required = false) Log params) {
         try {
             logger.debug("开始查询系统管理->系统管理-系统操作日志表列表信息……");
-            return logService.queryPageList(limit, offset, params);
+            return logService.findForPageList(limit, offset, params);
         } catch (BusinessException e) {
             throw e;
         } catch (Exception e) {

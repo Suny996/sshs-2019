@@ -21,7 +21,7 @@ import java.util.List;
  * @date 2018/11/07
  */
 @Service("orgService")
-public class OrgServiceImpl extends BaseServiceImpl<Org> implements IOrgService {
+public class OrgServiceImpl extends BaseServiceImpl<OrgMapper,Org> implements IOrgService {
     Logger logger = LoggerFactory.getLogger(OrgServiceImpl.class);
     @Resource
     private OrgMapper mapper;

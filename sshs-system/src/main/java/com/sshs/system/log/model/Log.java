@@ -1,13 +1,12 @@
 package com.sshs.system.log.model;
 
-import com.sshs.core.util.UUIdGenId;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.ibatis.type.Alias;
-import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
@@ -19,7 +18,7 @@ import java.util.Date;
  * @date 2019/02/21
  */
 @Alias("Log")
-@Table(name = "SYS_LOG")
+@TableName("SYS_LOG")
 public class Log implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -28,8 +27,7 @@ public class Log implements Serializable {
     /**
      * ID
      */
-    @Id
-    @KeySql(genId = UUIdGenId.class)
+    @TableId(type = IdType.ID_WORKER_STR)
     @Column(name = "LOG_ID",length = 32)
     private String logId;
 

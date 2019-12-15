@@ -1,11 +1,14 @@
 package com.sshs.core.customise.controller;
 
+import com.sshs.core.wrapper.QueryWrapper;
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.customise.mapper.CustomiseMapper;
 import com.sshs.core.customise.model.Customise;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -61,9 +64,9 @@ public class CustomiseController extends BaseController {
     @DeleteMapping("/{pageId}/{customiseName}")
     public Message<Integer> deleteCustomise(@PathVariable("pageId") String pageId, @PathVariable("customiseName") String customiseName) {
         try {
-            Customise customise = new Customise();
-            customise.setPageId(pageId);
-            customise.setCustomiseName(customiseName);
+            QueryWrapper<Customise> customise = new QueryWrapper<>();
+            customise.eq("pageId", pageId);
+            customise.eq("customiseName",customiseName);
             int cnt = customiseMapper.delete(customise);
             return Message.success(cnt);
         } catch (Exception e) {
@@ -81,11 +84,11 @@ public class CustomiseController extends BaseController {
     @ApiImplicitParam(paramType = "path", name = "pageId", value = "页面ID", dataType = "String", required = true)
     @GetMapping("/{pageId}")
     public Message<List<Customise>> getCustomiseByPageId(@PathVariable("pageId") String pageId) {
-        Customise customise = new Customise();
-        customise.setPageId(pageId);
-        customise.setUserCode("admin");
+        QueryWrapper<Customise> customise = new QueryWrapper<>();
+        customise.eq("pageId", pageId);
+        customise.eq("userCode","admin");
 
-        List<Customise> customises = customiseMapper.select(customise);
+        List<Customise> customises = customiseMapper.selectList(customise);
         return Message.success(customises);
     }
 }

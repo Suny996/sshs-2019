@@ -1,16 +1,15 @@
 package com.sshs.core.customise.model;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.sshs.core.model.BaseEntity;
-import com.sshs.core.util.UUIdGenId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.ibatis.type.Alias;
-import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
 
 /**
  * 自定义查询
@@ -20,14 +19,14 @@ import javax.persistence.Table;
  */
 @ApiModel(description = "自定义查询")
 @Alias("Customise")
-@Table(name = "CORE_CUSTOMISE_QUERY")
+@TableName("CORE_CUSTOMISE_QUERY")
 public class Customise extends BaseEntity {
     /**
      *
      */
     private static final long serialVersionUID = 1L;
-    @Id
-    @KeySql(genId = UUIdGenId.class)
+
+    @TableId(type = IdType.ID_WORKER_STR)
     @Column(name = "customise_id")
     private String customiseId;
 

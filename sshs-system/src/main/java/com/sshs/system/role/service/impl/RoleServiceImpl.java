@@ -4,7 +4,6 @@ import com.sshs.core.base.service.impl.BaseServiceImpl;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
 import com.sshs.core.util.BusiUtil;
-import com.sshs.core.util.UuidUtil;
 import com.sshs.system.role.mapper.RoleMapper;
 import com.sshs.system.role.model.Role;
 import com.sshs.system.role.service.IRoleService;
@@ -24,7 +23,7 @@ import java.util.List;
  * @date 2018/11/07
  */
 @Service("roleService")
-public class RoleServiceImpl extends BaseServiceImpl<Role> implements IRoleService {
+public class RoleServiceImpl extends BaseServiceImpl<RoleMapper,Role> implements IRoleService {
     Logger logger = LoggerFactory.getLogger(RoleServiceImpl.class);
     @Resource
     private RoleMapper mapper;

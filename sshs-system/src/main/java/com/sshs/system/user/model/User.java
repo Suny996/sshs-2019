@@ -1,14 +1,15 @@
 package com.sshs.system.user.model;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.sshs.core.model.BaseEntity;
-import com.sshs.core.util.UUIdGenId;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.ibatis.type.Alias;
-import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
@@ -20,8 +21,9 @@ import java.util.List;
  * @author Suny
  * @date 2018/01/09
  */
+@ApiModel("用户信息")
 @Alias("User")
-@Table(name = "SYS_USER")
+@TableName("SYS_USER")
 public class User extends BaseEntity implements Serializable {
     /**
      *
@@ -32,26 +34,29 @@ public class User extends BaseEntity implements Serializable {
     /**
      * 主键
      */
-    @Id
-    @KeySql(genId = UUIdGenId.class)
+    @ApiModelProperty(value = "用户ID", dataType = "String", example = "02932892832")
+    @TableId(type=IdType.ID_WORKER_STR)
     @Column(name = "USER_ID", length = 32)
     private String userId;
 
     /**
      * 用户编号
      */
+    @ApiModelProperty(value = "用户编号", dataType = "String", example = "020001")
     @Column(name = "USER_CODE")
     private String userCode;
 
     /**
      * 姓名
      */
+    @ApiModelProperty(value = "用户名称", dataType = "String", example = "李寻欢")
     @Column(name = "USER_NAME")
     private String userName;
 
     /**
      * 英文名
      */
+    @ApiModelProperty(value = "英文名称", dataType = "String", example = "020001")
     @Column(name = "USER_NAME_EN")
     private String userNameEn;
 
@@ -64,6 +69,7 @@ public class User extends BaseEntity implements Serializable {
     /**
      * 曾用名
      */
+    @ApiModelProperty(value = "曾用名", dataType = "String", example = "晓峰")
     @Column(name = "USER_NAME_FR")
     private String userNameFr;
 
@@ -131,6 +137,7 @@ public class User extends BaseEntity implements Serializable {
      * 入职日期
      */
     @Column(name = "JOIN_DATE")
+    @ApiModelProperty(value = "入职日期", dataType = "Date")
     private Date joinDate;
 
     /**

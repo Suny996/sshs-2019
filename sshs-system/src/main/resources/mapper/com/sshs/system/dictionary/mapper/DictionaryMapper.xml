@@ -86,8 +86,8 @@
 	</select>-->
 
 	<!-- 分页查询系统管理->系统管理-数据字典表-查询列信息 -->
-	<select id="findForList" parameterType="Page"
-			resultType="Dictionary">
+	<select id="findForList" parameterType="com.sshs.core.page.Page"
+			resultType="com.sshs.system.dictionary.model.Dictionary">
 		SELECT
 		<include refid="Field"></include>
 		FROM

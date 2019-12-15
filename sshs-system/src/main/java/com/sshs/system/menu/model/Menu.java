@@ -1,10 +1,10 @@
 package com.sshs.system.menu.model;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import org.apache.ibatis.type.Alias;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -19,7 +19,7 @@ import java.util.List;
  * @date 2018/03/13
  */
 @Alias("Menu")
-@Table(name = "SYS_MENU")
+@TableName("SYS_MENU")
 public class Menu implements Serializable {
     /**
      *
@@ -30,7 +30,7 @@ public class Menu implements Serializable {
      * 菜单编码
      */
     @Id
-    //@KeySql(genId = UUIdGenId.class)
+    //@TableId(type=IdType.ID_WORKER_STR
     @Column(name = "MENU_CODE")
     private String menuCode;
 

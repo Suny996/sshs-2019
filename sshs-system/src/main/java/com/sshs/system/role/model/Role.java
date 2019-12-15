@@ -1,13 +1,13 @@
 package com.sshs.system.role.model;
 
-import com.sshs.core.util.UUIdGenId;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.ibatis.type.Alias;
-import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -18,7 +18,7 @@ import java.util.Date;
  * @date 2018/11/07
  */
 @Alias("Role")
-@Table(name = "SYS_ROLE")
+@TableName("SYS_ROLE")
 public class Role implements Serializable {
     /**
      *
@@ -30,7 +30,7 @@ public class Role implements Serializable {
      * 角色ID
      */
     @Id
-    @KeySql(genId = UUIdGenId.class)
+    @TableId(type= IdType.ID_WORKER_STR)
     @Column(name = "ROLE_ID", length = 32)
     private String roleId;
 

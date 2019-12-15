@@ -1,7 +1,6 @@
 package com.sshs.system.post.mapper;
 
 import com.sshs.core.base.mapper.BaseMapper;
-import com.sshs.core.page.Page;
 import com.sshs.system.post.model.Post;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -14,5 +13,4 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface PostMapper extends BaseMapper<Post> {
-    Page<Post> findForPageList();
 }

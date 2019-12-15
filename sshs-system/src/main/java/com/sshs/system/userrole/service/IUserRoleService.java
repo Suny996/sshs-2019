@@ -5,8 +5,6 @@ import com.sshs.core.message.Message;
 import com.sshs.system.user.model.User;
 import com.sshs.system.userrole.model.UserRole;
 
-import java.util.Map;
-
 /**
  * 系统管理->系统管理-用户角色对照表service类
  *
@@ -14,6 +12,7 @@ import java.util.Map;
  * @date 2018/11/16
  */
 public interface IUserRoleService extends IBaseService<UserRole> {
-    public Message save(User user);
-    public Message queryForList(Map<String , Object> params);
+    Message save(User user);
+
+    Message queryForList(UserRole params);
 }

@@ -1,13 +1,13 @@
 package com.sshs.system.authorize.model;
 
-import com.sshs.core.util.UUIdGenId;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.sshs.system.menu.model.Menu;
 import org.apache.ibatis.type.Alias;
-import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
@@ -20,7 +20,7 @@ import java.util.List;
  * @date 2018/11/16
  */
 @Alias("Authorize")
-@Table(name = "SYS_AUTHORIZE")
+@TableName("SYS_AUTHORIZE")
 public class Authorize implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,7 +29,7 @@ public class Authorize implements Serializable {
      * 权限ID
      */
     @Id
-    @KeySql(genId = UUIdGenId.class)
+    @TableId(type= IdType.ID_WORKER_STR)
     @Column(name = "AUTHORIZE_ID", length = 32)
     private String id;
 

@@ -1,5 +1,6 @@
 package com.sshs.system.authorize.service.impl;
 
+import com.sshs.core.wrapper.QueryWrapper;
 import com.sshs.core.base.service.impl.BaseServiceImpl;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
@@ -11,9 +12,7 @@ import com.sshs.system.menu.model.Menu;
 import com.sshs.system.menu.service.IMenuService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -28,7 +27,7 @@ import java.util.Map;
  * @date 2018/11/16
  */
 @Service("authorizeService")
-public class AuthorizeServiceImpl extends BaseServiceImpl<Authorize> implements IAuthorizeService {
+public class AuthorizeServiceImpl extends BaseServiceImpl<AuthorizeMapper,Authorize> implements IAuthorizeService {
     private static final Logger logger = LoggerFactory.getLogger(AuthorizeServiceImpl.class);
     @Resource
     private AuthorizeMapper mapper;
@@ -46,9 +45,9 @@ public class AuthorizeServiceImpl extends BaseServiceImpl<Authorize> implements 
     public Message<Authorize> save(Authorize authorize) {
         authorize.setId(UuidUtil.get32UUID());
         try {
-            Example example = new Example(Authorize.class);
-            example.createCriteria().andEqualTo("roleCode",authorize.getRoleCode());
-            mapper.deleteByExample(example);
+            QueryWrapper<Authorize> example = new QueryWrapper<>();
+            example.eq("roleCode",authorize.getRoleCode());
+            mapper.delete(example);
             for (Menu menu : authorize.getMenus()) {
                 Authorize auth = new Authorize();
                 authorize.setId(UuidUtil.get32UUID());

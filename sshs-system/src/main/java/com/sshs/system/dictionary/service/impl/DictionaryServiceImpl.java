@@ -1,5 +1,6 @@
 package com.sshs.system.dictionary.service.impl;
 
+import com.sshs.core.wrapper.QueryWrapper;
 import com.sshs.core.base.service.impl.BaseServiceImpl;
 import com.sshs.core.constant.Global;
 import com.sshs.core.util.DictionaryUtil;
@@ -11,7 +12,6 @@ import com.sshs.system.dictionary.service.IDictionaryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -23,7 +23,7 @@ import java.util.*;
  * @date 2017-12-01
  */
 @Service
-public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implements IDictionaryService {
+public class DictionaryServiceImpl extends BaseServiceImpl<DictionaryMapper,Dictionary> implements IDictionaryService {
     private static final Logger logger = LoggerFactory.getLogger(DictionaryServiceImpl.class);
 
     /**
@@ -45,10 +45,10 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
      */
     @Override
     public List<Dictionary> findByParentId(String parentId) {
-        Example example = new Example(Dictionary.class);
-        example.createCriteria().andEqualTo("parentId", parentId);
-        example.orderBy("sortNo").asc();
-        return mapper.selectByExample(example);
+        QueryWrapper<Dictionary> example = new QueryWrapper<>();
+        example.eq("parentId", parentId);
+        example.orderByAsc("sortNo");
+        return mapper.selectList(example);
     }
 
     @Override
@@ -57,9 +57,9 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
         if (dict != null) {
             return dict;
         } else {
-            Example example = new Example(Dictionary.class);
-            example.createCriteria().andEqualTo("dictType", "1").andEqualTo("dictCode", dictCode);
-            List<Dictionary> dicts = mapper.selectByExample(example);
+            QueryWrapper<Dictionary> example = new QueryWrapper<>();
+            example.eq("dictType", "1").eq("dictCode", dictCode);
+            List<Dictionary> dicts = mapper.selectList(example);
             if (dicts != null && !dicts.isEmpty()) {
                 for (Dictionary d : dicts) {
                     initChildren(d);
@@ -77,9 +77,9 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
     //@PostConstruct
     @Override
     public void initDictList() {
-        Example wrapper = new Example(Dictionary.class);
-        wrapper.createCriteria().andEqualTo("dictType", "1").andEqualTo("status", "1");
-        List<Dictionary> dictCodes = mapper.selectByExample(wrapper);
+        QueryWrapper<Dictionary> wrapper = new QueryWrapper<>();
+        wrapper.eq("dictType", "1").eq("status", "1");
+        List<Dictionary> dictCodes = mapper.selectList(wrapper);
         // 字典项
         for (Dictionary dict : dictCodes) {
             initChildren(dict);
@@ -95,7 +95,7 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
      */
     private void initChildren(Dictionary parent) {
         if (!Global.DICTIONARY_DICTTYPE_KEYVALUE.equals(parent.getDictType())) {
-            List<Dictionary> children = findByParentId(parent.getId());
+            List<Dictionary> children = findByParentId(parent.getDictId());
             if (children != null && !children.isEmpty()) {
                 for (Dictionary d : children) {
                     initI18n(d);
@@ -113,9 +113,9 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
      * @return
      */
     private List<DictionaryI18n> findI18nByDictId(String dictId) {
-        Example example = new Example(DictionaryI18n.class);
-        example.createCriteria().andEqualTo("dictId", dictId);
-        return dictionaryI18nMapper.selectByExample(example);
+        QueryWrapper<DictionaryI18n> example = new QueryWrapper<>();
+        example.eq("dictId", dictId);
+        return dictionaryI18nMapper.selectList(example);
     }
 
     /**
@@ -125,7 +125,7 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
      * @return
      */
     private void initI18n(Dictionary dict) {
-        List<DictionaryI18n> i18ns = findI18nByDictId(dict.getId());
+        List<DictionaryI18n> i18ns = findI18nByDictId(dict.getDictId());
         if (i18ns != null && !i18ns.isEmpty()) {
             for (DictionaryI18n i : i18ns) {
                 dict.addI18n(i);
@@ -145,7 +145,7 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
             dictGrp.put("value", dgrp.getDictCode());
             dictGrp.put("label", dgrp.getDictName());
             dictGrp.put("desc", dgrp.getDictDesc());
-            dictGrp.put("key", dgrp.getId());
+            dictGrp.put("key", dgrp.getDictId());
             dictGrp.put("status", dgrp.getStatus());
             if (dgrp.getI18ns() != null && !dgrp.getI18ns().isEmpty()) {
                 for (DictionaryI18n i18n : dgrp.getI18ns()) {
@@ -184,7 +184,7 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
                     Map<String, Object> dictVal = new LinkedHashMap<String, Object>();
                     dictVal.put("value", dv.getDictCode());
                     dictVal.put("label", dv.getDictName());
-                    dictVal.put("key", dv.getId());
+                    dictVal.put("key", dv.getDictId());
                     dictVal.put("desc", dv.getDictDesc());
                     dictVal.put("status", dv.getStatus());
                     if (dv.getI18ns() != null && !dv.getI18ns().isEmpty()) {
@@ -202,7 +202,7 @@ public class DictionaryServiceImpl extends BaseServiceImpl<Dictionary> implement
             dictGrp.put("value", dgrp.getDictCode());
             dictGrp.put("label", dgrp.getDictName());
             dictGrp.put("desc", dgrp.getDictDesc());
-            dictGrp.put("key", dgrp.getId());
+            dictGrp.put("key", dgrp.getDictId());
             dictGrp.put("status", dgrp.getStatus());
             if (dgrp.getI18ns() != null && !dgrp.getI18ns().isEmpty()) {
                 for (DictionaryI18n i18n : dgrp.getI18ns()) {

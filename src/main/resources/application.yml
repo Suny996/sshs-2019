@@ -15,7 +15,7 @@ spring:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/sshs?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
     username: root
-    password: rootroot
+    password: root
     druid:
       initialSize: 10
       minIdle: 10
@@ -38,8 +38,12 @@ spring:
     multipart:
       maxFileSize: 5MB
       maxRequestSize: 10MB
+  jackson:
+    #不反回空字段
+    defaultPropertyInclusion: non_null
 mybatis:
-  typeAliasesPackage: com.sshs
-  mapperLocations: classpath*:*Mapper.xml
+#  typeAliasesPackage: 'com.sshs.**.model'
+  mapperLocations: 'classpath*:*Mapper.xml'
   configuration:
     mapUnderscoreToCamelCase: true
+#  configLocation: 'classpath:mybatis-config.xml'

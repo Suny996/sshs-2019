@@ -1,6 +1,7 @@
 package com.sshs.toolkit.coder.service.impl;
 
 import com.sshs.core.base.service.impl.BaseServiceImpl;
+import com.sshs.toolkit.coder.mapper.DbTableMapper;
 import com.sshs.toolkit.coder.model.DbTable;
 import com.sshs.toolkit.coder.service.IDbTableService;
 import org.springframework.stereotype.Service;
@@ -14,5 +15,5 @@ import org.springframework.stereotype.Service;
  * @version
  */
 @Service("dbTableService")
-public class DbTableServiceImpl extends BaseServiceImpl<DbTable> implements IDbTableService {
+public class DbTableServiceImpl extends BaseServiceImpl<DbTableMapper,DbTable> implements IDbTableService {
 }

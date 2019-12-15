@@ -1,9 +1,9 @@
 package com.sshs.toolkit.coder.service;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.base.service.IBaseService;
 import com.sshs.core.message.Message;
-import com.sshs.core.page.Page;
 import com.sshs.toolkit.coder.model.Coder;
 import com.sshs.toolkit.coder.model.Column;
 
@@ -32,7 +32,7 @@ public interface ICoderService extends IBaseService<Coder> {
      * @param params
      * @return
      */
-    Message<Page<Coder>> findDbTableForPageList(int limit, int offset, Map<String, Object> params);
+    Message<IPage<Coder>> findDbTableForPageList(int limit, int offset, Map<String, Object> params);
 
     /**
      * 生成代码

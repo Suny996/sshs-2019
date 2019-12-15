@@ -1,9 +1,9 @@
 package com.sshs.system.dictionary.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
-import com.sshs.core.page.Page;
 import com.sshs.system.dictionary.model.Dictionary;
 import com.sshs.system.dictionary.service.IDictionaryService;
 import io.swagger.annotations.Api;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -106,10 +105,10 @@ public class DictionaryController extends BaseController {
      * 查询系统管理->系统管理-数据字典表信息列表
      */
     @GetMapping
-    public Message<Page<Dictionary>> queryList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam Map<String, Object> params) {
+    public Message<IPage<Dictionary>> queryPageList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam Dictionary params) {
         try {
             logger.debug("开始查询系统管理->系统管理-数据字典表列表信息……");
-            return dictionaryService.queryPageList(limit, offset, params);
+            return dictionaryService.findForPageList(limit, offset, params);
         } catch (Exception e) {
             logger.error("查询系统管理->系统管理-数据字典表信息异常！", e);
             throw new BusinessException("SY0001");

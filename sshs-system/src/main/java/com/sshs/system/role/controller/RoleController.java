@@ -1,5 +1,6 @@
 package com.sshs.system.role.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
@@ -12,7 +13,6 @@ import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -106,12 +106,12 @@ public class RoleController extends BaseController {
      * 查询系统管理->系统管理-角色表信息列表
      */
     @GetMapping
-    public Mono<Message> queryList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam Map
-            <String, Object> params) {
+    public Message<IPage<Role>> queryPageList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam Role
+            params) {
         try {
             logger.debug("开始查询系统管理->系统管理-角色表列表信息……");
-            Message message = roleService.queryPageList(limit, offset, params);
-            return Mono.justOrEmpty(message);
+            Message message = roleService.findForPageList(limit, offset, params);
+            return message;
         } catch (Exception e) {
             logger.error("查询系统管理->系统管理-角色表信息异常！", e);
             throw new BusinessException("SY0001");

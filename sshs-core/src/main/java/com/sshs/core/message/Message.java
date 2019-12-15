@@ -16,6 +16,7 @@ import java.util.jar.JarFile;
 
 /**
  * @author Suny
+ * @date 2018-09-23
  */
 public class Message<T> {
     private final static String SUCCESS_CODE = "000000";

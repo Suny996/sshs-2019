@@ -1,5 +1,6 @@
 package com.sshs.toolkit.coder.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
@@ -136,7 +137,7 @@ public class CoderController extends BaseController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "query", name = "limit", value = "页大小", required = false),
             @ApiImplicitParam(paramType = "query", name = "offset", value = "页码", required = false)})
     @GetMapping("/tableList")
-    public Message queryPageList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam(required = false) Map<String, Object> params) {
+    public Message<IPage<Coder>> queryPageList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam(required = false) Map<String, Object> params) {
         try {
             logger.debug("开始分页查询表信息……");
             return coderService.findDbTableForPageList(limit, offset, params);

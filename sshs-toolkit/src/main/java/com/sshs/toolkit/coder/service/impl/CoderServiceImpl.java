@@ -1,6 +1,6 @@
 package com.sshs.toolkit.coder.service.impl;
 
-import com.github.pagehelper.PageHelper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.base.service.impl.BaseServiceImpl;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
@@ -8,6 +8,7 @@ import com.sshs.core.page.Page;
 import com.sshs.core.util.ReflectHelper;
 import com.sshs.core.util.Serializabler;
 import com.sshs.core.util.UuidUtil;
+import com.sshs.core.wrapper.QueryWrapper;
 import com.sshs.toolkit.coder.helper.CoderGenerator;
 import com.sshs.toolkit.coder.mapper.CoderMapper;
 import com.sshs.toolkit.coder.model.Coder;
@@ -18,7 +19,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -33,7 +33,7 @@ import java.util.Map;
  * @date 2015年11月24日
  */
 @Service("coderService")
-public class CoderServiceImpl extends BaseServiceImpl<Coder> implements ICoderService {
+public class CoderServiceImpl extends BaseServiceImpl<CoderMapper, Coder> implements ICoderService {
 
     Logger logger = LoggerFactory.getLogger(CoderServiceImpl.class);
     @Resource
@@ -120,9 +120,9 @@ public class CoderServiceImpl extends BaseServiceImpl<Coder> implements ICoderSe
      * @param tableName
      */
     private void deleteByTableName(String tableName) {
-        Example example = new Example(Coder.class);
-        example.createCriteria().andEqualTo("tableName", tableName);
-        coderMapper.deleteByExample(example);
+        QueryWrapper<Coder> example = new QueryWrapper<>();
+        example.eq("tableName", tableName);
+        coderMapper.delete(example);
     }
 
     /**
@@ -135,11 +135,9 @@ public class CoderServiceImpl extends BaseServiceImpl<Coder> implements ICoderSe
         return coderMapper.findColumnAll(toolketConfigProp.getDbUser(), tableName);
     }
 
-    public Message<Page<Coder>> findDbTableForPageList(int limit, int offset, Map<String, Object> params) {
-        PageHelper.startPage(offset, limit);
+    public Message<IPage<Coder>> findDbTableForPageList(int limit, int offset, Map<String, Object> params) {
         params.put("dbUser", toolketConfigProp.getDbUser());
-        List<Coder> list = coderMapper.findDbTableForPageList(params);
-        return Message.success(new Page(list));
+        return Message.success(coderMapper.findDbTableForPageList(new Page(offset,limit),params));
     }
 
 }

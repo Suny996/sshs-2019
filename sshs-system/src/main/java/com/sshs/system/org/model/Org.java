@@ -1,12 +1,11 @@
 package com.sshs.system.org.model;
 
-import com.sshs.core.util.UUIdGenId;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import org.apache.ibatis.type.Alias;
-import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -21,7 +20,7 @@ import java.util.List;
  * @date 2018/11/07
  */
 @Alias("Org")
-@Table(name = "SYS_ORG")
+@TableName("SYS_ORG")
 public class Org implements Serializable {
     /**
      *
@@ -32,8 +31,7 @@ public class Org implements Serializable {
     /**
      * 机构ID
      */
-    @Id
-    @KeySql(genId = UUIdGenId.class)
+    @TableId (type= IdType.ID_WORKER_STR)
     @Column(name = "ORG_ID", length = 32)
     private String id;
 

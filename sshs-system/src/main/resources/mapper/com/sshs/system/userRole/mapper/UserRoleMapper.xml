@@ -27,8 +27,8 @@
 
 
     <!-- 分页查询系统管理->系统管理-用户角色对照表-查询列信息 -->
-    <select id="findForList" parameterType="Map"
-            resultType="UserRole">
+    <select id="findForList" parameterType="com.sshs.core.page.Page"
+            resultType="com.sshs.system.userrole.model.UserRole">
         SELECT
         <include refid="Field"></include>
         FROM

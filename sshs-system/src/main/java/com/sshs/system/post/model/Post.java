@@ -1,8 +1,8 @@
 package com.sshs.system.post.model;
 
-import com.sshs.core.util.UUIdGenId;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import org.apache.ibatis.type.Alias;
-import tk.mybatis.mapper.annotation.KeySql;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -25,7 +25,7 @@ private static final long serialVersionUID = 1L;
     * 岗位主键
     */
 	@Id
-	@KeySql(genId = UUIdGenId.class)
+	@TableId(type= IdType.ID_WORKER_STR)
 	@Column(name="POST_ID",length = 32)
 	private String id;
 

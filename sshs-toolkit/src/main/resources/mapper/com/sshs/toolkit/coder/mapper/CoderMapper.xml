@@ -90,7 +90,7 @@
     </delete>-->
     <!-- 代码生成-查询表信息 -->
     <select id="findDbTableForPageList" parameterType="Map"
-            resultType="Coder">
+            resultType="com.sshs.toolkit.coder.model.Coder">
         SELECT DISTINCT
         C.CODER_ID,
         T.TABLE_NAME,
@@ -146,7 +146,7 @@
 
     <!-- 代码生成-查询列信息 -->
     <select id="findColumnAll" parameterType="String"
-            resultType="Column">
+            resultType="com.sshs.toolkit.coder.model.Column">
         SELECT COLUMN_ID,
         TABLE_NAME,
         TABLE_COMMENT,

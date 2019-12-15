@@ -1,9 +1,9 @@
 package com.sshs.system.post.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
-import com.sshs.core.page.Page;
 import com.sshs.system.post.model.Post;
 import com.sshs.system.post.service.IPostService;
 import org.slf4j.Logger;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -103,10 +102,10 @@ public class PostController extends BaseController {
      * 查询系统管理->系统管理-岗位表信息列表
      */
     @GetMapping
-    public Message<Page<Post>> queryList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam(required = false) Map<String, Object> params) {
+    public Message<IPage<Post>> queryPageList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam(required = false) Post params) {
         try {
             logger.debug("开始查询系统管理->系统管理-岗位表列表信息……");
-            return postService.queryPageList(limit, offset, params);
+            return postService.findForPageList(limit, offset, params);
         } catch (Exception e) {
             logger.error("查询系统管理->系统管理-岗位表信息异常！", e);
             throw new BusinessException("SY0001");

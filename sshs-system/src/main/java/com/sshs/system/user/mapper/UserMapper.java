@@ -1,7 +1,6 @@
 package com.sshs.system.user.mapper;
 
 import com.sshs.core.base.mapper.BaseMapper;
-import com.sshs.core.page.Page;
 import com.sshs.system.user.model.User;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,5 +12,4 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface UserMapper extends BaseMapper<User> {
-    Page<User> findForPageList();
 }

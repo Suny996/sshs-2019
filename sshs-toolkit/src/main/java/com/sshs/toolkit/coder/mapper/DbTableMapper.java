@@ -1,16 +1,15 @@
 package com.sshs.toolkit.coder.mapper;
 
+import com.sshs.core.base.mapper.BaseMapper;
 import com.sshs.core.page.Page;
 import com.sshs.toolkit.coder.model.DbTable;
-
-import tk.mybatis.mapper.common.Mapper;
 
 /**
  * 
  * @author Suny
  *
  */
-public interface DbTableMapper extends Mapper<DbTable> {
+public interface DbTableMapper extends BaseMapper<DbTable> {
 	/**
 	 * 根据ID查询对象
 	 * @param tableName

@@ -1,8 +1,8 @@
 package com.sshs.system.user.service.impl;
 
 import com.sshs.core.base.service.impl.BaseServiceImpl;
-import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
+import com.sshs.core.wrapper.QueryWrapper;
 import com.sshs.system.user.mapper.UserMapper;
 import com.sshs.system.user.model.User;
 import com.sshs.system.user.service.IUserService;
@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
 
@@ -22,7 +21,7 @@ import javax.annotation.Resource;
  * @date 2017年7月5日 上午9:46:09
  */
 @Service("userService")
-public class UserServiceImpl extends BaseServiceImpl<User> implements IUserService {
+public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implements IUserService {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     @Resource
     private UserMapper mapper;
@@ -37,9 +36,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
      */
     @Override
     public User getByUserCode(String userCode) {
-        Example example = new Example(User.class);
-        example.createCriteria().andEqualTo("userCode", userCode);
-        return mapper.selectOneByExample(example);
+        QueryWrapper<User> wrapper = new QueryWrapper<User>();
+        wrapper.eq("userCode", userCode);
+        return mapper.selectOne(wrapper);
     }
 
     /**
@@ -51,11 +50,6 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements IUserServi
     @Override
     public Message<User> save(User user) {
         user.setPassword(defaultPassword);
-        try {
-            return super.save(user);
-        } catch (Exception e) {
-            logger.error("保存用户信息异常！", e);
-            throw new BusinessException("SY0001");
-        }
+        return super.save(user);
     }
 }
