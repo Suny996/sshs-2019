@@ -4,6 +4,7 @@ server:
   servlet:
     session:
       timeout: 600s
+    contextPath: /api
 logging:
   path: logs
   file: sshs

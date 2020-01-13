@@ -26,7 +26,7 @@ import java.util.List;
  */
 @Api(tags = "公共-自定义查询条件接口")
 @RestController
-@RequestMapping("/api/v1/core/custmise")
+@RequestMapping("/v1/core/customise")
 public class CustomiseController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(CustomiseController.class);
     @Resource
@@ -62,7 +62,7 @@ public class CustomiseController extends BaseController {
      * @throws Exception
      */
     @DeleteMapping("/{pageId}/{customiseName}")
-    public Message<Integer> deleteCustomise(@PathVariable("pageId") String pageId, @PathVariable("customiseName") String customiseName) {
+    public Message<Integer> deleteCustomiseByName(@PathVariable("pageId") String pageId, @PathVariable("customiseName") String customiseName) {
         try {
             QueryWrapper<Customise> customise = new QueryWrapper<>();
             customise.eq("pageId", pageId);
@@ -71,6 +71,22 @@ public class CustomiseController extends BaseController {
             return Message.success(cnt);
         } catch (Exception e) {
             logger.error("删除失败pageId:{},customiseName:{}", pageId, customiseName);
+            throw new BusinessException("SY0001");
+        }
+    }
+    /**
+     * 自定义查询条件-删除
+     *
+     * @param customiseId
+     * @throws Exception
+     */
+    @DeleteMapping("/{customiseId}")
+    public Message<Integer> deleteCustomise(@PathVariable("customiseId") String customiseId) {
+        try {
+            int cnt = customiseMapper.deleteById(customiseId);
+            return Message.success(cnt);
+        } catch (Exception e) {
+            logger.error("删除失败，customiseId:{}", customiseId);
             throw new BusinessException("SY0001");
         }
     }
