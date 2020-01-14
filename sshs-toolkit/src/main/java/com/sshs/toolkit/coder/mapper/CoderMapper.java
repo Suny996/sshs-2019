@@ -30,5 +30,5 @@ public interface CoderMapper extends BaseMapper<Coder> {
      * @param params
      * @return
      */
-    IPage<Coder> findDbTableForPageList(IPage<Coder> page, Map params);
+    IPage<Coder> findDbTableForPageList(IPage<Coder> page,@Param("dbUser") String dbuser, @Param("variables") Map params);
 }

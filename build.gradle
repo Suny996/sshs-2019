@@ -29,7 +29,7 @@ buildscript {
 
 dependencies {
     compile project(":sshs-core")
-    //compile project(":scais-security")
+    compile project(":sshs-security")
     compile project(":sshs-system")
     //compile project(":scais-develop")
     //compile project(":scais-report")

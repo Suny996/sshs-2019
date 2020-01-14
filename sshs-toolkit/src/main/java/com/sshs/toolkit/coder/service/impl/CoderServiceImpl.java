@@ -136,8 +136,7 @@ public class CoderServiceImpl extends BaseServiceImpl<CoderMapper, Coder> implem
     }
 
     public Message<IPage<Coder>> findDbTableForPageList(int limit, int offset, Map<String, Object> params) {
-        params.put("dbUser", toolketConfigProp.getDbUser());
-        return Message.success(coderMapper.findDbTableForPageList(new Page(offset,limit),params));
+        return Message.success(coderMapper.findDbTableForPageList(new Page(offset, limit), toolketConfigProp.getDbUser(), params));
     }
 
 }

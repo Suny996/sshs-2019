@@ -1,14 +1,14 @@
 package ${coder.packageName}.controller;
 
-import com.scai.core.exception.BusinessException;
-import com.scai.core.message.Message;
-import com.scai.core.page.Page;
+import com.sshs.core.exception.BusinessException;
+import com.sshs.core.message.Message;
+import com.sshs.core.page.Page;
 import ${coder.packageName}.model.${coder.className};
 import ${coder.packageName}.service.I${coder.className}Service;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.annotation.*;
-import com.scai.core.base.controller.BaseController;
+import com.sshs.core.base.controller.BaseController;
 import reactor.core.publisher.Mono;
 import javax.annotation.Resource;
 import java.util.List;

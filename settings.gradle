@@ -1,6 +1,6 @@
 rootProject.name = 'sshs'
 include 'sshs-core'
-//include 'sshs-security'
+include 'sshs-security'
 include 'sshs-system'
 include 'sshs-toolkit'
 /*include 'sshs-develop'

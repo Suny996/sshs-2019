@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sshs.security.mapper.PrivilegeMapper">
+
+    <!-- 查询权限管理->安全管理-权限表-根据用户查询权限信息 -->
+    <select id="findPrivilegeListByUserId" parameterType="String"
+            resultType="com.sshs.security.model.Privilege">
+		SELECT DISTINCT R.ROLE_CODE AS ID, R.ROLE_NAME AS NAME
+		FROM
+		SYS_USER_ROLE UR, SYS_ROLE R
+		WHERE UR.ROLE_CODE = R.ROLE_CODE AND
+		UR.USER_CODE =#{userId}
+	</select>
+
+    <!-- 查询权限管理->安全管理-权限表-根据功能URL查询权限信息 -->
+    <select id="findPrivilegeListByUrl" parameterType="String"
+            resultType="com.sshs.security.model.Privilege">
+		SELECT DISTINCT R.ROLE_CODE AS ID, R.ROLE_NAME AS NAME
+		FROM
+		SYS_AUTHORIZE A, SYS_MENU M, SYS_ROLE R
+		WHERE A.ROLE_CODE = R.ROLE_CODE
+		AND A.RESOURCE_ID = M.MENU_CODE
+		AND M.MENU_URL = #{url}
+	</select>
+</mapper>

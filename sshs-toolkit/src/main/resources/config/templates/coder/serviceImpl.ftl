@@ -1,10 +1,10 @@
 package ${coder.packageName}.service.impl;
 
-import com.scai.core.base.service.impl.BaseServiceImpl;
-import com.scai.core.exception.BusinessException;
-import com.scai.core.message.Message;
-import com.scai.core.page.Page;
-import com.scai.core.util.UuidUtil;
+import com.sshs.core.base.service.impl.BaseServiceImpl;
+import com.sshs.core.exception.BusinessException;
+import com.sshs.core.message.Message;
+import com.sshs.core.page.Page;
+import com.sshs.core.util.UuidUtil;
 import ${coder.packageName}.mapper.${coder.className}Mapper;
 import ${coder.packageName}.model.${coder.className};
 import ${coder.packageName}.service.I${coder.className}Service;

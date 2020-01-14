@@ -1,6 +1,6 @@
 package ${coder.packageName}.mapper;
 
-import com.scai.core.page.Page;
+import com.sshs.core.page.Page;
 import ${coder.packageName}.model.${coder.className};
 import tk.mybatis.mapper.common.Mapper;
 

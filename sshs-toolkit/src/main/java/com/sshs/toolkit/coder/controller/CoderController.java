@@ -28,7 +28,7 @@ import java.util.Map;
  */
 @Api(tags = "代码生成工具")
 @RestController
-@RequestMapping("/api/toolkit/coders")
+@RequestMapping("/v1/toolkit/coders")
 public class CoderController extends BaseController {
     @Autowired
     private ICoderService coderService;

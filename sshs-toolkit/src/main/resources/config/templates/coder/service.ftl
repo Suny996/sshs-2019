@@ -1,6 +1,6 @@
 package ${coder.packageName}.service;
 
-import com.scai.core.base.service.IBaseService;
+import com.sshs.core.base.service.IBaseService;
 import ${coder.packageName}.model.${coder.className};
 
  /**

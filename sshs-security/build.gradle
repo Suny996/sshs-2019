@@ -1,0 +1,22 @@
+apply plugin: 'application'
+
+group = "com.sshs"
+version '0.0.1-SNAPSHOT'
+description = "系统安全框架（不会独立运行）"
+archivesBaseName = 'sshs-security'
+
+dependencies{
+    compile project(":sshs-core")
+}
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-security:2.1.0.RELEASE')
+	//implementation('org.springframework.session:spring-session-core')
+	// https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
+	//compile group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+}
+//processResources {
+//   	from('src/main/java') {
+//    	include '**/*'
+//	}
+//	exclude { "**/*.java" }
+//}
