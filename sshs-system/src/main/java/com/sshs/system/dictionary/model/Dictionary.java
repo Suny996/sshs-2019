@@ -20,7 +20,7 @@ import java.util.List;
  * @author Suny
  */
 @Alias("Dictionary")
-@TableName( "SYS_DICTIONARIES")
+@TableName( "SYS_DICTIONARY")
 public class Dictionary extends BaseEntity {
     /**
      *

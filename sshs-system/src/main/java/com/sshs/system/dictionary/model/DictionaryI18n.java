@@ -15,7 +15,7 @@ import java.util.Date;
  * 
  */
 @Alias("DictionaryI18n")
-@TableName("SYS_DICTIONARIES_I18N")
+@TableName("SYS_DICTIONARY_I18N")
 public class DictionaryI18n implements Serializable {
 
 	/**
