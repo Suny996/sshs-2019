@@ -1,5 +1,8 @@
 package com.sshs.system.menu.model;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import org.apache.ibatis.type.Alias;
 
@@ -30,7 +33,7 @@ public class Menu implements Serializable {
      * 菜单编码
      */
     @Id
-    //@TableId(type=IdType.ID_WORKER_STR
+    @TableId(type= IdType.INPUT)
     @Column(name = "MENU_CODE")
     private String menuCode;
 
@@ -156,9 +159,11 @@ public class Menu implements Serializable {
 
 
     @Transient
+    @TableField(exist = false)
     private String dataAuthType;
 
     @Transient
+    @TableField(exist = false)
     private List<Menu> children;
 
     public List<Menu> getChildren() {

@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Api(tags = "系统管理-用户管理")
 @RestController
-@RequestMapping("/api/v1/system/users")
+@RequestMapping("/v1/system/users")
 public class UserController extends BaseController {
     @Autowired
     private IUserService userService;

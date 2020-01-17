@@ -28,7 +28,7 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * @param menuCode
      * @return
      */
-    public Menu findMenuById(String menuCode);
+    //public Menu findMenuById(String menuCode);
 
     /**
      * 根据menuCode查询最后一个子菜单

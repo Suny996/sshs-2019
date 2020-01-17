@@ -93,7 +93,7 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
      */
     @Override
     public Message<Menu> getMenuTree(String rootId) {
-        Menu menu = mapper.findMenuById(rootId);
+        Menu menu = mapper.selectById(rootId);
         if (menu != null) {
             QueryWrapper<Menu> wrapper = new QueryWrapper<>();
             wrapper.orderByAsc("menuCode");
