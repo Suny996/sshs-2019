@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Api(tags = "系统管理-机构管理")
 @RestController
-@RequestMapping("/system/orgs")
+@RequestMapping("/v1/system/orgs")
 public class OrgController extends BaseController {
     @Resource
     private IOrgService orgService;

@@ -3,7 +3,6 @@ package com.sshs.security.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sshs.core.customise.mapper.CommonMapper;
 import com.sshs.core.message.Message;
-import com.sshs.core.util.BusiUtil;
 import com.sshs.core.util.SystemUtil;
 import com.sshs.security.password.PasswordEncoderFactory;
 import org.apache.commons.lang.StringUtils;
@@ -127,7 +126,7 @@ public class LoginController {
         List<Map<String, Object>> userMenus = commonMapper.findUserMenus(params);
         List<Map<String, Object>> menus = new ArrayList<>();
         for (Map<String, Object> menu : userMenus) {
-            menu = BusiUtil.tranMapKey(menu,"1");
+            //menu = BusiUtil.tranMapKey(menu,"1");
             menus.add(menu);
         }
         for (Map<String, Object> menu : menus) {

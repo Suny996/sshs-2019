@@ -50,7 +50,7 @@
 		SELECT DISTINCT
 			M.MENU_CODE AS code,
 			IFNULL(I.MENU_LABEL, M.MENU_NAME) AS label,
-			MENU_URL AS name,
+			MENU_URL AS path,
 			MENU_TYPE AS type,
 			MENU_ICON AS icon,
 			MENU_SEQ  AS seq
