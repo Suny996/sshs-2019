@@ -26,7 +26,7 @@ import java.util.Map;
 
 @Api(tags = "公共-字典等公共接口")
 @RestController
-@RequestMapping("/api/v1/core")
+@RequestMapping("/v1/core")
 public class CommonController extends BaseController {
     Logger logger = LoggerFactory.getLogger(CommonController.class);
     @Resource
