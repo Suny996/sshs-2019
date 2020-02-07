@@ -3,6 +3,7 @@ package com.sshs.system.org.service.impl;
 import com.sshs.core.base.service.impl.BaseServiceImpl;
 import com.sshs.core.message.Message;
 import com.sshs.core.util.SystemUtil;
+import com.sshs.core.wrapper.QueryWrapper;
 import com.sshs.system.org.mapper.OrgMapper;
 import com.sshs.system.org.model.Org;
 import com.sshs.system.org.service.IOrgService;
@@ -38,9 +39,11 @@ public class OrgServiceImpl extends BaseServiceImpl<OrgMapper,Org> implements IO
         if ("0".equalsIgnoreCase(rootId)) {
             rootId = SystemUtil.getAuthRootOrgCode();
         }
-        Org org = mapper.findOrgById(rootId);
+        Org org = mapper.selectById(rootId);
         if (org != null) {
-            List<Org> orgs = mapper.findOrgAll();
+            QueryWrapper<Org> wrapper = new QueryWrapper<>();
+            wrapper.orderByAsc("orgCode");
+            List<Org> orgs = mapper.selectList(wrapper);
             org = initChildren(org, orgs);
         }
         return Message.success(org);
@@ -65,7 +68,7 @@ public class OrgServiceImpl extends BaseServiceImpl<OrgMapper,Org> implements IO
 
     @Override
     public Org findOrgById(String orgCode) {
-        return mapper.findOrgById(orgCode);
+        return mapper.selectById(orgCode);
     }
 
 

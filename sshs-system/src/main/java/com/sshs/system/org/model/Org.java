@@ -1,12 +1,12 @@
 package com.sshs.system.org.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import org.apache.ibatis.type.Alias;
 
 import javax.persistence.Column;
-import javax.persistence.Transient;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -31,9 +31,9 @@ public class Org implements Serializable {
     /**
      * 机构ID
      */
-    @TableId (type= IdType.ID_WORKER_STR)
-    @Column(name = "ORG_ID", length = 32)
-    private String id;
+    @TableId(type = IdType.ID_WORKER_STR)
+    @TableField("ORG_ID")
+    private String orgId;
 
     /**
      * 状态：01--启用,02--停用
@@ -280,15 +280,15 @@ public class Org implements Serializable {
      */
     @Column(name = "PATH_NAME")
     private String pathName;
-    @Transient
+    @TableField(exist = false)
     private List<Org> children;
 
-    public String getId() {
-        return this.id;
+    public String getOrgId() {
+        return this.orgId;
     }
 
-    public void setId(String orgId) {
-        this.id = id;
+    public void setOrgId(String orgId) {
+        this.orgId = orgId;
     }
 
     public String getStatus() {
