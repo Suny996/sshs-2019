@@ -28,6 +28,9 @@ import java.util.*;
 public class LoginController {
     @Resource
     CommonMapper commonMapper;
+
+    @Value("${server.servlet.contextPath:}")
+    String contextPath;
     /**
      * 密码
      */
@@ -80,7 +83,7 @@ public class LoginController {
          * 验证原密码
          */
         if (!PasswordEncoderFactory.matches(password, encodedPassword)) {
-           return Message.failure("100900");
+            return Message.failure("100900");
         }
         String newEncodedPassword = PasswordEncoderFactory.encode(newPassword);
         commonMapper.setNewPassword(userName, newEncodedPassword, SystemUtil.getCurrentUser().getUserCode(), new Date());
@@ -161,7 +164,7 @@ public class LoginController {
      * @return
      */
     private String formLogin() {
-        return "      <form class='form-signin' method='post' action='/login'>"
+        return "      <form class='form-signin' method='post' action='" + contextPath + "/login'>"
                 + "        <h2 class='form-signin-heading'>Please sign in</h2>"
                 + "        <p>"
                 + "          <label for='username' class='sr-only'>Username</label>"

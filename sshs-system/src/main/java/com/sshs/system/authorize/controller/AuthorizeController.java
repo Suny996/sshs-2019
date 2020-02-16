@@ -8,7 +8,6 @@ import com.sshs.system.authorize.service.IAuthorizeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -108,11 +107,11 @@ public class AuthorizeController extends BaseController {
      * @return Message
      */
     @GetMapping
-    public Mono<Message> queryList(@RequestParam Map<String, Object> params) {
+    public Message queryList(@RequestParam Map<String, Object> params) {
         try {
             logger.debug("开始查询系统管理->系统管理-角色权限表列表信息……");
             Message message = authorizeService.queryAuthorizeList(params);
-            return Mono.justOrEmpty(message);
+            return message;
         } catch (Exception e) {
             logger.error("查询系统管理->系统管理-角色权限表信息异常！", e);
             throw new BusinessException("SY0001");

@@ -10,7 +10,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -35,10 +34,10 @@ public class OrgController extends BaseController {
      * 保存系统管理->系统管理-机构表
      */
     @PostMapping
-    public Mono<Message> save(@RequestBody Org org) {
+    public Message save(@RequestBody Org org) {
         try {
             logger.debug("开始保存系统管理->系统管理-机构表信息……");
-            return Mono.justOrEmpty(orgService.save(org));
+            return orgService.save(org);
         } catch (Exception e) {
             logger.error("保存系统管理->系统管理-机构表信息异常！", e);
             throw new BusinessException("SY0001");
@@ -49,10 +48,10 @@ public class OrgController extends BaseController {
      * 修改系统管理->系统管理-机构表
      */
     @PutMapping
-    public Mono<Message> update(@RequestBody Org org) {
+    public Message update(@RequestBody Org org) {
         try {
             logger.debug("开始更新系统管理->系统管理-机构表信息……");
-            return Mono.justOrEmpty(orgService.update(org));
+            return orgService.update(org);
         } catch (Exception e) {
             logger.error("更新系统管理->系统管理-机构表信息异常！", e);
             throw new BusinessException("SY0002");
@@ -63,10 +62,10 @@ public class OrgController extends BaseController {
      * 删除系统管理->系统管理-机构表
      */
     @DeleteMapping("/{orgId}")
-    public Mono<Message> delete(@PathVariable("orgId") String orgId) {
+    public Message delete(@PathVariable("orgId") String orgId) {
         try {
             logger.debug("开始删除系统管理->系统管理-机构表信息……");
-            return Mono.justOrEmpty(orgService.deleteById(orgId));
+            return orgService.deleteById(orgId);
         } catch (Exception e) {
             logger.error("删除系统管理->系统管理-机构表信息异常！", e);
             throw new BusinessException("SY0003");
@@ -77,10 +76,10 @@ public class OrgController extends BaseController {
      * 批量删除系统管理->系统管理-机构表
      */
     @DeleteMapping
-    public Mono<Message> delete(@RequestBody List<String> ids) {
+    public Message delete(@RequestBody List<String> ids) {
         try {
             logger.debug("开始批量删除系统管理->系统管理-机构表信息……");
-            return Mono.justOrEmpty(orgService.deleteByIds(ids));
+            return orgService.deleteByIds(ids);
         } catch (Exception e) {
             logger.error("批量删除系统管理->系统管理-机构表信息异常！", e);
             throw new BusinessException("SY0003");
@@ -91,11 +90,11 @@ public class OrgController extends BaseController {
      * 查询系统管理->系统管理-机构表信息列表
      */
     @GetMapping
-    public Mono<Message> queryPageList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam(required = false) Org params) {
+    public Message queryPageList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam(required = false) Org params) {
         try {
             logger.debug("开始查询系统管理->系统管理-机构表列表信息……");
             Message message = orgService.findForPageList(limit, offset, params);
-            return Mono.justOrEmpty(message);
+            return message;
         } catch (Exception e) {
             logger.error("查询系统管理->系统管理-机构表信息异常！", e);
             throw new BusinessException("SY0000");
@@ -107,7 +106,7 @@ public class OrgController extends BaseController {
      * 根据主键查找系统管理->系统管理-机构表信息
      */
     @GetMapping("/{orgId}/{type}")
-    public Mono<Message> getById(@PathVariable("orgId") String orgId, @PathVariable("type") String type) {
+    public Message getById(@PathVariable("orgId") String orgId, @PathVariable("type") String type) {
         try {
             logger.debug("开始查询系统管理->系统管理-机构表信息……");
             Message org;
@@ -116,7 +115,7 @@ public class OrgController extends BaseController {
             } else {
                 org = orgService.getById(orgId);
             }
-            return Mono.justOrEmpty(org);
+            return org;
         } catch (Exception e) {
             logger.error("查询系统管理->系统管理-机构表信息异常！", e);
             throw new BusinessException("SY0001");

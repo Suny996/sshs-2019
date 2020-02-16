@@ -6,8 +6,9 @@ import com.sshs.core.base.model.GlobalUser;
 import com.sshs.core.constant.Global;
 import com.sshs.core.message.Message;
 import com.sshs.security.model.Privilege;
-import com.sshs.security.model.SshsGrantedAuthority;
 import com.sshs.security.model.SecurityUser;
+import com.sshs.security.model.SshsGrantedAuthority;
+import com.sshs.security.util.JwtTokenUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.Authentication;
@@ -44,6 +45,8 @@ public class SshsAuthenticationSuccessHandler extends
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response, Authentication authentication)
             throws ServletException, IOException {
+        final String token = JwtTokenUtils.generateToken(authentication);
+        response.addHeader("Authorization", "Bearer " + token);
         GlobalUser gu = new GlobalUser();
         SecurityUser su = (SecurityUser) authentication.getPrincipal();
         gu.setUserCode(su.getUsername());

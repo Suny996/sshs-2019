@@ -4,8 +4,6 @@ import org.apache.ibatis.type.Alias;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-
-import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,7 +16,7 @@ import java.util.Map;
  * @date 2018/01/09
  */
 @Alias("SecurityUser")
-@Table(name = "SEC_USER")
+//@Table(name="SEC_USER")
 public class SecurityUser extends User {
     /**
      * 机构号

@@ -1,5 +1,6 @@
 package com.sshs.toolkit.coder.model;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import org.apache.ibatis.type.Alias;
 
 import java.io.Serializable;
@@ -16,6 +17,7 @@ public class DbTable implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@TableId
 	private String tableName;
 	private String tableComment;
 	private String status;

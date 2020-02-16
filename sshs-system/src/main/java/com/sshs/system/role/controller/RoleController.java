@@ -9,7 +9,6 @@ import com.sshs.system.role.service.IRoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -33,10 +32,10 @@ public class RoleController extends BaseController {
      * 保存系统管理->系统管理-角色表
      */
     @PostMapping
-    public Mono<Message> save(@RequestBody Role role) {
+    public Message save(@RequestBody Role role) {
         try {
             logger.debug("开始保存系统管理->系统管理-角色表信息……");
-            return Mono.justOrEmpty(roleService.save(role));
+            return roleService.save(role);
         } catch (Exception e) {
             logger.error("保存系统管理->系统管理-角色表信息异常！", e);
             throw new BusinessException("SY0001");
@@ -47,10 +46,10 @@ public class RoleController extends BaseController {
      * 修改系统管理->系统管理-角色表
      */
     @PutMapping
-    public Mono<Message> update(@RequestBody Role role) {
+    public Message update(@RequestBody Role role) {
         try {
             logger.debug("开始更新系统管理->系统管理-角色表信息……");
-            return Mono.justOrEmpty(roleService.update(role));
+            return roleService.update(role);
         } catch (Exception e) {
             logger.error("更新系统管理->系统管理-角色表信息异常！", e);
             throw new BusinessException("SY0002");
@@ -61,10 +60,10 @@ public class RoleController extends BaseController {
      * 删除系统管理->系统管理-角色表
      */
     @DeleteMapping("/{roleId}")
-    public Mono<Message> delete(@PathVariable("roleId") String roleId) {
+    public Message delete(@PathVariable("roleId") String roleId) {
         try {
             logger.debug("开始删除系统管理->系统管理-角色表信息……");
-            return Mono.justOrEmpty(roleService.deleteById(roleId));
+            return roleService.deleteById(roleId);
         } catch (Exception e) {
             logger.error("删除系统管理->系统管理-角色表信息异常！", e);
             throw new BusinessException("SY0003");
@@ -75,10 +74,10 @@ public class RoleController extends BaseController {
      * 批量删除系统管理->系统管理-角色表
      */
     @DeleteMapping
-    public Mono<Message> delete(@RequestBody List<String> ids) {
+    public Message delete(@RequestBody List<String> ids) {
         try {
             logger.debug("开始批量删除系统管理->系统管理-角色表信息……");
-            return Mono.justOrEmpty(roleService.deleteByIds(ids));
+            return roleService.deleteByIds(ids);
         } catch (Exception e) {
             logger.error("批量删除系统管理->系统管理-角色表信息异常！", e);
             throw new BusinessException("SY0003");
@@ -89,11 +88,11 @@ public class RoleController extends BaseController {
      * 根据主键查找系统管理->系统管理-角色表信息
      */
     @GetMapping("/{roleId}")
-    public Mono<Message> getById(@PathVariable("roleId") String roleId) {
+    public Message getById(@PathVariable("roleId") String roleId) {
         try {
             logger.debug("开始查询系统管理->系统管理-角色表信息……");
             Message message = Message.success(roleService.getById(roleId));
-            return Mono.justOrEmpty(message);
+            return message;
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("查询系统管理->系统管理-角色表信息异常！");

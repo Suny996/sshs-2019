@@ -4,7 +4,7 @@ server:
   servlet:
     session:
       timeout: 600s
-    contextPath: /api
+#    contextPath: /api
 logging:
   path: logs
   file: sshs
@@ -34,7 +34,7 @@ spring:
   resources:
     staticLocations: 'classpath:'
   security:
-    maximum-sessions: 2
+    maximumSessions: 2
   servlet:
     multipart:
       maxFileSize: 5MB
@@ -48,3 +48,6 @@ mybatis:
   configuration:
     mapUnderscoreToCamelCase: true
 #  configLocation: 'classpath:mybatis-config.xml'
+sshs:
+  security:
+    authorizedPattern: '/api/login,/api/doc**'

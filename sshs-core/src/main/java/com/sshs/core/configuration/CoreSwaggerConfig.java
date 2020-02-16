@@ -57,7 +57,7 @@ public class CoreSwaggerConfig implements WebMvcConfigurer {
 
     private ApiInfo apiInfo1() {
         return new ApiInfoBuilder()
-                .title("SSHS-公共接口(ORE)")
+                .title("SSHS-公共接口(CORE)")
                 //.termsOfServiceUrl("www.baidu.com").contact("Suny999")
                 //.contact(new Contact("Suny", "https://github.com/Suny999", "mail.suny@qq.com"))
                 //.version("v0.1")

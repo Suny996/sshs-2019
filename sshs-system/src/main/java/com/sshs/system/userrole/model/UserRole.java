@@ -1,11 +1,12 @@
 package com.sshs.system.userrole.model;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+import org.apache.ibatis.type.Alias;
+
+import javax.persistence.Column;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Column;
-import org.apache.ibatis.type.Alias;
 
 /** 
  * 系统管理->系统管理-用户角色对照表bean UserRole类
@@ -22,9 +23,8 @@ private static final long serialVersionUID = 1L;
     /**
     * ID
     */
-	@Id
 	//@GeneratedValue(generator = "UUID")
-	@Column(name="USER_ROLE_ID")
+	@TableId("USER_ROLE_ID")
 	private String userRoleId;
 
     /**
