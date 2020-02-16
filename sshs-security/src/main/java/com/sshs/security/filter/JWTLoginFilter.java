@@ -1,15 +1,19 @@
 package com.sshs.security.filter;
 
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.util.Assert;
 
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * 验证用户名密码正确后，生成一个token，并将token返回给客户端
@@ -24,9 +28,9 @@ public class JWTLoginFilter extends
 
     public static final String SPRING_SECURITY_FORM_USERNAME_KEY = "username";
     public static final String SPRING_SECURITY_FORM_PASSWORD_KEY = "password";
-
-    private String usernameParameter = SPRING_SECURITY_FORM_USERNAME_KEY;
-    private String passwordParameter = SPRING_SECURITY_FORM_PASSWORD_KEY;
+    /*
+        private String usernameParameter = SPRING_SECURITY_FORM_USERNAME_KEY;
+        private String passwordParameter = SPRING_SECURITY_FORM_PASSWORD_KEY;*/
     private boolean postOnly = true;
     // ~ Constructors
     // ===================================================================================================
@@ -44,12 +48,20 @@ public class JWTLoginFilter extends
             throw new AuthenticationServiceException(
                     "Authentication method not supported: " + request.getMethod());
         }
+        String username = null;
+        String password = null;
+        if (request.getContentType().contains(MediaType.APPLICATION_JSON_VALUE)) {
+            JSONObject jsonObject = getJsonParam(request);
+            username = jsonObject.getString(SPRING_SECURITY_FORM_USERNAME_KEY);
+            password = jsonObject.getString(SPRING_SECURITY_FORM_PASSWORD_KEY);
+        } else {
+            username = request.getParameter(SPRING_SECURITY_FORM_USERNAME_KEY);
+            password = request.getParameter(SPRING_SECURITY_FORM_PASSWORD_KEY);
+        }
 
-        String username = obtainUsername(request);
-        String password = obtainPassword(request);
-
-        if (username == null) {
-            username = "";
+        if (StringUtils.isBlank(username)) {
+            throw new AuthenticationServiceException(
+                    "username con't be none ! ");
         }
 
         if (password == null) {
@@ -67,35 +79,6 @@ public class JWTLoginFilter extends
         return this.getAuthenticationManager().authenticate(authRequest);
     }
 
-    /**
-     * Enables subclasses to override the composition of the password, such as by
-     * including additional values and a separator.
-     * <p>
-     * This might be used for example if a postcode/zipcode was required in addition to
-     * the password. A delimiter such as a pipe (|) should be used to separate the
-     * password and extended value(s). The <code>AuthenticationDao</code> will need to
-     * generate the expected password in a corresponding manner.
-     * </p>
-     *
-     * @param request so that request attributes can be retrieved
-     * @return the password that will be presented in the <code>Authentication</code>
-     * request token to the <code>AuthenticationManager</code>
-     */
-    protected String obtainPassword(HttpServletRequest request) {
-        return request.getParameter(passwordParameter);
-    }
-
-    /**
-     * Enables subclasses to override the composition of the username, such as by
-     * including additional values and a separator.
-     *
-     * @param request so that request attributes can be retrieved
-     * @return the username that will be presented in the <code>Authentication</code>
-     * request token to the <code>AuthenticationManager</code>
-     */
-    protected String obtainUsername(HttpServletRequest request) {
-        return request.getParameter(usernameParameter);
-    }
 
     /**
      * Provided so that subclasses may configure what is put into the authentication
@@ -110,27 +93,6 @@ public class JWTLoginFilter extends
         authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
     }
 
-    /**
-     * Sets the parameter name which will be used to obtain the username from the login
-     * request.
-     *
-     * @param usernameParameter the parameter name. Defaults to "username".
-     */
-    public void setUsernameParameter(String usernameParameter) {
-        Assert.hasText(usernameParameter, "Username parameter must not be empty or null");
-        this.usernameParameter = usernameParameter;
-    }
-
-    /**
-     * Sets the parameter name which will be used to obtain the password from the login
-     * request..
-     *
-     * @param passwordParameter the parameter name. Defaults to "password".
-     */
-    public void setPasswordParameter(String passwordParameter) {
-        Assert.hasText(passwordParameter, "Password parameter must not be empty or null");
-        this.passwordParameter = passwordParameter;
-    }
 
     /**
      * Defines whether only HTTP POST requests will be allowed by this filter. If set to
@@ -145,11 +107,42 @@ public class JWTLoginFilter extends
         this.postOnly = postOnly;
     }
 
-    public final String getUsernameParameter() {
-        return usernameParameter;
-    }
+    /**
+     * 获取Json数据
+     *
+     * @param request
+     * @return
+     */
+    private JSONObject getJsonParam(HttpServletRequest request) {
+        JSONObject jsonObject = new JSONObject();
+        ServletInputStream inputStream = null;
+        try {
+            int contentLength = request.getContentLength();
+            if (!(contentLength < 0)) {
+                byte[] buffer = new byte[contentLength];
+                inputStream = request.getInputStream();
+                for (int i = 0; i < contentLength; ) {
+                    int len = inputStream.read(buffer, i, contentLength);
+                    if (len == -1) {
+                        break;
+                    }
+                    i += len;
+                }
+                String jsonParam = new String(buffer, "utf-8");
+                jsonObject = JSONObject.parseObject(jsonParam);
 
-    public final String getPasswordParameter() {
-        return passwordParameter;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return jsonObject;
     }
 }
