@@ -51,5 +51,5 @@ mybatis:
 sshs:
   security:
     authorizedPattern: '/api/login,/api/doc**'
-swagger:
-  enable: true
+  swagger:
+    enable: false

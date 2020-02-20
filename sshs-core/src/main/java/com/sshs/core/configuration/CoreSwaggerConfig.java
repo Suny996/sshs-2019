@@ -1,6 +1,6 @@
 package com.sshs.core.configuration;
 
-import com.github.xiaoymin.swaggerbootstrapui.annotations.EnableSwaggerBootstrapUI;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -21,7 +21,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  **/
 @Configuration
 @EnableSwagger2
-@EnableSwaggerBootstrapUI
+//@EnableSwaggerBootstrapUI
+//@Profile({"dev","test"})
+@ConditionalOnProperty(name = "sshs.swagger.enable", havingValue = "true")
 public class CoreSwaggerConfig implements WebMvcConfigurer {
     /**
      * 显示swagger-ui.html文档展示页，还必须注入swagger资源：
