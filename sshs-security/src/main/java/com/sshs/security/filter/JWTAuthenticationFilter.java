@@ -1,25 +1,23 @@
 package com.sshs.security.filter;
 
-import com.sshs.core.base.model.GlobalUser;
-import com.sshs.core.constant.Global;
-import com.sshs.core.exception.BusinessException;
-import com.sshs.security.service.GrantedAuthorityImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sshs.core.message.Message;
 import com.sshs.security.util.JwtTokenUtils;
-import io.jsonwebtoken.*;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * 自定义JWT认证过滤器
@@ -29,65 +27,54 @@ import java.util.ArrayList;
  *
  * @author Suny on 2019/9/13.
  */
-public class JWTAuthenticationFilter extends BasicAuthenticationFilter {
+public class JWTAuthenticationFilter extends OncePerRequestFilter {//BasicAuthenticationFilter {
     private static final Logger logger = LoggerFactory.getLogger(JWTAuthenticationFilter.class);
 
-    public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
-        super(authenticationManager);
-    }
+    @Autowired
+    private JwtTokenUtils jwtTokenUtils;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        chain.doFilter(request, response);
-    }
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String token = request.getHeader(jwtTokenUtils.TOKEN_HEADER);
+        if (token == null) {
+            token = (String) request.getSession().getAttribute(jwtTokenUtils.TOKEN_HEADER);
+        }
+        if (token != null && StringUtils.startsWith(token, jwtTokenUtils.TOKEN_PREFIX)) {
+            token = StringUtils.substring(token, jwtTokenUtils.TOKEN_PREFIX.length());
+        } else {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-    private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-        long start = System.currentTimeMillis();
-        GlobalUser gu = (GlobalUser) request.getSession().getAttribute(Global.USER);
-        if (gu != null) {
-            return new UsernamePasswordAuthenticationToken(gu, null, null);
-        }
-        String token = request.getHeader("Authorization");
-        // parse the token.
-        if (token == null || token.isEmpty()) {
-            throw new BusinessException("Token为空");
-        }
-        String user = null;
         try {
-            user = Jwts.parser()
-                    .setSigningKey(JwtTokenUtils.SIGNING_KEY)
-                    .parseClaimsJws(token.replace("Bearer ", ""))
-                    .getBody()
-                    .getSubject();
-            long end = System.currentTimeMillis();
-            logger.info("执行时间: {}", (end - start) + " 毫秒");
-            if (user != null) {
-                String[] split = user.split("-")[1].split(",");
-                ArrayList<GrantedAuthority> authorities = new ArrayList<>();
-                for (int i = 0; i < split.length; i++) {
-                    authorities.add(new GrantedAuthorityImpl(split[i]));
-                }
-                return new UsernamePasswordAuthenticationToken(user, null, authorities);
-            }
-        } catch (ExpiredJwtException e) {
-            logger.error("Token已过期: {} " + e);
-            throw new BusinessException("Token已过期");
-        } catch (UnsupportedJwtException e) {
-            logger.error("Token格式错误: {} " + e);
-            throw new BusinessException("Token格式错误");
-        } catch (MalformedJwtException e) {
-            logger.error("Token没有被正确构造: {} " + e);
-            throw new BusinessException("Token没有被正确构造");
-        } catch (SignatureException e) {
-            logger.error("签名失败: {} " + e);
-            throw new BusinessException("签名失败");
-        } catch (IllegalArgumentException e) {
-            logger.error("非法参数异常: {} " + e);
-            throw new BusinessException("非法参数异常");
-        }
-        return null;
-    }
+            String username = jwtTokenUtils.getUsername(token);
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                /*
+                 *  注意：
+                 *       这里代码不应该从数据库中去查，而是从缓存中根据token去查，目前只是做测试，无关紧要
+                 *      如果是真正的项目实际开发需要增加缓存
+                 */
+                UserDetails userDetails = jwtTokenUtils.getUserDetails(username);
 
+                if (jwtTokenUtils.validateToken(token, userDetails)) {
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
+                    authentication.setDetails(new WebAuthenticationDetails(request));
+
+
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+
+            }
+        } catch (Exception e) {
+            response.setContentType("application/json;charset=UTF-8");
+            response.getWriter().write(objectMapper.writeValueAsString(Message.failure("401", "token已失效")));
+            return;
+        }
+
+        filterChain.doFilter(request, response);
+    }
 }

@@ -4,7 +4,7 @@ server:
   servlet:
     session:
       timeout: 600s
-#    contextPath: /api
+    contextPath: /api
 logging:
   path: logs
   file: sshs
@@ -43,7 +43,7 @@ spring:
     #不反回空字段
     defaultPropertyInclusion: non_null
 mybatis:
-#  typeAliasesPackage: 'com.sshs.**.model'
+  #  typeAliasesPackage: 'com.sshs.**.model'
   mapperLocations: 'classpath*:*Mapper.xml'
   configuration:
     mapUnderscoreToCamelCase: true
@@ -51,3 +51,5 @@ mybatis:
 sshs:
   security:
     authorizedPattern: '/api/login,/api/doc**'
+swagger:
+  enable: true

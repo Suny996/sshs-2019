@@ -58,28 +58,34 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(scaiUserService)
                 .passwordEncoder(new BCryptPasswordEncoder());
     }*/
+
     /**
      * 需要放行的URL
      */
-    private static final String[] AUTH_WHITELIST = {
-            // -- register url
-            "/users/signup",
-            "/users/addTask",
-            "/login",
-            // -- swagger ui
-            "/v2/api-docs",
-            "/swagger-resources",
-            "/swagger-resources/**",
-            "/configuration/ui",
-            "/configuration/security",
-            "/swagger-ui.html",
-            "/webjars/**"
-            // other public endpoints of your API may be appended to this array
-    };
+    private String[] getAuthList() {
+        // -- register url
+        String[] list = {
+                (contextPath == null ? "" : contextPath) + "/docs",
+                (contextPath == null ? "" : contextPath) + "/doc",
+                (contextPath == null ? "" : contextPath) + "/login",
+                // -- swagger ui
+                (contextPath == null ? "" : contextPath) + "/v2/api-docs",
+                (contextPath == null ? "" : contextPath) + "/swagger-resources",
+                (contextPath == null ? "" : contextPath) + "/swagger-resources/**",
+                (contextPath == null ? "" : contextPath) + "/configuration/ui",
+                (contextPath == null ? "" : contextPath) + "/configuration/security",
+                (contextPath == null ? "" : contextPath) + "/swagger-ui.html",
+                (contextPath == null ? "" : contextPath) + "/webjars/**",
+                (contextPath == null ? "" : contextPath) + "/images/**"};
+        return list;
+    }
+
+    ;
 
     /*@Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/index.html", "/static/**", "/login1", contextPath + "/login");
+        //web.ignoring().antMatchers("/index.html", "/static/**", "/login1", contextPath + "/login");
+        web.ignoring().antMatchers(AUTH_WHITELIST);
     }*/
 
     @Override
@@ -87,8 +93,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable().formLogin().successHandler(sshsAuthenticationSuccessHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated()  // 所有请求需要身份认证
+                .antMatchers(getAuthList()).permitAll()
                 .and()
                 .exceptionHandling()
                 // .authenticationEntryPoint(new Http401AuthenticationEntryPoint("Basic realm=\"MyApp\""))
@@ -96,7 +102,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .exceptionHandling().accessDeniedHandler(customAccessDeniedHandler) // 自定义访问失败处理器
 //                .and()
                 .addFilterAt(jWTLoginFilter(), UsernamePasswordAuthenticationFilter.class)//用户名密码登录
-                .addFilter(new JWTAuthenticationFilter(authenticationManager()))
+                .addFilterBefore(jWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .logout() // 默认注销行为为logout，可以通过下面的方式来修改
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login")// 设置注销成功后跳转页面，默认是跳转到登录页面;
@@ -140,6 +146,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         filter.setAuthenticationManager(authenticationManagerBean());
         filter.setAuthenticationSuccessHandler(sshsAuthenticationSuccessHandler);
         filter.setAuthenticationFailureHandler(sshsAuthenticationFailureHandler);
+        return filter;
+    }
+
+    @Bean
+    JWTAuthenticationFilter jWTAuthenticationFilter() throws Exception {
+        JWTAuthenticationFilter filter = new JWTAuthenticationFilter();
         return filter;
     }
 }

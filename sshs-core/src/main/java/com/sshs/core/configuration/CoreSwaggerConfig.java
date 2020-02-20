@@ -40,7 +40,7 @@ public class CoreSwaggerConfig implements WebMvcConfigurer {
     @Bean
     public Docket coreApi() {
         //可以添加多个header或参数
-       /* ParameterBuilder aParameterBuilder = new ParameterBuilder();
+        /*ParameterBuilder aParameterBuilder = new ParameterBuilder();
         aParameterBuilder
                 .parameterType("header") //参数类型支持header, cookie, body, query etc
                 .name("token") //参数名
@@ -51,7 +51,7 @@ public class CoreSwaggerConfig implements WebMvcConfigurer {
         List<Parameter> aParameters = new ArrayList<Parameter>();
         aParameters.add(aParameterBuilder.build());*/
         return new Docket(DocumentationType.SWAGGER_2).groupName("公共部分(CORE)").select().apis(RequestHandlerSelectors.basePackage("com.sshs.core"))
-                .paths(PathSelectors.ant("/api/**")).build().apiInfo(apiInfo1());//.globalOperationParameters(aParameters);
+                .paths(PathSelectors.any()).build().apiInfo(apiInfo1());//.globalOperationParameters(aParameters);
     }
 
 

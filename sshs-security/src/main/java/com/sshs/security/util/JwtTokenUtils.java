@@ -1,137 +1,137 @@
 package com.sshs.security.util;
 
-import com.sshs.security.model.SecurityUser;
+import com.sshs.core.exception.BusinessException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Component;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
+@Component
 public class JwtTokenUtils {
-    private static final String CLAIM_KEY_USERNAME = "sub";
-    private static final String CLAIM_KEY_ID = "id";
-    private static final String CLAIM_KEY_CREATED = "created";
-    private static final String CLAIM_KEY_ROLES = "roles";
+    public  final String TOKEN_HEADER = "Authorization";
+
+    public  final String TOKEN_PREFIX = "Bearer ";
     /**
-     * 签名key
+     * 密钥key
      */
-    public static final String SIGNING_KEY = "spring-security-@Jwt!&Secret^#";
+    private  final String SECRET = "jwtsecurit";
 
-    @Value("${jwt.token.secret:123456}")
-    private String secret;
+    /**
+     * JWT的发行人
+     */
+    private  final String ISS = "sshs group";
 
-    @Value("${jwt.token.expiration:30}")
-    private int expiration; //过期时长，单位为秒,可以通过配置写入。
+    /**
+     * 自定义用户信息
+     */
+    private  final String ROLE_CLAIMS = "rol";
 
-    public String getUsernameFromToken(String token) {
-        String username;
-        try {
-            username = getClaimsFromToken(token).getSubject();
-        } catch (Exception e) {
-            username = null;
-        }
-        return username;
-    }
+    /**
+     * 过期时间是3600秒，既是1个小时
+     */
+    public  final long EXPIRATION = 3600L * 1000;
 
-    public Date getCreatedDateFromToken(String token) {
-        Date created;
-        try {
-            final Claims claims = getClaimsFromToken(token);
-            created = new Date((Long) claims.get(CLAIM_KEY_CREATED));
-        } catch (Exception e) {
-            created = null;
-        }
-        return created;
-    }
+    /**
+     * 选择了记住我之后的过期时间为7天
+     */
+    public  final long EXPIRATION_REMEMBER = 604800L * 1000;
 
-    public Date getExpirationDateFromToken(String token) {
-        Date expiration;
-        try {
-            final Claims claims = getClaimsFromToken(token);
-            expiration = claims.getExpiration();
-        } catch (Exception e) {
-            expiration = null;
-        }
-        return expiration;
-    }
+    @Autowired
+    @Qualifier("sshsUserService")
+    private UserDetailsService userDetailService;
 
+    /**
+     * 创建token
+     *
+     * @param details      用户角色信息
+     * @param isRememberMe 是否记住我
+     * @return
+     */
+    public  String createToken(UserDetails details, boolean isRememberMe) throws BusinessException {
+        // 如果选择记住我，则token的过期时间为
+        long expiration = isRememberMe ? EXPIRATION_REMEMBER : EXPIRATION;
 
-    private Claims getClaimsFromToken(String token) {
-        Claims claims;
-        try {
-            claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
-        } catch (Exception e) {
-            claims = null;
-        }
-        return claims;
-    }
+        HashMap<String, Object> map = new HashMap<>();
 
-    private Date generateExpirationDate() {
-        return new Date(System.currentTimeMillis() + expiration * 1000);
-    }
-
-    private Boolean isTokenExpired(String token) {
-        final Date expiration = getExpirationDateFromToken(token);
-        return expiration.before(new Date());
-    }
-
-    public static String generateToken(Authentication auth) {
-        Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
-        // 定义存放角色集合的对象
-        List roleList = new ArrayList<>();
-        for (GrantedAuthority grantedAuthority : authorities) {
-            roleList.add(grantedAuthority.getAuthority());
-        }
-        Calendar calendar = Calendar.getInstance();
-        Date now = calendar.getTime();
-        // 设置签发时间
-        calendar.setTime(new Date());
-        // 设置过期时间
-        calendar.add(Calendar.MINUTE, 10);// 10分钟
-        Date time = calendar.getTime();
-        String token = Jwts.builder()
-                .setSubject(auth.getName() + "-" + roleList)
-                .setIssuedAt(now)//签发时间
-                .setExpiration(time)//过期时间
-                .signWith(SignatureAlgorithm.HS512, SIGNING_KEY) //采用什么算法是可以自己选择的，不一定非要采用HS512
-                .compact();
-        return token;
-    }
-
-    public String generateToken(Map<String, Object> claims) {
-        return Jwts.builder()
-                .setClaims(claims)
-                .setExpiration(generateExpirationDate())
-                .signWith(SignatureAlgorithm.HS512, secret)
+        map.put(ROLE_CLAIMS, details.getAuthorities()); // 角色名字
+        return Jwts.builder().signWith(SignatureAlgorithm.HS512, SECRET) // 加密算法
+                .setClaims(map) // 自定义信息
+                .setIssuer(ISS) // jwt发行人
+                .setSubject(details.getUsername()) // jwt面向的用户
+                .setIssuedAt(new Date()) // jwt发行人
+                .setExpiration(new Date(System.currentTimeMillis() + expiration)) // key过期时间
                 .compact();
     }
 
-    public Boolean canTokenBeRefreshed(String token) {
-        return !isTokenExpired(token);
+    /**
+     * 从token获取用户信息
+     *
+     * @param token
+     * @return
+     */
+    public  String getUsername(String token) throws BusinessException {
+        return getTokenBody(token).getSubject();
     }
 
-    public String refreshToken(String token) {
-        String refreshedToken;
-        try {
-            final Claims claims = getClaimsFromToken(token);
-            claims.put(CLAIM_KEY_CREATED, new Date());
-            refreshedToken = generateToken(claims);
-        } catch (Exception e) {
-            refreshedToken = null;
-        }
-        return refreshedToken;
+    /**
+     * 从token中获取用户角色
+     *
+     * @param token
+     * @return
+     */
+    public  Set<String> getUserRole(String token) throws BusinessException {
+        List<GrantedAuthority> userAuthorities = (List<GrantedAuthority>) getTokenBody(token).get(ROLE_CLAIMS);
+        return AuthorityUtils.authorityListToSet(userAuthorities);
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        SecurityUser user = (SecurityUser) userDetails;
-        final String username = getUsernameFromToken(token);
-        final Date created = getCreatedDateFromToken(token);
-        return (
-                username.equals(user.getUsername())
-                        && isTokenExpired(token) == false);
+    /**
+     * 是否已过期
+     *
+     * @param token
+     * @return
+     */
+    public  boolean isExpiration(String token) throws BusinessException {
+        return getTokenBody(token).getExpiration().before(new Date());
+    }
+
+    private  Claims getTokenBody(String token) throws BusinessException {
+        return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
+    }
+
+    /**
+     * 验证token
+     *
+     * @param token
+     * @param userDetails
+     * @return
+     */
+    public  boolean validateToken(String token, UserDetails userDetails) throws BusinessException {
+        User user = (User) userDetails;
+        final String username = getUsername(token);
+        return (username.equals(user.getUsername()) && isExpiration(token) == false);
+    }
+
+    /**
+     * 临时缓存方案
+     *
+     * @param username
+     * @return
+     */
+    @Cacheable(value = "sprint_security_user_details", key = "#username")
+    public UserDetails getUserDetails(String username) {
+        return userDetailService.loadUserByUsername(username);
     }
 }

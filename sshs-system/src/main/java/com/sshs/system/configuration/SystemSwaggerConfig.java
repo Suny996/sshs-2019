@@ -1,6 +1,5 @@
 package com.sshs.system.configuration;
 
-import com.github.xiaoymin.swaggerbootstrapui.annotations.EnableSwaggerBootstrapUI;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -21,7 +20,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  **/
 @Configuration
 @EnableSwagger2
-@EnableSwaggerBootstrapUI
+//@EnableSwaggerBootstrapUI
 public class SystemSwaggerConfig implements WebMvcConfigurer {
     /**
      * 显示swagger-ui.html文档展示页，还必须注入swagger资源：
@@ -51,7 +50,7 @@ public class SystemSwaggerConfig implements WebMvcConfigurer {
         List<Parameter> aParameters = new ArrayList<Parameter>();
         aParameters.add(aParameterBuilder.build());*/
         return new Docket(DocumentationType.SWAGGER_2).groupName("系统管理(SYSTEM)").select().apis(RequestHandlerSelectors.basePackage("com.sshs.system"))
-                .paths(PathSelectors.ant("/api/**")).build().apiInfo(apiInfo1());//.globalOperationParameters(aParameters);
+                .paths(PathSelectors.any()).build().apiInfo(apiInfo1());//.globalOperationParameters(aParameters);
     }
 
     private ApiInfo apiInfo1() {

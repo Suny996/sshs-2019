@@ -51,7 +51,7 @@ public class ToolkitSwaggerConfig implements WebMvcConfigurer {
         List<Parameter> aParameters = new ArrayList<Parameter>();
         aParameters.add(aParameterBuilder.build());*/
         return new Docket(DocumentationType.SWAGGER_2).groupName("开发者工具(TOOLKIT)").select().apis(RequestHandlerSelectors.basePackage("com.sshs.toolkit"))
-                .paths(PathSelectors.ant("/api/**")).build().apiInfo(apiInfo1());//.globalOperationParameters(aParameters);
+                .paths(PathSelectors.any()).build().apiInfo(apiInfo1());//.globalOperationParameters(aParameters);
     }
 
     private ApiInfo apiInfo1() {

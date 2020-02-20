@@ -8,9 +8,11 @@ import com.sshs.core.util.BusiUtil;
 import com.sshs.core.util.SystemUtil;
 import com.sshs.security.mapper.SecurityUserMapper;
 import com.sshs.security.model.Privilege;
-import com.sshs.security.model.SshsGrantedAuthority;
 import com.sshs.security.model.SecurityUser;
+import com.sshs.security.model.SshsGrantedAuthority;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,6 +29,7 @@ import java.util.*;
  */
 @Service("sshsUserService")
 public class SshsUserServiceImpl extends BaseServiceImpl<SecurityUserMapper, SecurityUser> implements UserDetailsService {
+    final static Logger logger = LoggerFactory.getLogger(SshsUserServiceImpl.class);
     @Resource
     SecurityUserMapper SecurityUserMapper;
     @Resource
@@ -40,7 +43,7 @@ public class SshsUserServiceImpl extends BaseServiceImpl<SecurityUserMapper, Sec
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         SecurityUser userDetails = null;
-        List<SecurityUser> list =  SecurityUserMapper.findSecurityUserByUserName(username);
+        List<SecurityUser> list = SecurityUserMapper.findSecurityUserByUserName(username);
         if (list == null || list.isEmpty()) {
             throw new BusinessException("US3000");
         }
