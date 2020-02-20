@@ -52,4 +52,4 @@ sshs:
   security:
     authorizedPattern: '/api/login,/api/doc**'
   swagger:
-    enable: false
+    enable: true
