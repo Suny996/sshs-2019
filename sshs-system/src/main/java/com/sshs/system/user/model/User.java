@@ -1,6 +1,7 @@
 package com.sshs.system.user.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.sshs.core.model.BaseEntity;
@@ -10,7 +11,6 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.ibatis.type.Alias;
 
 import javax.persistence.Column;
-import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -35,7 +35,7 @@ public class User extends BaseEntity implements Serializable {
      * 主键
      */
     @ApiModelProperty(value = "用户ID", dataType = "String", example = "02932892832")
-    @TableId(type=IdType.ID_WORKER_STR)
+    @TableId(type = IdType.ID_WORKER_STR)
     @Column(name = "USER_ID", length = 32)
     private String userId;
 
@@ -239,7 +239,7 @@ public class User extends BaseEntity implements Serializable {
     /**
      * role角色
      */
-    @Transient
+    @TableField(exist = false)
     private List<String> roleCodes;
 
 

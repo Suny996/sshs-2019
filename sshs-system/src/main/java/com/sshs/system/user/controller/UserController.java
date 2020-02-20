@@ -46,8 +46,8 @@ public class UserController extends BaseController {
      */
     @PutMapping
     public Message update(@RequestBody User user) {
-            logger.debug("开始更新用户信息……");
-            return userService.update(user);
+        logger.debug("开始更新用户信息……");
+        return userService.update(user);
     }
 
     /**
@@ -86,14 +86,9 @@ public class UserController extends BaseController {
     @ApiOperation(httpMethod = "GET", value = "根据主键查询用户", notes = "根据主键查询用户")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "path", dataType = "String", name = "userId", value = "用户ID")})
     @GetMapping("/{userId}")
-    public Message getById(@PathVariable("userId") String userId) {
-        try {
-            logger.debug("开始查询用户信息……");
-            return Message.success(userService.getById(userId));
-        } catch (Exception e) {
-            logger.error("查询用户信息异常！", e);
-            throw new BusinessException("SY0001");
-        }
+    public Message<User> getById(@PathVariable("userId") String userId) {
+        logger.debug("开始查询用户信息……");
+        return userService.getById(userId);
     }
 
     /**
