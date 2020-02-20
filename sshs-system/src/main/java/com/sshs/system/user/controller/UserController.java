@@ -10,6 +10,7 @@ import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.List;
  */
 @Api(tags = "系统管理-用户管理")
 @RestController
-@RequestMapping("/v1/system/users")
+@RequestMapping(value = "/v1/system/users", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE})
 public class UserController extends BaseController {
     @Autowired
     private IUserService userService;
@@ -34,13 +35,8 @@ public class UserController extends BaseController {
      * 保存用户
      */
     @ApiOperation(value = "用户管理新增", nickname = "save", notes = "Adds an User to the system", tags = {"save",})
-    @PostMapping(consumes = {"application/json"})
+    @PostMapping
     public Message<User> save(@ApiParam(value = "User item to add") @RequestBody User user) {
-            /*User u = userService.getByUserCode(user.getUserCode());
-            if (u != null) {
-                logger.error("保存用户信息异常！");
-                throw new BusinessException("US3002");
-            }*/
         logger.debug("开始保存用户信息……");
         return userService.save(user);
     }
@@ -50,13 +46,8 @@ public class UserController extends BaseController {
      */
     @PutMapping
     public Message update(@RequestBody User user) {
-        try {
             logger.debug("开始更新用户信息……");
             return userService.update(user);
-        } catch (Exception e) {
-            logger.error("更新用户信息异常！", e);
-            throw new BusinessException("SY0002");
-        }
     }
 
     /**
@@ -119,9 +110,9 @@ public class UserController extends BaseController {
     }
 
     /**
-     * 查询用户信息列表(分页)
+     * 查询用户信息列表
      */
-    @ApiOperation(httpMethod = "GET", value = "查询用户列表可分页", notes = "查询用户列表可分页")
+    @ApiOperation(httpMethod = "GET", value = "查询用户列表", notes = "查询用户列表")
     @ApiImplicitParams({@ApiImplicitParam(paramType = "query", dataType = "User", name = "user", value = "查询条件")})
     @GetMapping("/list")
     public Message<List<User>> queryList(@ModelAttribute User user) {
