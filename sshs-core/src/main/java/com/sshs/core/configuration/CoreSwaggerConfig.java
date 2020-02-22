@@ -1,16 +1,23 @@
 package com.sshs.core.configuration;
 
+import com.sshs.core.constant.Global;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -42,18 +49,18 @@ public class CoreSwaggerConfig implements WebMvcConfigurer {
     @Bean
     public Docket coreApi() {
         //可以添加多个header或参数
-        /*ParameterBuilder aParameterBuilder = new ParameterBuilder();
+        ParameterBuilder aParameterBuilder = new ParameterBuilder();
         aParameterBuilder
                 .parameterType("header") //参数类型支持header, cookie, body, query etc
-                .name("token") //参数名
-                .defaultValue("token") //默认值
+                .name(Global.TOKEN_HEADER) //参数名
+                .defaultValue("") //默认值
                 .description("header中token字段测试")
                 .modelRef(new ModelRef("string"))//指定参数值的类型
                 .required(false).build(); //非必需，这里是全局配置，然而在登陆的时候是不用验证的
-        List<Parameter> aParameters = new ArrayList<Parameter>();
-        aParameters.add(aParameterBuilder.build());*/
+        List<Parameter> aParameters = new ArrayList<>();
+        aParameters.add(aParameterBuilder.build());
         return new Docket(DocumentationType.SWAGGER_2).groupName("公共部分(CORE)").select().apis(RequestHandlerSelectors.basePackage("com.sshs.core"))
-                .paths(PathSelectors.any()).build().apiInfo(apiInfo1());//.globalOperationParameters(aParameters);
+                .paths(PathSelectors.any()).build().apiInfo(apiInfo1()).globalOperationParameters(aParameters);
     }
 
 
@@ -62,7 +69,7 @@ public class CoreSwaggerConfig implements WebMvcConfigurer {
                 .title("SSHS-公共接口(CORE)")
                 //.termsOfServiceUrl("www.baidu.com").contact("Suny999")
                 //.contact(new Contact("Suny", "https://github.com/Suny999", "mail.suny@qq.com"))
-                //.version("v0.1")
+                .version("v1")
                 .build();
     }
 }

@@ -1,7 +1,7 @@
 package com.sshs.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sshs.core.aop.SLog;
+import com.sshs.core.log.SLog;
 import com.sshs.core.base.model.GlobalUser;
 import com.sshs.core.constant.Global;
 import com.sshs.core.message.Message;

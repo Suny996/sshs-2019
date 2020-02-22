@@ -3,13 +3,13 @@ package com.sshs.system.user.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.message.Message;
+import com.sshs.core.version.Version;
 import com.sshs.system.user.model.User;
 import com.sshs.system.user.service.IUserService;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +25,8 @@ import java.util.List;
  */
 @Api(tags = "系统管理-用户管理")
 @RestController
-@RequestMapping(value = "/v1/system/users", consumes = {MediaType.APPLICATION_JSON_VALUE})
+@Version(1)
+@RequestMapping(value = "/{version}/system/users")
 public class UserController extends BaseController {
     @Autowired
     private IUserService userService;

@@ -4,6 +4,7 @@ import com.sshs.core.base.model.GlobalUser;
 import com.sshs.core.constant.Global;
 import com.sshs.core.customise.mapper.CommonMapper;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -17,10 +18,13 @@ import java.util.Map;
  * @date 2019-1-21
  */
 public class SystemUtil {
-    static CommonMapper commonMapper = null;
+    static CommonMapper commonMapper;
+
+    //static HttpServletRequest request;
 
     static {
         commonMapper = (CommonMapper) com.sshs.core.util.SpringUtil.getBean("commonMapper");
+        //request = (HttpServletRequest) SpringUtil.getBean(HttpServletRequest.class);
     }
 
     /**
@@ -134,18 +138,22 @@ public class SystemUtil {
      * @return
      */
     public static String getLocale() {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String locale = request.getParameter("locale");
-        if (StringUtils.isBlank(locale)) {
-            locale = (String) request.getAttribute("locale");
-        }
-        if (StringUtils.isBlank(locale)) {
-            locale = request.getHeader("locale");
-        }
-        if (StringUtils.isBlank(locale)) {
-            locale = request.getLocale().toString();
-        }
+        String locale = null;
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        if (requestAttributes != null) {
+            HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+            locale = request.getParameter("locale");
+            if (StringUtils.isBlank(locale)) {
+                locale = (String) request.getAttribute("locale");
+            }
 
+            if (StringUtils.isBlank(locale)) {
+                locale = request.getHeader("locale");
+            }
+            if (StringUtils.isBlank(locale)) {
+                locale = request.getLocale().toString();
+            }
+        }
         if (StringUtils.isBlank(locale)) {
             locale = "zh_CN";
         }

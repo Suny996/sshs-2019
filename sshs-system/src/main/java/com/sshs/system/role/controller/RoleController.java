@@ -32,8 +32,8 @@ public class RoleController extends BaseController {
      */
     @PostMapping
     public Message save(@RequestBody Role role) {
-            logger.debug("开始保存系统管理->系统管理-角色表信息……");
-            return roleService.save(role);
+        logger.debug("开始保存系统管理->系统管理-角色表信息……");
+        return roleService.save(role);
     }
 
     /**
@@ -41,8 +41,8 @@ public class RoleController extends BaseController {
      */
     @PutMapping
     public Message update(@RequestBody Role role) {
-            logger.debug("开始更新系统管理->系统管理-角色表信息……");
-            return roleService.update(role);
+        logger.debug("开始更新系统管理->系统管理-角色表信息……");
+        return roleService.update(role);
     }
 
     /**
@@ -50,8 +50,8 @@ public class RoleController extends BaseController {
      */
     @DeleteMapping("/{roleId}")
     public Message delete(@PathVariable("roleId") String roleId) {
-            logger.debug("开始删除系统管理->系统管理-角色表信息……");
-            return roleService.deleteById(roleId);
+        logger.debug("开始删除系统管理->系统管理-角色表信息……");
+        return roleService.deleteById(roleId);
     }
 
     /**
@@ -59,8 +59,8 @@ public class RoleController extends BaseController {
      */
     @DeleteMapping
     public Message delete(@RequestBody List<String> ids) {
-            logger.debug("开始批量删除系统管理->系统管理-角色表信息……");
-            return roleService.deleteByIds(ids);
+        logger.debug("开始批量删除系统管理->系统管理-角色表信息……");
+        return roleService.deleteByIds(ids);
     }
 
     /**
@@ -68,9 +68,9 @@ public class RoleController extends BaseController {
      */
     @GetMapping("/{roleId}")
     public Message getById(@PathVariable("roleId") String roleId) {
-            logger.debug("开始查询系统管理->系统管理-角色表信息……");
-            Message message = Message.success(roleService.getById(roleId));
-            return message;
+        logger.debug("开始查询系统管理->系统管理-角色表信息……");
+        Message message = Message.success(roleService.getById(roleId));
+        return message;
     }
 
 
@@ -78,11 +78,11 @@ public class RoleController extends BaseController {
      * 查询系统管理->系统管理-角色表信息列表
      */
     @GetMapping
-    public Message<IPage<Role>> queryPageList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam Role
+    public Message<IPage<Role>> queryPageList(@RequestParam(value = "limit", required = false) Integer limit, @RequestParam(value = "offset", required = false) Integer offset, @ModelAttribute Role
             params) {
-            logger.debug("开始查询系统管理->系统管理-角色表列表信息……");
-            Message message = roleService.findForPageList(limit, offset, params);
-            return message;
+        logger.debug("开始查询系统管理->系统管理-角色表列表信息……");
+        Message message = roleService.findForPageList(limit, offset, params);
+        return message;
     }
 
 }

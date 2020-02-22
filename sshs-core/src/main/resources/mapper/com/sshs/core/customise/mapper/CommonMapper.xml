@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sshs.core.customise.mapper.CommonMapper">
-    <insert id="saveLog" parameterType="com.sshs.core.aop.SysLog">
+    <!--<insert id="saveLog" parameterType="com.sshs.core.aop.SysLog">
 		INSERT INTO  SYS_LOG(LOG_ID, USER_CODE, USER_NAME, MODULE,ACTION,OPT_DATE,
 		CLIENT_IP, METHOD, PARAMS, OPT_DESC,LEGAL_ORG, CRT_USER_CODE,
 		 CRT_ORG_CODE, CRT_DATE)
 		  VALUES (#{logId}, #{userCode}, #{userName}, #{module},#{action},#{optDate},
 			#{clientIp},#{method} ,#{params},#{optDesc}, #{legalOrg},#{crtUserCode},
 		 	#{crtOrgCode}, #{crtDate})
-	</insert>
+	</insert>-->
     <!--查询下级机构-->
     <select id="findOrgListByOrgCode" parameterType="String"
             resultType="Map">

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * 代码中获取bean工具类
- * 
+ *
  * @author Suny
  * @date 2017-12-01
  */
@@ -23,7 +23,7 @@ public class SpringUtil implements ApplicationContextAware {
 
 	/**
 	 * 实现ApplicationContextAware接口的回调方法。设置上下文环境
-	 * 
+	 *
 	 * @param applicationContext
 	 */
 	@Override
@@ -40,7 +40,7 @@ public class SpringUtil implements ApplicationContextAware {
 
 	/**
 	 * 获取对象
-	 * 
+	 *
 	 * @param name
 	 * @return Object
 	 * @throws BeansException

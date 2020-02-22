@@ -1,7 +1,7 @@
 package com.sshs.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sshs.core.aop.SLog;
+import com.sshs.core.log.SLog;
 import com.sshs.core.message.Message;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
