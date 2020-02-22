@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.base.mapper.BaseMapper;
 import com.sshs.core.base.service.IBaseService;
 import com.sshs.core.exception.BusinessException;
+import com.sshs.core.exception.NoDataFoundException;
 import com.sshs.core.message.Message;
 import com.sshs.core.page.Page;
 import org.slf4j.Logger;
@@ -150,7 +151,11 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> implements IBaseService
      */
     @Override
     public Message<T> getById(String id) {
-        return Message.success((T) mapper.selectById(id));
+        T e = mapper.selectById(id);
+        if (e == null) {
+            throw new NoDataFoundException(id);
+        }
+        return Message.success(e);
     }
 
     /**
@@ -161,7 +166,11 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> implements IBaseService
      */
     @Override
     public T getEntityById(String id) {
-        return (T) mapper.selectById(id);
+        T e = mapper.selectById(id);
+        if (e == null) {
+            throw new NoDataFoundException(id);
+        }
+        return e;
     }
 
 

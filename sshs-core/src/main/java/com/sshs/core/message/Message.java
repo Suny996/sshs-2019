@@ -128,6 +128,9 @@ public class Message<T> {
 
     public static String getMessage(String code, String defaultMessage) {
         try {
+            if (StringUtils.isEmpty(code)) {
+                return defaultMessage;
+            }
             Locale locale = null;
             String local = "";//SystemUtil.getLocale();
             if (StringUtils.isNotEmpty(local) && local.contains(Global.CHARACTER_UNDERLINE)) {
