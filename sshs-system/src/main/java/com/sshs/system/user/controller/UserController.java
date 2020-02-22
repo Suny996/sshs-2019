@@ -5,10 +5,7 @@ import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.message.Message;
 import com.sshs.system.user.model.User;
 import com.sshs.system.user.service.IUserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +25,7 @@ import java.util.List;
  */
 @Api(tags = "系统管理-用户管理")
 @RestController
-@RequestMapping(value = "/v1/system/users", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_FORM_URLENCODED_VALUE})
+@RequestMapping(value = "/v1/system/users", consumes = {MediaType.APPLICATION_JSON_VALUE})
 public class UserController extends BaseController {
     @Autowired
     private IUserService userService;
@@ -39,9 +36,8 @@ public class UserController extends BaseController {
      * 保存用户
      */
     @ApiOperation(value = "用户信息新增保存", nickname = "save", notes = "Adds an User to the system", tags = {"save",})
-    @ApiImplicitParams({@ApiImplicitParam(paramType = "body", dataType = "User", name = "user", value = "用户对象")})
     @PostMapping
-    public Message<User> save(@Validated @RequestBody @RequestParam User user) {
+    public Message<User> save(@ApiParam(name = "user", value = "用户对象") @Validated @RequestBody User user) {
         logger.debug("开始保存用户信息……");
         return userService.save(user);
     }
@@ -50,9 +46,8 @@ public class UserController extends BaseController {
      * 修改用户
      */
     @ApiOperation(value = "用户信息修改保存", nickname = "save", notes = "Adds an User to the system", tags = {"update",})
-    @ApiImplicitParams({@ApiImplicitParam(paramType = "body", dataType = "User", name = "user", value = "用户对象")})
     @PutMapping
-    public Message update(@Validated @RequestBody @RequestParam User user) {
+    public Message update(@ApiParam(name = "user", value = "用户对象") @Validated @RequestBody User user) {
         logger.debug("开始更新用户信息……");
         return userService.update(user);
     }
