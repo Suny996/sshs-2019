@@ -18,14 +18,14 @@ public interface IMenuService extends IBaseService<Menu> {
      * @param rootId
      * @return
      */
-    Message getMenuTree(String rootId);
+    Message<Menu> getMenuTree(String rootId);
 
     void verifyMenuForm(Menu menu);
 
-    Menu findMenuById(String menuCode);
+   // Menu findMenuById(String menuCode);
 
     BigDecimal getMaxMenuSeq(String parentCode);
 
-    public Menu getMenuByMenuName(String menuName);
+    //public Menu getMenuByMenuName(String menuName);
 }
 

@@ -2,7 +2,6 @@ package com.sshs.system.post.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.base.controller.BaseController;
-import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
 import com.sshs.system.post.model.Post;
 import com.sshs.system.post.service.IPostService;
@@ -33,13 +32,8 @@ public class PostController extends BaseController {
      */
     @PostMapping
     public Message<Post> save(@RequestBody Post post) {
-        try {
-            logger.debug("开始保存系统管理->系统管理-岗位表信息……");
-            return postService.save(post);
-        } catch (Exception e) {
-            logger.error("保存系统管理->系统管理-岗位表信息异常！", e);
-            throw new BusinessException("SY0001");
-        }
+        logger.debug("开始保存系统管理->系统管理-岗位表信息……");
+        return postService.save(post);
     }
 
     /**
@@ -47,13 +41,8 @@ public class PostController extends BaseController {
      */
     @PutMapping
     public Message<Post> update(@RequestBody Post post) {
-        try {
-            logger.debug("开始更新系统管理->系统管理-岗位表信息……");
-            return postService.update(post);
-        } catch (Exception e) {
-            logger.error("更新系统管理->系统管理-岗位表信息异常！", e);
-            throw new BusinessException("SY0002");
-        }
+        logger.debug("开始更新系统管理->系统管理-岗位表信息……");
+        return postService.update(post);
     }
 
     /**
@@ -61,13 +50,8 @@ public class PostController extends BaseController {
      */
     @DeleteMapping("/{postId}")
     public Message<Integer> delete(@PathVariable("postId") String postId) {
-        try {
-            logger.debug("开始删除系统管理->系统管理-岗位表信息……");
-            return postService.deleteById(postId);
-        } catch (Exception e) {
-            logger.error("删除系统管理->系统管理-岗位表信息异常！", e);
-            throw new BusinessException("SY0003");
-        }
+        logger.debug("开始删除系统管理->系统管理-岗位表信息……");
+        return postService.deleteById(postId);
     }
 
     /**
@@ -75,13 +59,8 @@ public class PostController extends BaseController {
      */
     @DeleteMapping
     public Message<Integer> delete(@RequestBody List<String> ids) {
-        try {
-            logger.debug("开始批量删除系统管理->系统管理-岗位表信息……");
-            return postService.deleteByIds(ids);
-        } catch (Exception e) {
-            logger.error("批量删除系统管理->系统管理-岗位表信息异常！", e);
-            throw new BusinessException("SY0003");
-        }
+        logger.debug("开始批量删除系统管理->系统管理-岗位表信息……");
+        return postService.deleteByIds(ids);
     }
 
     /**
@@ -89,13 +68,8 @@ public class PostController extends BaseController {
      */
     @GetMapping("/{postId}")
     public Message<Post> getById(@PathVariable("postId") String postId) {
-        try {
-            logger.debug("开始查询系统管理->系统管理-岗位表信息……");
-            return postService.getById(postId);
-        } catch (Exception e) {
-            logger.error("查询系统管理->系统管理-岗位表信息异常！", e);
-            throw new BusinessException("SY0001");
-        }
+        logger.debug("开始查询系统管理->系统管理-岗位表信息……");
+        return postService.getById(postId);
     }
 
     /**
@@ -103,13 +77,8 @@ public class PostController extends BaseController {
      */
     @GetMapping
     public Message<IPage<Post>> queryPageList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam(required = false) Post params) {
-        try {
-            logger.debug("开始查询系统管理->系统管理-岗位表列表信息……");
-            return postService.findForPageList(limit, offset, params);
-        } catch (Exception e) {
-            logger.error("查询系统管理->系统管理-岗位表信息异常！", e);
-            throw new BusinessException("SY0001");
-        }
+        logger.debug("开始查询系统管理->系统管理-岗位表列表信息……");
+        return postService.findForPageList(limit, offset, params);
     }
 
 }

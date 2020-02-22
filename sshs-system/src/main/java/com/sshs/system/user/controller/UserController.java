@@ -2,17 +2,21 @@ package com.sshs.system.user.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.base.controller.BaseController;
-import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
 import com.sshs.system.user.model.User;
 import com.sshs.system.user.service.IUserService;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 
@@ -34,9 +38,10 @@ public class UserController extends BaseController {
     /**
      * 保存用户
      */
-    @ApiOperation(value = "用户管理新增", nickname = "save", notes = "Adds an User to the system", tags = {"save",})
+    @ApiOperation(value = "用户信息新增保存", nickname = "save", notes = "Adds an User to the system", tags = {"save",})
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "body", dataType = "User", name = "user", value = "用户对象")})
     @PostMapping
-    public Message<User> save(@ApiParam(value = "User item to add") @RequestBody User user) {
+    public Message<User> save(@Validated @RequestBody @RequestParam User user) {
         logger.debug("开始保存用户信息……");
         return userService.save(user);
     }
@@ -44,8 +49,10 @@ public class UserController extends BaseController {
     /**
      * 修改用户
      */
+    @ApiOperation(value = "用户信息修改保存", nickname = "save", notes = "Adds an User to the system", tags = {"update",})
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "body", dataType = "User", name = "user", value = "用户对象")})
     @PutMapping
-    public Message update(@RequestBody User user) {
+    public Message update(@Validated @RequestBody @RequestParam User user) {
         logger.debug("开始更新用户信息……");
         return userService.update(user);
     }
@@ -57,27 +64,17 @@ public class UserController extends BaseController {
     @ApiImplicitParams({@ApiImplicitParam(paramType = "path", dataType = "String", name = "userId", value = "用户ID")})
     @DeleteMapping("/{userId}")
     public Message delete(@PathVariable("userId") String userId) {
-        try {
-            logger.debug("开始删除用户信息……");
-            return userService.deleteById(userId);
-        } catch (Exception e) {
-            logger.error("删除用户信息异常！", e);
-            throw new BusinessException("SY0003");
-        }
+        logger.debug("开始删除用户信息……");
+        return userService.deleteById(userId);
     }
 
     /**
      * 批量删除用户
      */
     @DeleteMapping
-    public Message delete(@RequestBody List<String> ids) {
-        try {
-            logger.debug("开始批量删除用户信息……");
-            return userService.deleteByIds(ids);
-        } catch (Exception e) {
-            logger.error("批量删除用户信息异常！", e);
-            throw new BusinessException("SY0003");
-        }
+    public Message delete(@NotEmpty(message = "${user.ids.notEmpty}") @RequestBody List<String> ids) {
+        logger.debug("开始批量删除用户信息……");
+        return userService.deleteByIds(ids);
     }
 
     /**

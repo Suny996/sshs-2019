@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sshs.core.customise.mapper.CommonMapper;
 import com.sshs.core.message.Message;
 import com.sshs.core.util.SystemUtil;
+import com.sshs.security.error.SecurityErrorCode;
 import com.sshs.security.password.PasswordEncoderFactory;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -83,7 +84,7 @@ public class LoginController {
          * 验证原密码
          */
         if (!PasswordEncoderFactory.matches(password, encodedPassword)) {
-            return Message.failure("100900");
+            return Message.failure(SecurityErrorCode.OLD_PASSWORD_IS_WRONG);
         }
         String newEncodedPassword = PasswordEncoderFactory.encode(newPassword);
         commonMapper.setNewPassword(userName, newEncodedPassword, SystemUtil.getCurrentUser().getUserCode(), new Date());
@@ -102,7 +103,7 @@ public class LoginController {
         String encodePassword = commonMapper.getPasswordByUserName(SystemUtil.getCurrentUser().getUserCode());
         //验证重置密码的管理员密码
         if (!PasswordEncoderFactory.matches(password, encodePassword)) {
-            return Message.failure("100901");
+            return Message.failure(SecurityErrorCode.PASSWORD_IS_WRONG);
         }
         commonMapper.setNewPassword(userName, defaultPassword, SystemUtil.getCurrentUser().getUserCode(), new Date());
         return Message.success();

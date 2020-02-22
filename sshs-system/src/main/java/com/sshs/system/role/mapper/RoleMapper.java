@@ -1,12 +1,9 @@
 package com.sshs.system.role.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.base.mapper.BaseMapper;
-import com.sshs.core.page.Page;
 import com.sshs.system.role.model.Role;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
 
 /**
  * 系统管理->系统管理-角色表类
@@ -16,15 +13,17 @@ import java.util.List;
  */
 @Mapper
 public interface RoleMapper extends BaseMapper<Role> {
-    public Page<Role> findForPageList();
+    IPage<Role> findForPageList();
 
     /**
-     * 功能描述:
+    /* * 功能描述:
+     *
      * @param:
      * @return:
      * @auther: huangnan
      * @date: 2018/11/13 18:17
-     */
-    public List<Role> getRoleInfo(@Param("roleCode")String roleCode, @Param("roleName")String roleName, @Param("roleId")String roleId);
-    public Role getRoleByRoleCode(String roleCode);
+     *//*
+    List<Role> getRoleInfo(@Param("roleCode") String roleCode, @Param("roleName") String roleName, @Param("roleId") String roleId);
+
+    Role getRoleByRoleCode(String roleCode);*/
 }

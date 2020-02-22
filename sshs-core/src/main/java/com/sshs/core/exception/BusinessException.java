@@ -26,6 +26,24 @@ public class BusinessException extends RuntimeException {
         this.msg = errorCode.getMsg();
     }
 
+    /**
+     * @param errorCode
+     */
+    public BusinessException(BaseErrorCode errorCode, String... parameter) {
+        super(errorCode.getMsg());
+        this.code = errorCode.getCode();
+        this.msg = errorCode.getMsg(parameter);
+    }
+
+    /**
+     * @param errorCode
+     */
+    public BusinessException(BaseErrorCode errorCode, Throwable cause, String... parameter) {
+        super(errorCode.getMsg(), cause);
+        this.code = errorCode.getCode();
+        this.msg = errorCode.getMsg(parameter);
+    }
+
     @Deprecated
     public BusinessException(int code) {
         super(Message.getMessage(code));

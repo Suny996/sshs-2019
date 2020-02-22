@@ -2,7 +2,6 @@ package com.sshs.system.role.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.base.controller.BaseController;
-import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
 import com.sshs.system.role.model.Role;
 import com.sshs.system.role.service.IRoleService;
@@ -33,13 +32,8 @@ public class RoleController extends BaseController {
      */
     @PostMapping
     public Message save(@RequestBody Role role) {
-        try {
             logger.debug("开始保存系统管理->系统管理-角色表信息……");
             return roleService.save(role);
-        } catch (Exception e) {
-            logger.error("保存系统管理->系统管理-角色表信息异常！", e);
-            throw new BusinessException("SY0001");
-        }
     }
 
     /**
@@ -47,13 +41,8 @@ public class RoleController extends BaseController {
      */
     @PutMapping
     public Message update(@RequestBody Role role) {
-        try {
             logger.debug("开始更新系统管理->系统管理-角色表信息……");
             return roleService.update(role);
-        } catch (Exception e) {
-            logger.error("更新系统管理->系统管理-角色表信息异常！", e);
-            throw new BusinessException("SY0002");
-        }
     }
 
     /**
@@ -61,13 +50,8 @@ public class RoleController extends BaseController {
      */
     @DeleteMapping("/{roleId}")
     public Message delete(@PathVariable("roleId") String roleId) {
-        try {
             logger.debug("开始删除系统管理->系统管理-角色表信息……");
             return roleService.deleteById(roleId);
-        } catch (Exception e) {
-            logger.error("删除系统管理->系统管理-角色表信息异常！", e);
-            throw new BusinessException("SY0003");
-        }
     }
 
     /**
@@ -75,13 +59,8 @@ public class RoleController extends BaseController {
      */
     @DeleteMapping
     public Message delete(@RequestBody List<String> ids) {
-        try {
             logger.debug("开始批量删除系统管理->系统管理-角色表信息……");
             return roleService.deleteByIds(ids);
-        } catch (Exception e) {
-            logger.error("批量删除系统管理->系统管理-角色表信息异常！", e);
-            throw new BusinessException("SY0003");
-        }
     }
 
     /**
@@ -89,15 +68,9 @@ public class RoleController extends BaseController {
      */
     @GetMapping("/{roleId}")
     public Message getById(@PathVariable("roleId") String roleId) {
-        try {
             logger.debug("开始查询系统管理->系统管理-角色表信息……");
             Message message = Message.success(roleService.getById(roleId));
             return message;
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("查询系统管理->系统管理-角色表信息异常！");
-            throw new BusinessException("SY0001");
-        }
     }
 
 
@@ -107,14 +80,9 @@ public class RoleController extends BaseController {
     @GetMapping
     public Message<IPage<Role>> queryPageList(@RequestParam(value = "limit", required = false) int limit, @RequestParam(value = "offset", required = false) int offset, @RequestParam Role
             params) {
-        try {
             logger.debug("开始查询系统管理->系统管理-角色表列表信息……");
             Message message = roleService.findForPageList(limit, offset, params);
             return message;
-        } catch (Exception e) {
-            logger.error("查询系统管理->系统管理-角色表信息异常！", e);
-            throw new BusinessException("SY0001");
-        }
     }
 
 }

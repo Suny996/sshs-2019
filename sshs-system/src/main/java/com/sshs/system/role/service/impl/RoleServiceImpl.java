@@ -1,13 +1,13 @@
 package com.sshs.system.role.service.impl;
 
 import com.sshs.core.base.service.impl.BaseServiceImpl;
-import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
 import com.sshs.core.util.BusiUtil;
+import com.sshs.core.wrapper.QueryWrapper;
+import com.sshs.system.error.SystemErrorCode;
 import com.sshs.system.role.mapper.RoleMapper;
 import com.sshs.system.role.model.Role;
 import com.sshs.system.role.service.IRoleService;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ import java.util.List;
  * @date 2018/11/07
  */
 @Service("roleService")
-public class RoleServiceImpl extends BaseServiceImpl<RoleMapper,Role> implements IRoleService {
+public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implements IRoleService {
     Logger logger = LoggerFactory.getLogger(RoleServiceImpl.class);
     @Resource
     private RoleMapper mapper;
@@ -36,28 +36,19 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper,Role> implements
      */
     @Override
     public Message save(Role role) {
+        logger.debug("角色保存开始...");
+        QueryWrapper<Role> wrapper = new QueryWrapper<>();
         //role.setRoleId(UuidUtil.get32UUID());
-        if (null != mapper.getRoleByRoleCode(role.getRoleCode())) {
-            throw new BusinessException("U1001");
+        wrapper.eq("roleCode", role.getRoleCode());
+        if (null != mapper.selectList(wrapper)) {
+            return Message.failure(SystemErrorCode.ROLE_CODE_EXISTS);
         }
-        if (StringUtils.isBlank(role.getRoleName())) {
-            throw new BusinessException("R1000", "角色名称不能为空!");
-        }
-        List<Role> roleOldI = mapper.getRoleInfo(role.getRoleId(), null, null);
-        if (BusiUtil.isNotEmpty(roleOldI)) {
-            throw new BusinessException("R1001", "该角色ID已存在，请重新输入！");
-        }
-        List<Role> roleOldN = mapper.getRoleInfo(null, role.getRoleName(), null);
+        wrapper = new QueryWrapper<>();
+        wrapper.eq("roleName", role.getRoleName());
+        List<Role> roleOldN = mapper.selectList(wrapper);
         if (BusiUtil.isNotEmpty(roleOldN)) {
-            throw new BusinessException("R1002", "该角色名称已存在，请重新输入！");
+            return Message.failure(SystemErrorCode.ROLE_CODE_EXISTS);
         }
-        try {
-            return super.save(role);
-        } catch (BusinessException e) {
-            throw e;
-        } catch (Exception e) {
-            logger.error("保存系统管理->系统管理-角色表信息异常！", e);
-            throw new BusinessException("SY0001");
-        }
+        return super.save(role);
     }
 }

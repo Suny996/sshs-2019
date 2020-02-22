@@ -2,6 +2,7 @@ package com.sshs.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sshs.core.message.Message;
+import com.sshs.security.error.SecurityErrorCode;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.web.DefaultRedirectStrategy;
@@ -34,7 +35,7 @@ public final class SshsInvalidSessionStrategy implements InvalidSessionStrategy 
                                          HttpServletResponse response) throws IOException {
         response.setContentType("application/json;charset=utf-8");
         response.setStatus(602);
-        Message message = Message.failure("100602");
+        Message message = Message.failure(SecurityErrorCode.AUTHORISE_INVALID);
         ObjectMapper om = new ObjectMapper();
         PrintWriter out = response.getWriter();
         out.write(om.writeValueAsString(message));

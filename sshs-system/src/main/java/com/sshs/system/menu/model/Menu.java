@@ -9,6 +9,7 @@ import org.apache.ibatis.type.Alias;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -41,12 +42,14 @@ public class Menu implements Serializable {
      * 菜单名称
      */
     @Column(name = "MENU_NAME")
+    @NotBlank(message = "${menu.menuName.notBlank}")
     private String menuName;
 
     /**
      * 菜单类型:0-节点，1-功能
      */
     @Column(name = "MENU_TYPE")
+    @NotBlank(message = "${menu.menuType.notBlank}")
     private String menuType;
 
     /**
@@ -59,6 +62,7 @@ public class Menu implements Serializable {
      * 所属父菜单
      */
     @Column(name = "PARENT_CODE")
+    @NotBlank(message = "${menu.parentCode.notBlank}")
     private String parentCode;
 
     /**

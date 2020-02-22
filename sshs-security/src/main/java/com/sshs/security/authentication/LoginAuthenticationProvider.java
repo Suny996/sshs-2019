@@ -1,6 +1,7 @@
 package com.sshs.security.authentication;
 
 import com.sshs.core.message.Message;
+import com.sshs.security.error.SecurityErrorCode;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -44,14 +45,13 @@ public class LoginAuthenticationProvider extends DaoAuthenticationProvider {
 
         if (authentication.getCredentials() == null) {
             logger.debug("Authentication failed: no credentials provided");
-            throw new BadCredentialsException(
-                    messages.getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
+            throw new BadCredentialsException(Message.getMessage(SecurityErrorCode.AUTHORISE_FAILURE.getCode()));
         }
 
         String presentedPassword = authentication.getCredentials().toString();
         if (!passwordEncoder.matches(presentedPassword, userDetails.getPassword())) {
             logger.debug("Authentication failed: password does not match stored value");
-            throw new BadCredentialsException(messages.getMessage("US3003", Message.getMessage("US3003")));
+            throw new BadCredentialsException(Message.getMessage(SecurityErrorCode.PASSWORD_IS_WRONG.getCode()));
         }
         //我就改了这个地方，增加一个验证码登录标识(具体怎么做就看自己了)
         // 【原本的是登录密码和数据密码不等就抛出异常，我用验证码登录时压根都不知道密码(ー`´ー)】

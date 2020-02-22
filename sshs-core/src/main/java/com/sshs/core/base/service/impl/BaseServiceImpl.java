@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.base.mapper.BaseMapper;
 import com.sshs.core.base.service.IBaseService;
 import com.sshs.core.exception.BusinessException;
-import com.sshs.core.exception.NoDataFoundException;
+import com.sshs.core.exception.CommonErrorCode;
 import com.sshs.core.message.Message;
 import com.sshs.core.page.Page;
 import org.slf4j.Logger;
@@ -12,9 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 基础服务类
@@ -47,7 +45,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> implements IBaseService
         if (mapper.insert(model) >= 1) {
             return Message.success(model);
         } else {
-            return Message.failure("-100001");
+            return Message.failure(CommonErrorCode.SAVE_FAILURE);
         }
     }
 
@@ -62,7 +60,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> implements IBaseService
     public Message<List<T>> save(List<T> models) {
         if (models == null || models.isEmpty()) {
             logger.error("记录不能为空");
-            throw new BusinessException("-10005");
+            return Message.failure(CommonErrorCode.NO_INPUT_PARAMETER);
         }
         service.saveBatch(models, 1000);
         return Message.success(models);
@@ -81,7 +79,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> implements IBaseService
         if (mapper.updateById(model) >= 1) {
             return Message.success(model);
         } else {
-            return Message.failure("-20001");
+            return Message.failure(CommonErrorCode.NO_UPDATE_ENTITY);
         }
     }
 
@@ -97,11 +95,11 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> implements IBaseService
     public Message<List<T>> update(List<T> models) {
         if (models == null || models.isEmpty()) {
             logger.error("记录不能为空");
-            throw new BusinessException("-10005");
+            return Message.failure(CommonErrorCode.NO_INPUT_PARAMETER);
         }
         if (models.size() > 2000) {
-            logger.error("批量插入记录数不能大于2000");
-            throw new BusinessException("-10005");
+            logger.error("批量更新记录数不能大于2000");
+            return Message.failure(CommonErrorCode.MAX_INPUT_PARAMETER);
         }
         service.updateBatchById(models, 1000);
         return Message.success(models);
@@ -153,7 +151,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> implements IBaseService
     public Message<T> getById(String id) {
         T e = mapper.selectById(id);
         if (e == null) {
-            throw new NoDataFoundException(id);
+            return Message.failure(CommonErrorCode.NO_DATA_FOUND, id);
         }
         return Message.success(e);
     }
@@ -168,7 +166,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> implements IBaseService
     public T getEntityById(String id) {
         T e = mapper.selectById(id);
         if (e == null) {
-            throw new NoDataFoundException(id);
+            throw new BusinessException(CommonErrorCode.NO_DATA_FOUND, id);
         }
         return e;
     }
@@ -182,7 +180,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> implements IBaseService
      */
     @Override
     public Message<List<T>> findForList(Object parameter) {
-        Map<String, Object> params = new HashMap<String, Object>();
+        //Map<String, Object> params = new HashMap<String, Object>();
         return Message.success(mapper.findForList(parameter));
     }
 
@@ -194,7 +192,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> implements IBaseService
      */
     @Override
     public List<T> findList(Object parameter) {
-        Map<String, Object> params = new HashMap<String, Object>();
+        // Map<String, Object> params = new HashMap<String, Object>();
         return mapper.findForList(parameter);
     }
 

@@ -15,6 +15,7 @@ import com.sshs.toolkit.coder.model.Coder;
 import com.sshs.toolkit.coder.model.Column;
 import com.sshs.toolkit.coder.service.ICoderService;
 import com.sshs.toolkit.configuration.ToolkitConfigProp;
+import com.sshs.toolkit.error.ToolkitErrorCode;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +72,7 @@ public class CoderServiceImpl extends BaseServiceImpl<CoderMapper, Coder> implem
             return Message.success(coder);
         } catch (Exception e) {
             logger.error("保存代码信息异常！", e);
-            return Message.failure("-110002");
+            throw new BusinessException(ToolkitErrorCode.GENERATE_EXCEPTION, e);
         }
     }
 
@@ -92,7 +93,7 @@ public class CoderServiceImpl extends BaseServiceImpl<CoderMapper, Coder> implem
             List<Column> cols = findColumnForList(tableName);
             if (cols == null || cols.isEmpty()) {
                 logger.error("数据表不存在{}", tableName);
-                throw new BusinessException("-11001", "数据表不存在");
+                return Message.failure(ToolkitErrorCode.COLUMN_NOT_FOUND);
             }
             coder.setFields(cols);
             for (Column col : coder.getFields()) {
@@ -110,7 +111,7 @@ public class CoderServiceImpl extends BaseServiceImpl<CoderMapper, Coder> implem
             return Message.success(coder);
         } catch (Exception e) {
             logger.error("保存代码信息异常！", e);
-            return Message.failure("-110002");
+            throw new BusinessException(ToolkitErrorCode.GENERATE_EXCEPTION, e);
         }
     }
 

@@ -3,6 +3,7 @@ package com.sshs.security.handler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sshs.core.message.Message;
+import com.sshs.security.error.SecurityErrorCode;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -94,7 +95,7 @@ public class SshsLoginUrlAuthenticationEntryPoint implements AuthenticationEntry
                          AuthenticationException authException) throws IOException, ServletException {
         response.setContentType("application/json;charset=utf-8");
         response.setStatus(601);
-        Message message = Message.failure("100601");
+        Message message = Message.failure(SecurityErrorCode.NO_AUTHORISED);
         try {
             ObjectMapper om = new ObjectMapper();
             PrintWriter out = response.getWriter();
@@ -102,6 +103,7 @@ public class SshsLoginUrlAuthenticationEntryPoint implements AuthenticationEntry
             out.flush();
             out.close();
         } catch (JsonProcessingException e) {
+            logger.error("");
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();

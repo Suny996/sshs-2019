@@ -1,6 +1,7 @@
 package com.sshs.security.service;
 
 import com.sshs.core.message.Message;
+import com.sshs.security.error.SecurityErrorCode;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -40,10 +41,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                 // 生成令牌 这里令牌里面存入了:name,password,authorities, 当然你也可以放其他内容
                 return new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
             } else {
-                throw new BadCredentialsException(Message.getMessage("US3003"));
+                throw new BadCredentialsException(Message.getMessage(SecurityErrorCode.PASSWORD_IS_WRONG.getCode()));
             }
         } else {
-            throw new UsernameNotFoundException(Message.getMessage("US3003"));
+            throw new UsernameNotFoundException(Message.getMessage(SecurityErrorCode.USER_NOT_EXISTS.getCode()));
         }
     }
 

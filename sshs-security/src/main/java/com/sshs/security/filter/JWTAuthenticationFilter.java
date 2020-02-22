@@ -2,6 +2,7 @@ package com.sshs.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sshs.core.message.Message;
+import com.sshs.security.error.SecurityErrorCode;
 import com.sshs.security.util.JwtTokenUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -70,8 +71,9 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {//BasicAuthen
 
             }
         } catch (Exception e) {
+            logger.error("身份验证异常", e);
             response.setContentType("application/json;charset=UTF-8");
-            response.getWriter().write(objectMapper.writeValueAsString(Message.failure("401", "token已失效")));
+            response.getWriter().write(objectMapper.writeValueAsString(Message.failure(SecurityErrorCode.AUTHORISE_EXCEPTION)));
             return;
         }
 

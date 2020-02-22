@@ -8,6 +8,7 @@ import org.apache.ibatis.type.Alias;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -56,12 +57,14 @@ public class Role implements Serializable {
      * 角色编码
      */
     @Column(name = "ROLE_CODE")
+    @NotEmpty(message = "${role.roleCode.notEmpty}")
     private String roleCode;
 
     /**
      * 角色名称
      */
     @Column(name = "ROLE_NAME")
+    @NotEmpty(message = "${role.roleName.notEmpty}")
     private String roleName;
 
     /**

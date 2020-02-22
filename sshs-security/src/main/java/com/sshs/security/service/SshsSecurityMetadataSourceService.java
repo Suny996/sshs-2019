@@ -29,14 +29,14 @@ public class SshsSecurityMetadataSourceService implements FilterInvocationSecuri
         Collection<ConfigAttribute> configAttributes = new ArrayList<ConfigAttribute>();
         List<Privilege> urlPrivileges = null;
         try {
-            urlPrivileges = (List<Privilege>) privilegeService.findPrivilegeByUrl(url).getData();
+            urlPrivileges = privilegeService.findPrivilegeByUrl(url);
             if (urlPrivileges == null || urlPrivileges.isEmpty()) {
                 // 截取得到url
                 int firstQuestionMarkIndex = url.indexOf("?");
                 if (firstQuestionMarkIndex != -1) {
                     url = url.substring(0, firstQuestionMarkIndex);
                 }
-                urlPrivileges = (List<Privilege>) privilegeService.findPrivilegeByUrl(url).getData();
+                urlPrivileges = privilegeService.findPrivilegeByUrl(url);
             }
 
         } catch (Exception e) {

@@ -65,16 +65,11 @@ public class ErrorController extends AbstractErrorController {
         Throwable error = getException(requestAttributes);
         if ((null != error) && (error instanceof BusinessException)) {
             LOG.error("An exception occurred ", error);
-            return Message.failure("统一错误处理");
-        } else if (null != error) {
-            LOG.error("An exception occurred ", error);
-            return Message.failure("未知错误处理");
+            return Message.failure(((BusinessException) error).getCode(), ((BusinessException) error).getMsg());
         } else {
-            status = getAttribute(requestAttributes, "javax.servlet.error.status_code");
-            status = null == status ? 999 : status;
-            return Message.failure("");
+            LOG.error("An exception occurred ", error);
+            return Message.failure(CommonErrorCode.FAILURE);
         }
-
     }
 
     public Throwable getException(RequestAttributes requestAttributes) {

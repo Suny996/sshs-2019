@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
  * @date 2017年9月28日
  */
 @Alias("Page")
-public class Page<T> extends com.baomidou.mybatisplus.extension.plugins.pagination.Page {
+public class Page<T> extends com.baomidou.mybatisplus.extension.plugins.pagination.Page<T> {
     private static final Logger logger = LoggerFactory.getLogger(Page.class);
     /**
      * 每页显示记录数

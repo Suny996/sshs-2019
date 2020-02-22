@@ -1,7 +1,6 @@
 package com.sshs.system.authorize.controller;
 
 import com.sshs.core.base.controller.BaseController;
-import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
 import com.sshs.system.authorize.model.Authorize;
 import com.sshs.system.authorize.service.IAuthorizeService;
@@ -32,71 +31,45 @@ public class AuthorizeController extends BaseController {
      * 保存系统管理->系统管理-角色权限表数据
      */
     @PostMapping
-    public Message save(@RequestBody Authorize authorize) {
-        try {
-            logger.debug("开始保存系统管理->系统管理-角色权限表信息……");
-            return authorizeService.save(authorize);
-        } catch (Exception e) {
-            logger.error("保存系统管理->系统管理-角色权限表信息异常！", e);
-            throw new BusinessException("SY0001");
-        }
+    public Message<Authorize> save(@RequestBody Authorize authorize) {
+        logger.debug("开始保存系统管理->系统管理-角色权限表信息……");
+        return authorizeService.save(authorize);
     }
 
     /**
      * 修改系统管理->系统管理-角色权限表数据
      */
     @PutMapping
-    public Message update(@RequestBody Authorize authorize) {
-        try {
-            logger.debug("开始更新系统管理->系统管理-角色权限表信息……");
-            return authorizeService.update(authorize);
-        } catch (Exception e) {
-            logger.error("更新系统管理->系统管理-角色权限表信息异常！", e);
-            throw new BusinessException("SY0002");
-        }
+    public Message<Authorize> update(@RequestBody Authorize authorize) {
+        logger.debug("开始更新系统管理->系统管理-角色权限表信息……");
+        return authorizeService.update(authorize);
     }
 
     /**
      * 根据主键删除系统管理->系统管理-角色权限表数据
      */
     @DeleteMapping("/{authorizeId}")
-    public Message delete(@PathVariable("authorizeId") String authorizeId) {
-        try {
-            logger.debug("开始删除系统管理->系统管理-角色权限表信息……");
-            return authorizeService.deleteById(authorizeId);
-        } catch (Exception e) {
-            logger.error("删除系统管理->系统管理-角色权限表信息异常！", e);
-            throw new BusinessException("SY0003");
-        }
+    public Message<Integer> delete(@PathVariable("authorizeId") String authorizeId) {
+        logger.debug("开始删除系统管理->系统管理-角色权限表信息……");
+        return authorizeService.deleteById(authorizeId);
     }
 
     /**
      * 批量删除系统管理->系统管理-角色权限表数据
      */
     @DeleteMapping
-    public Message delete(@RequestBody List<String> ids) {
-        try {
-            logger.debug("开始批量删除系统管理->系统管理-角色权限表信息……");
-            return authorizeService.deleteByIds(ids);
-        } catch (Exception e) {
-            logger.error("批量删除系统管理->系统管理-角色权限表信息异常！", e);
-            throw new BusinessException("SY0003");
-        }
+    public Message<Integer> delete(@RequestBody List<String> ids) {
+        logger.debug("开始批量删除系统管理->系统管理-角色权限表信息……");
+        return authorizeService.deleteByIds(ids);
     }
 
     /**
      * 根据主键查找系统管理->系统管理-角色权限表信息
      */
     @GetMapping("/{authorizeId}")
-    public Message getById(@PathVariable("authorizeId") String authorizeId) {
-        try {
-            logger.debug("开始查询系统管理->系统管理-角色权限表信息……");
-            Message message = Message.success(authorizeService.getById(authorizeId));
-            return message;
-        } catch (Exception e) {
-            logger.error("查询系统管理->系统管理-角色权限表信息异常！", e);
-            throw new BusinessException("SY0001");
-        }
+    public Message<Authorize> getById(@PathVariable("authorizeId") String authorizeId) {
+        logger.debug("开始查询系统管理->系统管理-角色权限表信息……");
+        return authorizeService.getById(authorizeId);
     }
 
     /**
@@ -107,14 +80,8 @@ public class AuthorizeController extends BaseController {
      * @return Message
      */
     @GetMapping
-    public Message queryList(@RequestParam Map<String, Object> params) {
-        try {
-            logger.debug("开始查询系统管理->系统管理-角色权限表列表信息……");
-            Message message = authorizeService.queryAuthorizeList(params);
-            return message;
-        } catch (Exception e) {
-            logger.error("查询系统管理->系统管理-角色权限表信息异常！", e);
-            throw new BusinessException("SY0001");
-        }
+    public Message<Map> queryList(@RequestParam Map<String, Object> params) {
+        logger.debug("开始查询系统管理->系统管理-角色权限表列表信息……");
+        return authorizeService.queryAuthorizeList(params);
     }
 }

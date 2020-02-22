@@ -12,13 +12,13 @@ public class QueryWrapper<T> extends com.baomidou.mybatisplus.core.conditions.qu
     public QueryWrapper() {
     }
 
-    public QueryWrapper(T entity) {
+    /*public QueryWrapper(T entity) {
         super(entity);
     }
 
     public QueryWrapper(T entity, String... columns) {
         super(entity, columns);
-    }
+    }*/
 
     @Override
     protected String columnToString(String column) {

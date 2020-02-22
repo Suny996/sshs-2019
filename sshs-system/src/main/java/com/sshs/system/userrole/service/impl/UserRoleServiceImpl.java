@@ -1,7 +1,6 @@
 package com.sshs.system.userrole.service.impl;
 
 import com.sshs.core.base.service.impl.BaseServiceImpl;
-import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
 import com.sshs.core.util.UuidUtil;
 import com.sshs.system.role.model.Role;
@@ -27,7 +26,7 @@ import java.util.Map;
  * @date 2018/11/16
  */
 @Service("userRoleService")
-public class UserRoleServiceImpl extends BaseServiceImpl<UserRoleMapper,UserRole> implements IUserRoleService {
+public class UserRoleServiceImpl extends BaseServiceImpl<UserRoleMapper, UserRole> implements IUserRoleService {
     Logger logger = LoggerFactory.getLogger(UserRoleServiceImpl.class);
     @Resource
     private UserRoleMapper mapper;
@@ -43,21 +42,16 @@ public class UserRoleServiceImpl extends BaseServiceImpl<UserRoleMapper,UserRole
      */
     @Override
     public Message save(User user) {
-        try {
-            mapper.deleteByUserCode(user.getUserCode());
-            List<String> roleCodes = user.getRoleCodes();
-            for (String roleCode : roleCodes) {
-                UserRole userRole = new UserRole();
-                userRole.setRoleCode(roleCode);
-                userRole.setUserRoleId(UuidUtil.get32UUID());
-                userRole.setUserCode(user.getUserCode());
-                super.save(userRole);
-            }
-            return Message.success();
-        } catch (Exception e) {
-            logger.error("保存系统管理->系统管理-用户角色对照表信息异常！", e);
-            throw new BusinessException("SY0001");
+        mapper.deleteByUserCode(user.getUserCode());
+        List<String> roleCodes = user.getRoleCodes();
+        for (String roleCode : roleCodes) {
+            UserRole userRole = new UserRole();
+            userRole.setRoleCode(roleCode);
+            userRole.setUserRoleId(UuidUtil.get32UUID());
+            userRole.setUserCode(user.getUserCode());
+            super.save(userRole);
         }
+        return Message.success();
     }
 
 
@@ -69,15 +63,10 @@ public class UserRoleServiceImpl extends BaseServiceImpl<UserRoleMapper,UserRole
      */
     @Override
     public Message save(List<UserRole> userRoles) {
-        try {
-            for (UserRole userRole : userRoles) {
-                userRole.setUserRoleId(UuidUtil.get32UUID());
-            }
-            return super.save(userRoles);
-        } catch (Exception e) {
-            logger.error("批量保存系统管理->系统管理-用户角色对照表信息异常！", e);
-            throw new BusinessException("SY0001");
+        for (UserRole userRole : userRoles) {
+            userRole.setUserRoleId(UuidUtil.get32UUID());
         }
+        return super.save(userRoles);
     }
 
 

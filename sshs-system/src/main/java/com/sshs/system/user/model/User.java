@@ -11,6 +11,9 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.ibatis.type.Alias;
 
 import javax.persistence.Column;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -36,7 +39,7 @@ public class User extends BaseEntity implements Serializable {
      */
     @ApiModelProperty(value = "用户ID", dataType = "String", example = "02932892832")
     @TableId(type = IdType.ID_WORKER_STR)
-    @Column(name = "USER_ID", length = 32)
+    @TableField("USER_ID")
     private String userId;
 
     /**
@@ -44,13 +47,16 @@ public class User extends BaseEntity implements Serializable {
      */
     @ApiModelProperty(value = "用户编号", dataType = "String", example = "020001")
     @Column(name = "USER_CODE")
+    @NotBlank(message = "{user.name.notBlank}")
+    @Size(min=3,max=20,message="{account.username.size}")
     private String userCode;
 
     /**
      * 姓名
      */
     @ApiModelProperty(value = "用户名称", dataType = "String", example = "李寻欢")
-    @Column(name = "USER_NAME")
+    @TableField("USER_NAME")
+    @NotBlank(message = "{user.name.notBlank}")
     private String userName;
 
     /**
@@ -119,6 +125,7 @@ public class User extends BaseEntity implements Serializable {
      * 出生日期
      */
     @Column(name = "BIRTH_DATE")
+    @Past(message="${user.birthDate.past}")
     private Date birthDate;
 
     /**

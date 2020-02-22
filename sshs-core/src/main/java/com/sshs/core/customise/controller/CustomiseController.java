@@ -3,7 +3,6 @@ package com.sshs.core.customise.controller;
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.customise.mapper.CustomiseMapper;
 import com.sshs.core.customise.model.Customise;
-import com.sshs.core.exception.BusinessException;
 import com.sshs.core.message.Message;
 import com.sshs.core.wrapper.QueryWrapper;
 import io.swagger.annotations.*;
@@ -41,16 +40,11 @@ public class CustomiseController extends BaseController {
     @ApiImplicitParam(name = "customise", value = "查询对象", required = true, dataType = "Customise", paramType = "body")
     @PostMapping
     public Message<Customise> saveCustomise(@RequestBody Customise customise) {
-        try {
-            //customise.setCustomiseId(UuidUtil.get32UUID());
-            customise.setUserCode("admin");
-            customise.setCrtDate(new Date());
-            customiseMapper.insert(customise);
-            return Message.success(customise);
-        } catch (Exception e) {
-            logger.error("保存失败", e);
-            throw new BusinessException("SY0001");
-        }
+        logger.info("保存自定义查询开始...");
+        customise.setUserCode("admin");
+        customise.setCrtDate(new Date());
+        customiseMapper.insert(customise);
+        return Message.success(customise);
     }
 
     /**
@@ -65,16 +59,12 @@ public class CustomiseController extends BaseController {
             @ApiImplicitParam(name = "customiseName", value = "查询名称", required = true, dataType = "String", paramType = "body")})
     @DeleteMapping("/{pageId}/{customiseName}")
     public Message<Integer> deleteCustomiseByName(@PathVariable("pageId") String pageId, @PathVariable("customiseName") String customiseName) {
-        try {
-            QueryWrapper<Customise> customise = new QueryWrapper<>();
-            customise.eq("pageId", pageId);
-            customise.eq("customiseName", customiseName);
-            int cnt = customiseMapper.delete(customise);
-            return Message.success(cnt);
-        } catch (Exception e) {
-            logger.error("删除失败pageId:{},customiseName:{}", pageId, customiseName);
-            throw new BusinessException("SY0001");
-        }
+        logger.info("删除自定义查询开始...");
+        QueryWrapper<Customise> customise = new QueryWrapper<>();
+        customise.eq("pageId", pageId);
+        customise.eq("customiseName", customiseName);
+        int cnt = customiseMapper.delete(customise);
+        return Message.success(cnt);
     }
 
     /**
@@ -87,12 +77,8 @@ public class CustomiseController extends BaseController {
     @ApiImplicitParams({@ApiImplicitParam(name = "customiseId", value = "查询ID", required = true, dataType = "String", paramType = "path")})
     @DeleteMapping("/{customiseId}")
     public Message<Integer> deleteCustomise(@PathVariable("customiseId") String customiseId) {
-        try {
-            return Message.success(customiseMapper.deleteById(customiseId));
-        } catch (Exception e) {
-            logger.error("删除失败，customiseId:{}", customiseId);
-            throw new BusinessException("SY0001");
-        }
+        logger.info("删除自定义查询开始...");
+        return Message.success(customiseMapper.deleteById(customiseId));
     }
 
     /**
@@ -105,6 +91,7 @@ public class CustomiseController extends BaseController {
     @ApiImplicitParam(paramType = "path", name = "pageId", value = "页面ID", dataType = "String", required = true)
     @GetMapping("/{pageId}")
     public Message<List<Customise>> getCustomiseByPageId(@PathVariable("pageId") String pageId) {
+        logger.debug("查询自定义查询开始...");
         QueryWrapper<Customise> customise = new QueryWrapper<>();
         customise.eq("pageId", pageId);
         customise.eq("userCode", "admin");

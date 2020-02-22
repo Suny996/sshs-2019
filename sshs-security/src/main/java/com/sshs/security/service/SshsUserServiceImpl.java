@@ -3,9 +3,9 @@ package com.sshs.security.service;
 import com.sshs.core.base.service.impl.BaseServiceImpl;
 import com.sshs.core.customise.mapper.CommonMapper;
 import com.sshs.core.exception.BusinessException;
-import com.sshs.core.message.Message;
 import com.sshs.core.util.BusiUtil;
 import com.sshs.core.util.SystemUtil;
+import com.sshs.security.error.SecurityErrorCode;
 import com.sshs.security.mapper.SecurityUserMapper;
 import com.sshs.security.model.Privilege;
 import com.sshs.security.model.SecurityUser;
@@ -41,16 +41,17 @@ public class SshsUserServiceImpl extends BaseServiceImpl<SecurityUserMapper, Sec
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        SecurityUser userDetails = null;
+        if (StringUtils.isBlank(username)) {
+            throw new BusinessException(SecurityErrorCode.USERNAME_CAN_NOT_NULL);
+        }
+        SecurityUser userDetails;
         List<SecurityUser> list = SecurityUserMapper.findSecurityUserByUserName(username);
         if (list == null || list.isEmpty()) {
-            throw new BusinessException("US3000");
+            throw new BusinessException(SecurityErrorCode.USER_NOT_EXISTS);
         }
         SecurityUser user = list.get(0);
         userDetails = new SecurityUser(user.getUsername(), user.getUserNameCn(), user.getPassword(), user.getOrgCode(), true, true, true, true,
                 findUserAuthorities(user.getUsername()));
-        //userDetails.set
         return userDetails;
     }
 
@@ -66,15 +67,9 @@ public class SshsUserServiceImpl extends BaseServiceImpl<SecurityUserMapper, Sec
         // 查询一个user的所有的权限
         List<Privilege> privilegeList = null;
         try {
-            Message message = privilegeService.findPrivilegeByUserId(userName);
-            Object data = message.getData();
-            if (data == null) {
-                throw new BusinessException("US4000");
-            } else {
-                privilegeList = (List<Privilege>) message.getData();
-            }
-            if (privilegeList == null || privilegeList.size() == 0) {
-                throw new BusinessException("US4000");
+            privilegeList = privilegeService.findPrivilegeByUserId(userName);
+            if (privilegeList == null || privilegeList.isEmpty()) {
+                throw new BusinessException(SecurityErrorCode.NO_PRIVILEGE_FOUND);
             } else {
                 SshsGrantedAuthority sga = new SshsGrantedAuthority(privilegeList);
                 Map<String, List<Map<String, Object>>> menuButtons = findUserMenus(userName, null);
@@ -90,8 +85,8 @@ public class SshsUserServiceImpl extends BaseServiceImpl<SecurityUserMapper, Sec
                 return autthorities;
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new BusinessException("US4000");
+            logger.error("验证身份异常", e);
+            throw new BusinessException(SecurityErrorCode.AUTHORISE_EXCEPTION);
         }
     }
 
@@ -146,14 +141,14 @@ public class SshsUserServiceImpl extends BaseServiceImpl<SecurityUserMapper, Sec
         } else if ("1".equalsIgnoreCase((String) currentMenu.get("type"))) {
             List<Map<String, Object>> buttons = data.get("buttons");
             if (buttons == null) {
-                buttons = new ArrayList<Map<String, Object>>();
-                buttons.add(new HashMap<String, Object>());
+                buttons = new ArrayList<>();
+                buttons.add(new HashMap<>());
                 data.put("buttons", buttons);
             }
             String menuUrl = (String) currentMenu.get("name");
             for (Map<String, Object> menu : menus) {
-                String code = (String) menu.get("code");
-                String type = (String) menu.get("type");
+                //String code = (String) menu.get("code");
+                //String type = (String) menu.get("type");
                 String url = (String) menu.get("name");
                 buttons.get(0).put(menuUrl + "/" + url, "1");
             }

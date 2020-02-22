@@ -1,6 +1,9 @@
 package com.sshs.core.message;
 
 import com.sshs.core.constant.Global;
+import com.sshs.core.exception.BaseErrorCode;
+import com.sshs.core.exception.CommonErrorCode;
+import com.sshs.core.util.SystemUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang.StringUtils;
@@ -29,11 +32,11 @@ public class Message<T> implements Serializable {
     private int code;
     @ApiModelProperty(value = "响应信息", dataType = "String", example = "操作成功")
     private String msg;
-    T data;
+    private T data;
     /**
      * 国际化资源文件集
      */
-    private static Map<String, List<ResourceBundle>> RESOURCES = new HashMap<String, List<ResourceBundle>>();
+    private static Map<String, List<ResourceBundle>> RESOURCES = new HashMap<>();
     private static Set<String> resource_names = new HashSet<>();
 
     /**
@@ -69,7 +72,7 @@ public class Message<T> implements Serializable {
             }
         }
         if (RESOURCES.isEmpty() || RESOURCES.get(locale.toString()) == null) {
-            List<ResourceBundle> resources = new ArrayList<ResourceBundle>();
+            List<ResourceBundle> resources = new ArrayList<>();
             logger.debug("加载国际化文件:[i18n/messages]");
             ResourceBundle root = ResourceBundle.getBundle("i18n/messages", locale);
             try {
@@ -91,9 +94,10 @@ public class Message<T> implements Serializable {
 
     /**
      * 根据code构造对象
+     *
      * @param code 信息码
      */
-    public Message(int code) {
+    private Message(int code) {
         this.code = code;
         this.msg = Message.getMessage(code);
         if (SUCCESS_CODE == this.code && StringUtils.isEmpty(this.msg)) {
@@ -103,23 +107,38 @@ public class Message<T> implements Serializable {
 
     /**
      * 根据信息码及信息构造对象
+     *
      * @param code 代码
-     * @param msg 信息
+     * @param msg  信息
      */
-    public Message(int code, String msg) {
+    private Message(int code, String msg) {
         super();
         this.code = code;
         this.msg = msg;
     }
 
     /**
+     * 根据信息码及信息构造对象
+     *
+     * @param errorCode 代码
+     * @param parameter 参数
+     */
+    @Deprecated
+    public Message(BaseErrorCode errorCode, String... parameter) {
+        super();
+        this.code = errorCode.getCode();
+        this.msg = errorCode.getMsg(parameter);
+    }
+
+    /**
      * 根据码值与实体对象构造
-     * @param code 码值
+     *
+     * @param errorCode 码值
      * @param data 实体对象
      */
-    public Message(int code, T data) {
-        this.code = code;
-        this.msg = Message.getMessage(code);
+    private Message(CommonErrorCode errorCode, T data) {
+        this.code = errorCode.getCode();
+        this.msg = errorCode.getMsg();
         if (SUCCESS_CODE == this.code && StringUtils.isEmpty(this.msg)) {
             this.msg = "操作成功";
         }
@@ -128,42 +147,48 @@ public class Message<T> implements Serializable {
 
     /**
      * 静态构造成功信息
+     *
      * @return 返回成功对象
      */
-    public static Message success() {
-        return new Message(SUCCESS_CODE);
+    public static <T> Message<T> success() {
+        return new Message<>(SUCCESS_CODE);
     }
 
     /**
      * 根据实体对象构造成功信息
+     *
      * @param data 实体对象
      * @return 成功信息
      */
     public static <T> Message<T> success(T data) {
-        return new Message<T>(SUCCESS_CODE, data);
+        return new Message<>(CommonErrorCode.SUCCESS, data);
     }
 
     /**
      * 根据码值静态构造失败信息
-     * @param code 码值
+     *
+     * @param errorCode 码值
      * @return 失败信息
      */
-    public static Message failure(int code) {
-        return new Message(code);
+    public static <T> Message<T> failure(BaseErrorCode errorCode, String... parameter) {
+        return new Message<>(errorCode.getCode(), errorCode.getMsg(parameter));
     }
 
     /**
      * 静态构造失败信息
-     * @param code 码值
+     *
+     * @param code    码值
      * @param message 信息
      * @return 错误信息
      */
-    public static Message failure(int code, String message) {
-        return new Message(code, message);
+    @Deprecated
+    public static <T> Message<T> failure(int code, String message) {
+        return new Message<>(code, message);
     }
 
     /**
      * 根据码值获取信息
+     *
      * @param code 码值
      * @return 信息
      */
@@ -173,14 +198,15 @@ public class Message<T> implements Serializable {
 
     /**
      * 带默认值获取信息
-     * @param code 码值
+     *
+     * @param code           码值
      * @param defaultMessage 默认信息
      * @return 信息
      */
     public static String getMessage(int code, String defaultMessage) {
         try {
             Locale locale = null;
-            String local = "";//SystemUtil.getLocale();
+            String local = SystemUtil.getLocale();
             if (StringUtils.isNotEmpty(local) && local.contains(Global.CHARACTER_UNDERLINE)) {
                 locale = new Locale(local.split(Global.CHARACTER_UNDERLINE)[0],
                         local.split(Global.CHARACTER_UNDERLINE)[1]);
@@ -191,7 +217,7 @@ public class Message<T> implements Serializable {
             init(locale);
             List<ResourceBundle> list = RESOURCES.get(locale.toString());
             for (ResourceBundle resource : list) {
-                String message = null;
+                String message;
                 try {
                     message = resource.getString(String.valueOf(code));
                 } catch (MissingResourceException e) {
@@ -214,8 +240,7 @@ public class Message<T> implements Serializable {
     }
 
     /**
-     *
-     * @return
+     * @return 返回码值
      */
     public int getCode() {
         return code;
@@ -225,7 +250,11 @@ public class Message<T> implements Serializable {
         this.code = code;
     }
 
-
+    /**
+     * 返回实体对象
+     *
+     * @return 返回实体对象
+     */
     public Object getData() {
         return data;
     }
@@ -234,6 +263,9 @@ public class Message<T> implements Serializable {
         this.data = data;
     }
 
+    /**
+     * @param args 参数
+     */
     public static void main(String[] args) {
         // System.out.println(Message.success());
     }
@@ -241,7 +273,7 @@ public class Message<T> implements Serializable {
     /**
      * 从目录里获取国际化文件夹（子模块）
      *
-     * @param pkgPath
+     * @param pkgPath 包路径
      */
     private static void findClassesByFile(String pkgPath) {
         File dir = new File(pkgPath);
@@ -261,10 +293,10 @@ public class Message<T> implements Serializable {
      * 从jar里获取国际化文件夹（子模块）
      *
      * @param pkgName 包名
-     * @param jar jar文件
+     * @param jar     jar文件
      */
     private static void findClassesByJar(String pkgName, JarFile jar) {
-        String pkgDir = pkgName.replace(".", "/");
+        //String pkgDir = pkgName.replace(".", "/");
         // 从此jar包 得到一个枚举类
         Enumeration<JarEntry> entry = jar.entries();
         JarEntry jarEntry;
@@ -294,12 +326,12 @@ public class Message<T> implements Serializable {
      * @param fullClzName 类全名
      * @return 类
      */
-    private static Class<?> loadClass(String fullClzName) {
+    /*private static Class<?> loadClass(String fullClzName) {
         try {
             return Thread.currentThread().getContextClassLoader().loadClass(fullClzName);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         return null;
-    }
+    }*/
 }
