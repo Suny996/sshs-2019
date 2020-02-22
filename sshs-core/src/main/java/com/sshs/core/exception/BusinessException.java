@@ -4,39 +4,60 @@ import com.sshs.core.message.Message;
 
 /**
  * 异常类
- * 
+ *
  * @author Suny
  * @date 2017-10-22
- *
  */
 public class BusinessException extends RuntimeException {
+    /**
+     *
+     */
+    private static final long serialVersionUID = -7638041501183925225L;
 
-	/**
-	 */
-	private static final long serialVersionUID = -7638041501183925225L;
+    private int code;
+    private String msg;
 
-	private String code;
+    /**
+     * @param errorCode
+     */
+    public BusinessException(BaseErrorCode errorCode) {
+        super(errorCode.getMsg());
+        this.code = errorCode.getCode();
+        this.msg = errorCode.getMsg();
+    }
 
-	public BusinessException(String code) {
-		super(Message.getMessage(code));
-		this.code = code;
-	}
+    @Deprecated
+    public BusinessException(int code) {
+        super(Message.getMessage(code));
+        this.code = code;
+    }
 
-	public BusinessException(String code, String msg) {
-		super(msg);
-		this.code = code;
-	}
+    @Deprecated
+    public BusinessException(int code, String msg) {
+        super(msg);
+        this.code = code;
+        this.msg = msg;
+    }
 
-	public BusinessException(String code, String msg, Throwable cause) {
-		super(msg, cause);
-		this.code = code;
-	}
+    public BusinessException(int code, Throwable cause) {
+        super(cause);
+        this.code = code;
+        this.msg = cause.getMessage();
+    }
 
-	public String getCode() {
-		return code;
-	}
+    public int getCode() {
+        return code;
+    }
 
-	public void setCode(String code) {
-		this.code = code;
-	}
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
 }

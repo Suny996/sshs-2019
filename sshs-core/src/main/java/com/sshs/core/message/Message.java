@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -21,11 +22,11 @@ import java.util.jar.JarFile;
  * @date 2018-09-23
  */
 @ApiModel("用户信息")
-public class Message<T> {
-    private final static String SUCCESS_CODE = "000000";
+public class Message<T> implements Serializable {
+    private final static int SUCCESS_CODE = 0;
     private final static Logger logger = LoggerFactory.getLogger(Message.class);
-    @ApiModelProperty(value = "响应码", dataType = "String", example = "000000")
-    private String code;
+    @ApiModelProperty(value = "响应码", dataType = "Integer", example = "0")
+    private int code;
     @ApiModelProperty(value = "响应信息", dataType = "String", example = "操作成功")
     private String msg;
     T data;
@@ -38,7 +39,7 @@ public class Message<T> {
     /**
      * 初始化国际化文件
      *
-     * @param locale
+     * @param locale 语言
      */
     private static void init(Locale locale) {
         if (resource_names.isEmpty()) {
@@ -88,54 +89,96 @@ public class Message<T> {
         }
     }
 
-    public Message(String code) {
+    /**
+     * 根据code构造对象
+     * @param code 信息码
+     */
+    public Message(int code) {
         this.code = code;
         this.msg = Message.getMessage(code);
-        if (SUCCESS_CODE.equals(this.code) && StringUtils.isEmpty(this.msg)) {
+        if (SUCCESS_CODE == this.code && StringUtils.isEmpty(this.msg)) {
             this.msg = "操作成功";
         }
     }
 
-    public Message(String code, String msg) {
+    /**
+     * 根据信息码及信息构造对象
+     * @param code 代码
+     * @param msg 信息
+     */
+    public Message(int code, String msg) {
         super();
         this.code = code;
         this.msg = msg;
     }
 
-    public Message(String code, T data) {
+    /**
+     * 根据码值与实体对象构造
+     * @param code 码值
+     * @param data 实体对象
+     */
+    public Message(int code, T data) {
         this.code = code;
         this.msg = Message.getMessage(code);
-        if (SUCCESS_CODE.equals(this.code) && StringUtils.isEmpty(this.msg)) {
+        if (SUCCESS_CODE == this.code && StringUtils.isEmpty(this.msg)) {
             this.msg = "操作成功";
         }
         this.data = data;
     }
 
+    /**
+     * 静态构造成功信息
+     * @return 返回成功对象
+     */
     public static Message success() {
         return new Message(SUCCESS_CODE);
     }
 
+    /**
+     * 根据实体对象构造成功信息
+     * @param data 实体对象
+     * @return 成功信息
+     */
     public static <T> Message<T> success(T data) {
         return new Message<T>(SUCCESS_CODE, data);
     }
 
-    public static Message failure(String code) {
+    /**
+     * 根据码值静态构造失败信息
+     * @param code 码值
+     * @return 失败信息
+     */
+    public static Message failure(int code) {
         return new Message(code);
     }
 
-    public static Message failure(String code, String message) {
+    /**
+     * 静态构造失败信息
+     * @param code 码值
+     * @param message 信息
+     * @return 错误信息
+     */
+    public static Message failure(int code, String message) {
         return new Message(code, message);
     }
 
-    public static String getMessage(String code) {
+    /**
+     * 根据码值获取信息
+     * @param code 码值
+     * @return 信息
+     */
+    public static String getMessage(int code) {
         return getMessage(code, null);
     }
 
-    public static String getMessage(String code, String defaultMessage) {
+    /**
+     * 带默认值获取信息
+     * @param code 码值
+     * @param defaultMessage 默认信息
+     * @return 信息
+     */
+    public static String getMessage(int code, String defaultMessage) {
         try {
-            if (StringUtils.isEmpty(code)) {
-                return defaultMessage;
-            }
             Locale locale = null;
             String local = "";//SystemUtil.getLocale();
             if (StringUtils.isNotEmpty(local) && local.contains(Global.CHARACTER_UNDERLINE)) {
@@ -150,7 +193,7 @@ public class Message<T> {
             for (ResourceBundle resource : list) {
                 String message = null;
                 try {
-                    message = resource.getString(code);
+                    message = resource.getString(String.valueOf(code));
                 } catch (MissingResourceException e) {
                     continue;
                 }
@@ -165,25 +208,21 @@ public class Message<T> {
             if (defaultMessage != null) {
                 return defaultMessage;
             } else {
-                return code;
+                return String.valueOf(code);
             }
         }
     }
 
-    public String getCode() {
+    /**
+     *
+     * @return
+     */
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
     }
 
 
@@ -221,8 +260,8 @@ public class Message<T> {
     /**
      * 从jar里获取国际化文件夹（子模块）
      *
-     * @param pkgName
-     * @param jar
+     * @param pkgName 包名
+     * @param jar jar文件
      */
     private static void findClassesByJar(String pkgName, JarFile jar) {
         String pkgDir = pkgName.replace(".", "/");
