@@ -1,6 +1,8 @@
 package com.sshs.core.message;
 
 import com.sshs.core.constant.Global;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,10 +20,13 @@ import java.util.jar.JarFile;
  * @author Suny
  * @date 2018-09-23
  */
+@ApiModel("用户信息")
 public class Message<T> {
     private final static String SUCCESS_CODE = "000000";
     private final static Logger logger = LoggerFactory.getLogger(Message.class);
+    @ApiModelProperty(value = "响应码", dataType = "String", example = "000000")
     private String code;
+    @ApiModelProperty(value = "响应信息", dataType = "String", example = "操作成功")
     private String msg;
     T data;
     /**

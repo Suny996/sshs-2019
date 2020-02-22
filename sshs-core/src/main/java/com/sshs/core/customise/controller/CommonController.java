@@ -6,6 +6,9 @@ import com.sshs.core.message.Message;
 import com.sshs.core.util.DictionaryUtil;
 import com.sshs.core.util.SystemUtil;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +40,9 @@ public class CommonController extends BaseController {
      *
      * @throws Exception
      */
+    @ApiOperation(httpMethod = "GET", value = "数据字典查询接口(所有项目-不常用)", notes = "数据字典查询接口(所有项目-不常用)")
     @GetMapping("/plist")
+    //@Cacheable("dictAllList_cache")
     public Message getPlist() {
         return (Message.success(DictionaryUtil.getAllList()));
     }
@@ -48,7 +53,11 @@ public class CommonController extends BaseController {
      * @param dictCode
      * @throws Exception
      */
+    @ApiOperation(httpMethod = "GET", value = "数据字典查询接口(根据DictCode)", notes = "数据字典查询接口(常用)")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "path", dataType = "String", name = "dictCode", value = "字典码"),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "locale", value = "国家语言", example = "zh_CN")})
     @GetMapping("/plist/{dictCode}")
+    //@Cacheable("dictList_cache")
     public Message getPlistByDictCode(@PathVariable(value = "dictCode", required = true) String dictCode, @RequestParam(value = "locale", required = false) String locale) {
         if (StringUtils.isEmpty(locale)) {
             locale = SystemUtil.getLocale();
@@ -64,7 +73,12 @@ public class CommonController extends BaseController {
      * @param dictCode
      * @throws Exception
      */
+    @ApiOperation(httpMethod = "GET", value = "数据字典查询接口(根据DictCode及subCode)", notes = "数据字典查询接口(常用)")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "path", dataType = "String", name = "dictCode", value = "字典码"),
+            @ApiImplicitParam(paramType = "path", dataType = "String", name = "subCode", value = "字典子码"),
+            @ApiImplicitParam(paramType = "query", dataType = "String", name = "locale", value = "国家语言", example = "zh_CN")})
     @GetMapping("/plist/{dictCode}/{subCode}")
+    //@Cacheable("dictList_cache")
     public Message getPlistByDictCode2(@PathVariable(value = "dictCode", required = true) String dictCode, @PathVariable(value = "subCode", required = false) String subCode, @RequestParam(value = "locale", required = false) String locale) {
         if (StringUtils.isEmpty(locale)) {
             locale = SystemUtil.getLocale();
@@ -75,6 +89,7 @@ public class CommonController extends BaseController {
     /**
      * 岗位列表查询
      */
+    @ApiOperation(httpMethod = "GET", value = "岗位列表查询", notes = "")
     @GetMapping("/postlist")
     @Cacheable("postList_cache")
     public Message getPostList() {
@@ -88,6 +103,8 @@ public class CommonController extends BaseController {
      * @param orgCode
      * @throws Exception
      */
+    @ApiOperation(httpMethod = "GET", value = "机构查询接口(根据orgCode)", notes = "")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "path", dataType = "String", name = "orgCode", value = "机构编码")})
     @GetMapping("/orglist/{orgCode}")
     @Cacheable("orgList_cache")
     public Message getOrgTreeByOrgCode(@PathVariable("orgCode") String orgCode) {
@@ -95,6 +112,11 @@ public class CommonController extends BaseController {
         return (Message.success(getOrgListByOrgCode(org)));
     }
 
+    /**
+     * 根据机构信息查询其下属机构列表
+     * @param org
+     * @return
+     */
     private Map<String, Object> getOrgListByOrgCode(Map<String, Object> org) {
         if (org != null) {
             List<Map<String, Object>> list = commonMapper.findOrgListByOrgCode((String) org.get("ORG_CODE"));
@@ -118,6 +140,9 @@ public class CommonController extends BaseController {
      * @param userCode
      * @throws Exception
      */
+    @ApiOperation(httpMethod = "GET", value = "根据当前用户编号及上级菜单ID查询菜单项", notes = "")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "path", dataType = "String", name = "userCode", value = "用户编号"),
+            @ApiImplicitParam(paramType = "path", dataType = "String", name = "parentId", value = "上级菜单ID")})
     @GetMapping("/menus/{userCode}/{parentId}")
     public Message getUserMenu(@PathVariable("userCode") String userCode, @PathVariable("parentId") String parentId) {
         Map<String, Object> params = new HashMap<String, Object>();
@@ -133,7 +158,7 @@ public class CommonController extends BaseController {
      * @param parentId
      * @return
      */
-    List<Map<String, Object>> initMenu(String userName, String parentId) {
+    private List<Map<String, Object>> initMenu(String userName, String parentId) {
         Map<String, Object> params = new HashMap<String, Object>(2);
         params.put("parentId", parentId);
         params.put("userCode", userName);

@@ -7,10 +7,7 @@ import com.sshs.core.message.Message;
 import com.sshs.toolkit.coder.model.Coder;
 import com.sshs.toolkit.coder.model.Column;
 import com.sshs.toolkit.coder.service.ICoderService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +51,7 @@ public class CoderController extends BaseController {
      * 保存代码
      */
     @ApiOperation(value = "代碼生成(快速版)", notes = "")
+    @ApiOperationSort(0)
     @ApiImplicitParams({@ApiImplicitParam(paramType = "path", name = "tableName", value = "表名", required = true)})
     @GetMapping("/generate/{tableName}")
     public Message generate(@PathVariable("tableName") String tableName) {

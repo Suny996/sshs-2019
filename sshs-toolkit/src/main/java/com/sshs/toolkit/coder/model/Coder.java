@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.sshs.core.model.BaseEntity;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.apache.ibatis.type.Alias;
 
@@ -17,6 +18,7 @@ import java.util.List;
  * @author Suny
  * @date 2017-11-10
  */
+@ApiModel("代码生成实体类")
 @Alias("Coder")
 @TableName("TOO_CODER")
 public class Coder extends BaseEntity implements Serializable {
@@ -25,7 +27,7 @@ public class Coder extends BaseEntity implements Serializable {
      *
      */
     private static final long serialVersionUID = 1L;
-
+    @ApiModelProperty(value = "主键", dataType = "String")
     @TableId(type = IdType.ID_WORKER_STR)
     private String coderId;
     @ApiModelProperty(value = "包名", dataType = "String", example = "com.sshs.system")
