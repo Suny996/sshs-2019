@@ -13,7 +13,7 @@ public enum SecurityErrorCode implements BaseErrorCode<SecurityErrorCode> {
     PASSWORD_IS_EXPIRED(10008,"密码已过期"),
     ACCOUNT_IS_EXPIRED(10008,"账户已过期"),
     ACCOUNT_IS_DISABLED(10008,"账户已禁用"),
-    NO_AUTHORISED(100601,"您尚未登录"),
+    NO_AUTHORISED(401,"您尚未登录"),
     AUTHORISE_INVALID(100602,"登录无效"),
     AUTHORISE_TIMEOUT(10603,"登录超时"),
     OLD_PASSWORD_IS_WRONG(10009,"密码错误");

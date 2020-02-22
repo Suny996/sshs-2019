@@ -12,6 +12,8 @@ import com.sshs.security.util.JwtTokenUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -44,6 +46,9 @@ public class SshsAuthenticationSuccessHandler extends
     @Autowired
     private JwtTokenUtils jwtTokenUtils;
 
+    @Value("${sshs.swagger.enable:true}")
+    Boolean swaggerEnable;
+
     @Override
     @SLog(value = "登录系统成功", module = "security")
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -66,13 +71,17 @@ public class SshsAuthenticationSuccessHandler extends
         gu.setButtons(sga.getButtons());
         request.getSession().setAttribute(Global.USER, gu);
 
-        final String token = jwtTokenUtils.TOKEN_PREFIX +jwtTokenUtils.createToken((UserDetails) authentication.getPrincipal(), true);
-        response.addHeader(jwtTokenUtils.TOKEN_HEADER,  token);
-        request.getSession().setAttribute(jwtTokenUtils.TOKEN_HEADER, token);
+        final String token = jwtTokenUtils.TOKEN_PREFIX + jwtTokenUtils.createToken((UserDetails) authentication.getPrincipal(), true);
+        response.addHeader(Global.TOKEN_HEADER, token);
+        request.getSession().setAttribute(Global.TOKEN_HEADER, token);
 
         SavedRequest savedRequest = requestCache.getRequest(request, response);
 
         if (savedRequest == null) {
+            if (MediaType.APPLICATION_FORM_URLENCODED_VALUE.equalsIgnoreCase(request.getContentType()) && swaggerEnable) {
+                getRedirectStrategy().sendRedirect(request, response, "/docs");
+                return;
+            }
             response.setContentType("application/json;charset=utf-8");
             //登录成功
             ObjectMapper om = new ObjectMapper();

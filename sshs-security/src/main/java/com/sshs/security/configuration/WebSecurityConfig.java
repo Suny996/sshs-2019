@@ -6,6 +6,7 @@ import com.sshs.security.filter.JWTAuthenticationFilter;
 import com.sshs.security.filter.JWTLoginFilter;
 import com.sshs.security.handler.SshsAuthenticationFailureHandler;
 import com.sshs.security.handler.SshsAuthenticationSuccessHandler;
+import com.sshs.security.handler.SshsLoginUrlAuthenticationEntryPoint;
 import com.sshs.security.handler.SshsLogoutSuccessHandler;
 import com.sshs.security.service.CustomAuthenticationProvider;
 import com.sshs.security.service.SshsSecurityMetadataSourceService;
@@ -95,6 +96,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .anyRequest().authenticated()  // 所有请求需要身份认证
                 .antMatchers(getAuthList()).permitAll()
+                .and().exceptionHandling().authenticationEntryPoint(new SshsLoginUrlAuthenticationEntryPoint())
                 .and()
                 .exceptionHandling()
                 // .authenticationEntryPoint(new Http401AuthenticationEntryPoint("Basic realm=\"MyApp\""))

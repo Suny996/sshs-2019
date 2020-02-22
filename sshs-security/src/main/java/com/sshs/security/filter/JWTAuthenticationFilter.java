@@ -1,6 +1,7 @@
 package com.sshs.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sshs.core.constant.Global;
 import com.sshs.core.message.Message;
 import com.sshs.security.error.SecurityErrorCode;
 import com.sshs.security.util.JwtTokenUtils;
@@ -39,12 +40,14 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {//BasicAuthen
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = request.getHeader(jwtTokenUtils.TOKEN_HEADER);
+        String token = request.getHeader(Global.TOKEN_HEADER);
         if (token == null) {
-            token = (String) request.getSession().getAttribute(jwtTokenUtils.TOKEN_HEADER);
+            token = (String) request.getSession().getAttribute(Global.TOKEN_HEADER);
         }
-        if (token != null && StringUtils.startsWith(token, jwtTokenUtils.TOKEN_PREFIX)) {
-            token = StringUtils.substring(token, jwtTokenUtils.TOKEN_PREFIX.length());
+        if (token != null) {
+            if (StringUtils.startsWith(token, jwtTokenUtils.TOKEN_PREFIX)) {
+                token = StringUtils.substring(token, jwtTokenUtils.TOKEN_PREFIX.length());
+            }
         } else {
             filterChain.doFilter(request, response);
             return;

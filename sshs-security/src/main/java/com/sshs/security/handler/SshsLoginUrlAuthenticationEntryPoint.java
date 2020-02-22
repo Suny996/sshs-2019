@@ -7,6 +7,7 @@ import com.sshs.security.error.SecurityErrorCode;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.*;
 import org.springframework.security.web.util.RedirectUrlBuilder;
@@ -21,6 +22,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
+ * 未登录时处理
+ *
  * @author Suny
  * @date 2019-1-28
  */
@@ -93,15 +96,21 @@ public class SshsLoginUrlAuthenticationEntryPoint implements AuthenticationEntry
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException, ServletException {
-        response.setContentType("application/json;charset=utf-8");
-        response.setStatus(601);
-        Message message = Message.failure(SecurityErrorCode.NO_AUTHORISED);
         try {
-            ObjectMapper om = new ObjectMapper();
-            PrintWriter out = response.getWriter();
-            out.write(om.writeValueAsString(message));
-            out.flush();
-            out.close();
+            if (StringUtils.isEmpty(response.getContentType()) && MediaType.APPLICATION_JSON_VALUE.equals(request.getContentType()) || MediaType.APPLICATION_JSON_VALUE.equals(response.getContentType())) {
+                response.setContentType("application/json;charset=utf-8");
+                response.setStatus(401);
+                Message message = Message.failure(SecurityErrorCode.NO_AUTHORISED);
+
+                ObjectMapper om = new ObjectMapper();
+                PrintWriter out = response.getWriter();
+                out.write(om.writeValueAsString(message));
+                out.flush();
+                out.close();
+            } else {
+                String redirectUrl = buildRedirectUrlToLoginPage(request, response, authException);
+                redirectStrategy.sendRedirect(request, response, redirectUrl);
+            }
         } catch (JsonProcessingException e) {
             logger.error("");
             e.printStackTrace();

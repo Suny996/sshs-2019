@@ -21,7 +21,6 @@ import java.util.Set;
 
 @Component
 public class JwtTokenUtils {
-    public  final String TOKEN_HEADER = "Authorization";
 
     public  final String TOKEN_PREFIX = "Bearer ";
     /**
