@@ -1,9 +1,9 @@
 package com.sshs.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sshs.core.log.SLog;
 import com.sshs.core.base.model.GlobalUser;
 import com.sshs.core.constant.Global;
+import com.sshs.core.log.SLog;
 import com.sshs.core.message.Message;
 import com.sshs.security.model.Privilege;
 import com.sshs.security.model.SecurityUser;
@@ -72,7 +72,7 @@ public class SshsAuthenticationSuccessHandler extends
         request.getSession().setAttribute(Global.USER, gu);
 
         final String token = jwtTokenUtils.TOKEN_PREFIX + jwtTokenUtils.createToken((UserDetails) authentication.getPrincipal(), true);
-        response.addHeader(Global.TOKEN_HEADER, token);
+        response.addHeader("Set-" + Global.TOKEN_HEADER, token);
         request.getSession().setAttribute(Global.TOKEN_HEADER, token);
 
         SavedRequest savedRequest = requestCache.getRequest(request, response);
@@ -80,34 +80,34 @@ public class SshsAuthenticationSuccessHandler extends
         if (savedRequest == null) {
             if (MediaType.APPLICATION_FORM_URLENCODED_VALUE.equalsIgnoreCase(request.getContentType()) && swaggerEnable) {
                 getRedirectStrategy().sendRedirect(request, response, "/docs");
+            } else {
+                response.setContentType("application/json;charset=utf-8");
+                //登录成功
+                ObjectMapper om = new ObjectMapper();
+                PrintWriter out = response.getWriter();
+                out.write(om.writeValueAsString(Message.success(gu)));
+                out.flush();
+                out.close();
                 return;
             }
-            response.setContentType("application/json;charset=utf-8");
-            //登录成功
-            ObjectMapper om = new ObjectMapper();
-            PrintWriter out = response.getWriter();
-            out.write(om.writeValueAsString(Message.success(gu)));
-            out.flush();
-            out.close();
-            return;
-        }
-        String targetUrlParameter = getTargetUrlParameter();
-        if (isAlwaysUseDefaultTargetUrl()
-                || (targetUrlParameter != null && StringUtils.hasText(request
-                .getParameter(targetUrlParameter)))) {
-            requestCache.removeRequest(request, response);
-            super.onAuthenticationSuccess(request, response, authentication);
-            return;
-        }
+        } else {
+            String targetUrlParameter = getTargetUrlParameter();
+            if (isAlwaysUseDefaultTargetUrl()
+                    || (targetUrlParameter != null && StringUtils.hasText(request
+                    .getParameter(targetUrlParameter)))) {
+                requestCache.removeRequest(request, response);
+                super.onAuthenticationSuccess(request, response, authentication);
+                return;
+            }
+            //clearAuthenticationAttributes(request);
 
-        clearAuthenticationAttributes(request);
-
-        String targetUrl = savedRequest.getRedirectUrl();
-        logger.debug("Redirecting to DefaultSavedRequest Url: " + targetUrl);
-        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+            String targetUrl = savedRequest.getRedirectUrl();
+            logger.debug("Redirecting to DefaultSavedRequest Url: " + targetUrl);
+            getRedirectStrategy().sendRedirect(request, response, targetUrl);
+        }
     }
 
-    public void setRequestCache(RequestCache requestCache) {
+    /*public void setRequestCache(RequestCache requestCache) {
         this.requestCache = requestCache;
-    }
+    }*/
 }

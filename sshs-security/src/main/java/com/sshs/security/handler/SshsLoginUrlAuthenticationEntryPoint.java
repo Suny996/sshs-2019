@@ -56,7 +56,7 @@ public class SshsLoginUrlAuthenticationEntryPoint implements AuthenticationEntry
      */
     public SshsLoginUrlAuthenticationEntryPoint() {
         //Assert.notNull(loginFormUrl, "loginFormUrl cannot be null");
-        this.loginFormUrl = "";
+        this.loginFormUrl = "/login";
     }
 
     // ~ Methods

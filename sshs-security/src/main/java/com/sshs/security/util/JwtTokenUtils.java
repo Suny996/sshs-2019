@@ -22,31 +22,31 @@ import java.util.Set;
 @Component
 public class JwtTokenUtils {
 
-    public  final String TOKEN_PREFIX = "Bearer ";
+    public final String TOKEN_PREFIX = "Bearer ";
     /**
      * 密钥key
      */
-    private  final String SECRET = "jwtsecurit";
+    private final String SECRET = "jwtsecurit";
 
     /**
      * JWT的发行人
      */
-    private  final String ISS = "sshs group";
+    private final String ISS = "sshs group";
 
     /**
      * 自定义用户信息
      */
-    private  final String ROLE_CLAIMS = "rol";
+    private final String ROLE_CLAIMS = "rol";
 
     /**
      * 过期时间是3600秒，既是1个小时
      */
-    public  final long EXPIRATION = 3600L * 1000;
+    public final long EXPIRATION = 3600L * 1000;
 
     /**
      * 选择了记住我之后的过期时间为7天
      */
-    public  final long EXPIRATION_REMEMBER = 604800L * 1000;
+    public final long EXPIRATION_REMEMBER = 604800L * 1000;
 
     @Autowired
     @Qualifier("sshsUserService")
@@ -59,7 +59,7 @@ public class JwtTokenUtils {
      * @param isRememberMe 是否记住我
      * @return
      */
-    public  String createToken(UserDetails details, boolean isRememberMe) throws BusinessException {
+    public String createToken(UserDetails details, boolean isRememberMe) throws BusinessException {
         // 如果选择记住我，则token的过期时间为
         long expiration = isRememberMe ? EXPIRATION_REMEMBER : EXPIRATION;
 
@@ -81,7 +81,7 @@ public class JwtTokenUtils {
      * @param token
      * @return
      */
-    public  String getUsername(String token) throws BusinessException {
+    public String getUsername(String token) throws BusinessException {
         return getTokenBody(token).getSubject();
     }
 
@@ -91,7 +91,7 @@ public class JwtTokenUtils {
      * @param token
      * @return
      */
-    public  Set<String> getUserRole(String token) throws BusinessException {
+    public Set<String> getUserRole(String token) throws BusinessException {
         List<GrantedAuthority> userAuthorities = (List<GrantedAuthority>) getTokenBody(token).get(ROLE_CLAIMS);
         return AuthorityUtils.authorityListToSet(userAuthorities);
     }
@@ -102,11 +102,11 @@ public class JwtTokenUtils {
      * @param token
      * @return
      */
-    public  boolean isExpiration(String token) throws BusinessException {
+    public boolean isExpiration(String token) throws BusinessException {
         return getTokenBody(token).getExpiration().before(new Date());
     }
 
-    private  Claims getTokenBody(String token) throws BusinessException {
+    private Claims getTokenBody(String token) throws BusinessException {
         return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
     }
 
@@ -117,7 +117,7 @@ public class JwtTokenUtils {
      * @param userDetails
      * @return
      */
-    public  boolean validateToken(String token, UserDetails userDetails) throws BusinessException {
+    public boolean validateToken(String token, UserDetails userDetails) throws BusinessException {
         User user = (User) userDetails;
         final String username = getUsername(token);
         return (username.equals(user.getUsername()) && isExpiration(token) == false);

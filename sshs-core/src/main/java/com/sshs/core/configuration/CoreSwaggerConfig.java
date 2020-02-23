@@ -53,14 +53,14 @@ public class CoreSwaggerConfig implements WebMvcConfigurer {
         aParameterBuilder
                 .parameterType("header") //参数类型支持header, cookie, body, query etc
                 .name(Global.TOKEN_HEADER) //参数名
-                .defaultValue("") //默认值
+                .defaultValue("${header.Authored}") //默认值
                 .description("header中token字段测试")
                 .modelRef(new ModelRef("string"))//指定参数值的类型
                 .required(false).build(); //非必需，这里是全局配置，然而在登陆的时候是不用验证的
         List<Parameter> aParameters = new ArrayList<>();
         aParameters.add(aParameterBuilder.build());
         return new Docket(DocumentationType.SWAGGER_2).groupName("公共部分(CORE)").select().apis(RequestHandlerSelectors.basePackage("com.sshs.core"))
-                .paths(PathSelectors.any()).build().apiInfo(apiInfo1()).globalOperationParameters(aParameters);
+                .paths(PathSelectors.any()).build().apiInfo(apiInfo1());//.globalOperationParameters(aParameters);
     }
 
 
@@ -69,7 +69,7 @@ public class CoreSwaggerConfig implements WebMvcConfigurer {
                 .title("SSHS-公共接口(CORE)")
                 //.termsOfServiceUrl("www.baidu.com").contact("Suny999")
                 //.contact(new Contact("Suny", "https://github.com/Suny999", "mail.suny@qq.com"))
-                .version("v1")
+                .version("v1").termsOfServiceUrl("/apidocs")
                 .build();
     }
 }
