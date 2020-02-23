@@ -4,6 +4,9 @@ server:
   servlet:
     session:
       timeout: 600s
+      tracking-modes: cookie
+      cookie:
+        http-only: true
     contextPath: /api
 logging:
   path: logs
