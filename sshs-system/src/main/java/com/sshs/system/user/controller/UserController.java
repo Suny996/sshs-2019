@@ -26,7 +26,7 @@ import java.util.List;
 @Api(tags = "系统管理-用户管理")
 @RestController
 @Version(1)
-@RequestMapping(value = "/{version}/system/users")
+@RequestMapping(value = "/{version:v\\d+}/system/users")
 public class UserController extends BaseController {
     @Autowired
     private IUserService userService;
