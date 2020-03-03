@@ -81,7 +81,7 @@ public class SysLogAspect {
         } catch (Exception e) {
         }
         //获取用户ip地址
-        sysLog.setClientIp(SystemUtil.getRemoteId());
+        sysLog.setClientIp(SystemUtil.getRemoteIp());
 
         //调用service保存SysLog实体类到数据库
         mapper.insert(sysLog);

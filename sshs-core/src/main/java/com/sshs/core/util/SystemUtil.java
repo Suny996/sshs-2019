@@ -166,7 +166,7 @@ public class SystemUtil {
      *
      * @return
      */
-    public static String getRemoteId() {
+    public static String getRemoteIp() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
         return request.getRemoteHost();

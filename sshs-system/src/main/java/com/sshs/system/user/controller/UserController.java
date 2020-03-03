@@ -23,6 +23,7 @@ import java.util.List;
  * @author Suny
  * @date 2017年7月5日 上午10:40:10
  */
+@CrossOrigin(origins = "*", maxAge = 3600, methods = {RequestMethod.POST})
 @Api(tags = "系统管理-用户管理")
 @RestController
 @Version(1)
