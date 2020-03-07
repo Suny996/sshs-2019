@@ -3,7 +3,6 @@ package com.sshs.security.service;
 import com.sshs.core.base.service.impl.BaseServiceImpl;
 import com.sshs.core.customise.mapper.CommonMapper;
 import com.sshs.core.exception.BusinessException;
-import com.sshs.core.util.BusiUtil;
 import com.sshs.core.util.SystemUtil;
 import com.sshs.security.error.SecurityErrorCode;
 import com.sshs.security.mapper.SecurityUserMapper;
@@ -72,7 +71,7 @@ public class SshsUserServiceImpl extends BaseServiceImpl<SecurityUserMapper, Sec
                 throw new BusinessException(SecurityErrorCode.NO_PRIVILEGE_FOUND);
             } else {
                 SshsGrantedAuthority sga = new SshsGrantedAuthority(privilegeList);
-                Map<String, List<Map<String, Object>>> menuButtons = findUserMenus(userName, null);
+                Map<String, List<Map<String, Object>>> menuButtons = findUserMenus(userName, SystemUtil.getLocale());
                 List<Map<String, Object>> menus = menuButtons.get("menus");
                 List<Map<String, Object>> buttons = menuButtons.get("buttons");
                 sga.setMenus(menus);
@@ -126,7 +125,7 @@ public class SshsUserServiceImpl extends BaseServiceImpl<SecurityUserMapper, Sec
         List<Map<String, Object>> userMenus = commonMapper.findUserMenus(params);
         List<Map<String, Object>> menus = new ArrayList<>();
         for (Map<String, Object> menu : userMenus) {
-            menu = BusiUtil.tranMapKey(menu, "1");
+            //menu = BusiUtil.tranMapKey(menu, "1");
             menus.add(menu);
         }
         if (currentMenu == null || "0".equalsIgnoreCase((String) currentMenu.get("type"))) {
@@ -145,11 +144,11 @@ public class SshsUserServiceImpl extends BaseServiceImpl<SecurityUserMapper, Sec
                 buttons.add(new HashMap<>());
                 data.put("buttons", buttons);
             }
-            String menuUrl = (String) currentMenu.get("name");
+            String menuUrl = (String) currentMenu.get("path");
             for (Map<String, Object> menu : menus) {
                 //String code = (String) menu.get("code");
                 //String type = (String) menu.get("type");
-                String url = (String) menu.get("name");
+                String url = (String) menu.get("path");
                 buttons.get(0).put(menuUrl + "/" + url, "1");
             }
         }

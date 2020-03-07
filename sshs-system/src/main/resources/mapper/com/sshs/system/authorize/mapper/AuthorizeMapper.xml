@@ -37,120 +37,120 @@
         FROM
         <include refid="tableName"></include>
         WHERE 1=1
-        <if test="authorizeId != null and authorizeId != ''">
+        <if test="variable.authorizeId != null and variable.authorizeId != ''">
             AND AUTHORIZE_ID
             <choose>
-                <when test="operators.authorizeId != null and operators.authorizeId != '' ">${operators.authorizeId}
+                <when test="variable.operators.authorizeId != null and variable.operators.authorizeId != '' ">${variable.operators.authorizeId}
                 </when>
                 <otherwise>=</otherwise>
             </choose>
-            #{authorizeId}
+            #{variable.authorizeId}
         </if>
-        <if test="crtDate != null and crtDate != ''">
+        <if test="variable.crtDate != null and variable.crtDate != ''">
             AND CRT_DATE
             <choose>
-                <when test="operators.crtDate != null and operators.crtDate != '' ">${operators.crtDate}</when>
+                <when test="variable.operators.crtDate != null and variable.operators.crtDate != '' ">${variable.operators.crtDate}</when>
                 <otherwise>=</otherwise>
             </choose>
-            #{crtDate}
+            #{variable.crtDate}
         </if>
-        <if test="updUserCode != null and updUserCode != ''">
+        <if test="variable.updUserCode != null and variable.updUserCode != ''">
             AND UPD_USER_CODE
             <choose>
-                <when test="operators.updUserCode != null and operators.updUserCode != '' ">${operators.updUserCode}
+                <when test="variable.operators.updUserCode != null and variable.operators.updUserCode != '' ">${variable.operators.updUserCode}
                 </when>
                 <otherwise>=</otherwise>
             </choose>
-            #{updUserCode}
+            #{variable.updUserCode}
         </if>
-        <if test="updOrgCode != null and updOrgCode != ''">
+        <if test="variable.updOrgCode != null and variable.updOrgCode != ''">
             AND UPD_ORG_CODE
             <choose>
-                <when test="operators.updOrgCode != null and operators.updOrgCode != '' ">${operators.updOrgCode}</when>
+                <when test="variable.operators.updOrgCode != null and variable.operators.updOrgCode != '' ">${variable.operators.updOrgCode}</when>
                 <otherwise>=</otherwise>
             </choose>
-            #{updOrgCode}
+            #{variable.updOrgCode}
         </if>
-        <if test="updDate != null and updDate != ''">
+        <if test="variable.updDate != null and variable.updDate != ''">
             AND UPD_DATE
             <choose>
-                <when test="operators.updDate != null and operators.updDate != '' ">${operators.updDate}</when>
+                <when test="variable.operators.updDate != null and variable.operators.updDate != '' ">${operators.updDate}</when>
                 <otherwise>=</otherwise>
             </choose>
-            #{updDate}
+            #{variable.updDate}
         </if>
         <if test="resourceId != null and resourceId != ''">
             AND RESOURCE_ID
             <choose>
-                <when test="operators.resourceId != null and operators.resourceId != '' ">${operators.resourceId}</when>
+                <when test="variable.operators.resourceId != null and variable.operators.resourceId != '' ">${variable.operators.resourceId}</when>
                 <otherwise>=</otherwise>
             </choose>
-            #{resourceId}
+            #{variable.resourceId}
         </if>
-        <if test="resourceName != null and resourceName != ''">
+        <if test="variable.resourceName != null and variable.resourceName != ''">
             AND RESOURCE_NAME
             <choose>
-                <when test="operators.resourceName != null and operators.resourceName != '' ">
-                    ${operators.resourceName}
+                <when test="variable.operators.resourceName != null and variable.operators.resourceName != '' ">
+                    ${variable.operators.resourceName}
                 </when>
                 <otherwise>=</otherwise>
             </choose>
-            #{resourceName}
+            #{variable.resourceName}
         </if>
-        <if test="roleCode != null and roleCode != ''">
+        <if test="variable.roleCode != null and variable.roleCode != ''">
             AND ROLE_CODE
             <choose>
-                <when test="operators.roleCode != null and operators.roleCode != '' ">${operators.roleCode}</when>
+                <when test="variable.operators.roleCode != null and variable.operators.roleCode != '' ">${variable.operators.roleCode}</when>
                 <otherwise>=</otherwise>
             </choose>
-            #{roleCode}
+            #{variable.roleCode}
         </if>
-        <if test="resourceType != null and resourceType != ''">
+        <if test="variable.resourceType != null and variable.resourceType != ''">
             AND RESOURCE_TYPE
             <choose>
-                <when test="operators.resourceType != null and operators.resourceType != '' ">
-                    ${operators.resourceType}
+                <when test="variable.operators.resourceType != null and variable.operators.resourceType != '' ">
+                    ${variable.operators.resourceType}
                 </when>
                 <otherwise>=</otherwise>
             </choose>
-            #{resourceType}
+            #{variable.resourceType}
         </if>
-        <if test="authorizeType != null and authorizeType != ''">
+        <if test="variable.authorizeType != null and variable.authorizeType != ''">
             AND AUTHORIZE_TYPE
             <choose>
-                <when test="operators.authorizeType != null and operators.authorizeType != '' ">
-                    ${operators.authorizeType}
+                <when test="variable.operators.authorizeType != null and variable.operators.authorizeType != '' ">
+                    ${variable.operators.authorizeType}
                 </when>
                 <otherwise>=</otherwise>
             </choose>
-            #{authorizeType}
+            #{variable.authorizeType}
         </if>
-        <if test="dataAuthType != null and dataAuthType != ''">
+        <if test="variable.dataAuthType != null and variable.dataAuthType != ''">
             AND DATA_AUTH_TYPE
             <choose>
-                <when test="operators.dataAuthType != null and operators.dataAuthType != '' ">
-                    ${operators.dataAuthType}
+                <when test="variable.operators.dataAuthType != null and variable.operators.dataAuthType != '' ">
+                    ${variable.operators.dataAuthType}
                 </when>
                 <otherwise>=</otherwise>
             </choose>
-            #{dataAuthType}
+            #{variable.dataAuthType}
         </if>
-        <if test="crtUserCode != null and crtUserCode != ''">
+        <if test="variable.crtUserCode != null and variable.crtUserCode != ''">
             AND CRT_USER_CODE
             <choose>
-                <when test="operators.crtUserCode != null and operators.crtUserCode != '' ">${operators.crtUserCode}
+                <when test="variable.operators.crtUserCode != null and variable.operators.crtUserCode != '' ">${variable.operators.crtUserCode}
                 </when>
                 <otherwise>=</otherwise>
             </choose>
-            #{crtUserCode}
+            #{variable.crtUserCode}
         </if>
-        <if test="crtOrgCode != null and crtOrgCode != ''">
+        <if test="variable.crtOrgCode != null and variable.crtOrgCode != ''">
             AND CRT_ORG_CODE
             <choose>
-                <when test="operators.crtOrgCode != null and operators.crtOrgCode != '' ">${operators.crtOrgCode}</when>
+                <when test="variable.operators.crtOrgCode != null and variable.operators.crtOrgCode != '' ">${variable.operators.crtOrgCode}</when>
                 <otherwise>=</otherwise>
             </choose>
-            #{crtOrgCode}
+            #{variable.crtOrgCode}
         </if>
     </select>
 </mapper>
