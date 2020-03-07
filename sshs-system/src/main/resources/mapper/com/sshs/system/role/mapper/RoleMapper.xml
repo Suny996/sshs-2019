@@ -30,101 +30,101 @@
 		FROM 
 		<include refid="tableName"></include>
 		WHERE 1=1
-			<if test="variables.roleId != null and variables.roleId != ''">
+			<if test="variable.roleId != null and variable.roleId != ''">
 				AND ROLE_ID 
 				<choose>
-					<when test="operators.roleId != null and operators.roleId != '' ">${operators.roleId}</when>
+					<when test="variable.operators.roleId != null and variable.operators.roleId != '' ">${variable.operators.roleId}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.roleId}
+			#{variable.roleId}
 			</if>	
-			<if test="variables.updUserCode != null and variables.updUserCode != ''">
+			<if test="variable.updUserCode != null and variable.updUserCode != ''">
 				AND UPD_USER_CODE 
 				<choose>
-					<when test="operators.updUserCode != null and operators.updUserCode != '' ">${operators.updUserCode}</when>
+					<when test="variable.operators.updUserCode != null and variable.operators.updUserCode != '' ">${variable.operators.updUserCode}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.updUserCode}
+			#{variable.updUserCode}
 			</if>	
-			<if test="variables.updOrgCode != null and variables.updOrgCode != ''">
+			<if test="variable.updOrgCode != null and variable.updOrgCode != ''">
 				AND UPD_ORG_CODE 
 				<choose>
-					<when test="operators.updOrgCode != null and operators.updOrgCode != '' ">${operators.updOrgCode}</when>
+					<when test="variable.operators.updOrgCode != null and variable.operators.updOrgCode != '' ">${variable.operators.updOrgCode}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.updOrgCode}
+			#{variable.updOrgCode}
 			</if>	
-			<if test="variables.updDate != null and variables.updDate != ''">
+			<if test="variable.updDate != null and variable.updDate != ''">
 				AND UPD_DATE 
 				<choose>
-					<when test="operators.updDate != null and operators.updDate != '' ">${operators.updDate}</when>
+					<when test="variable.operators.updDate != null and variable.operators.updDate != '' ">${variable.operators.updDate}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.updDate}
+			#{variable.updDate}
 			</if>	
-			<if test="variables.roleCode != null and variables.roleCode != ''">
+			<if test="variable.roleCode != null and variable.roleCode != ''">
 				AND ROLE_CODE 
 				<choose>
-					<when test="operators.roleCode != null and operators.roleCode != '' ">${operators.roleCode}</when>
+					<when test="variable.operators.roleCode != null and variable.operators.roleCode != '' ">${variable.operators.roleCode}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.roleCode}
+			#{variable.roleCode}
 			</if>	
-			<if test="variables.roleName != null and variables.roleName != ''">
+			<if test="variable.roleName != null and variable.roleName != ''">
 				AND ROLE_NAME 
 				<choose>
-					<when test="operators.roleName != null and operators.roleName != '' ">${operators.roleName}</when>
+					<when test="variable.operators.roleName != null and variable.operators.roleName != '' ">${variable.operators.roleName}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.roleName}
+			#{variable.roleName}
 			</if>	
-			<if test="variables.remark != null and variables.remark != ''">
+			<if test="variable.remark != null and variable.remark != ''">
 				AND REMARK 
 				<choose>
-					<when test="operators.remark != null and operators.remark != '' ">${operators.remark}</when>
+					<when test="variable.operators.remark != null and variable.operators.remark != '' ">${variable.operators.remark}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.remark}
+			#{variable.remark}
 			</if>	
-			<if test="variables.roleLevel != null and variables.roleLevel != ''">
+			<if test="variable.roleLevel != null and variable.roleLevel != ''">
 				AND ROLE_LEVEL 
 				<choose>
-					<when test="operators.roleLevel != null and operators.roleLevel != '' ">${operators.roleLevel}</when>
+					<when test="variable.operators.roleLevel != null and variable.operators.roleLevel != '' ">${variable.operators.roleLevel}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.roleLevel}
+			#{variable.roleLevel}
 			</if>	
-			<if test="variables.status != null and variables.status != ''">
+			<if test="variable.status != null and variable.status != ''">
 				AND STATUS 
 				<choose>
-					<when test="operators.status != null and operators.status != '' ">${operators.status}</when>
+					<when test="variable.operators.status != null and variable.operators.status != '' ">${variable.operators.status}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.status}
+			#{variable.status}
 			</if>	
-			<if test="variables.crtUserCode != null and variables.crtUserCode != ''">
+			<if test="variable.crtUserCode != null and variable.crtUserCode != ''">
 				AND CRT_USER_CODE 
 				<choose>
-					<when test="operators.crtUserCode != null and operators.crtUserCode != '' ">${operators.crtUserCode}</when>
+					<when test="variable.operators.crtUserCode != null and variable.operators.crtUserCode != '' ">${variable.operators.crtUserCode}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.crtUserCode}
+			#{variable.crtUserCode}
 			</if>	
-			<if test="variables.crtOrgCode != null and variables.crtOrgCode != ''">
+			<if test="variable.crtOrgCode != null and variable.crtOrgCode != ''">
 				AND CRT_ORG_CODE 
 				<choose>
-					<when test="operators.crtOrgCode != null and operators.crtOrgCode != '' ">${operators.crtOrgCode}</when>
+					<when test="variable.operators.crtOrgCode != null and variable.operators.crtOrgCode != '' ">${variable.operators.crtOrgCode}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.crtOrgCode}
+			#{variable.crtOrgCode}
 			</if>	
-			<if test="variables.crtDate != null and variables.crtDate != ''">
+			<if test="variable.crtDate != null and variable.crtDate != ''">
 				AND CRT_DATE 
 				<choose>
-					<when test="operators.crtDate != null and operators.crtDate != '' ">${operators.crtDate}</when>
+					<when test="variable.operators.crtDate != null and variable.operators.crtDate != '' ">${variable.operators.crtDate}</when>
 					<otherwise> = </otherwise>
 				</choose> 
-			#{variables.crtDate}
+			#{variable.crtDate}
 			</if>	
 	</select>
 

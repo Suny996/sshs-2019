@@ -3,6 +3,7 @@ package com.sshs.system.dictionary.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.message.Message;
+import com.sshs.core.version.Version;
 import com.sshs.system.dictionary.model.Dictionary;
 import com.sshs.system.dictionary.service.IDictionaryService;
 import io.swagger.annotations.Api;
@@ -22,7 +23,8 @@ import java.util.List;
  */
 @Api(tags = "系统管理-字典管理接口")
 @RestController
-@RequestMapping("/api/v1/system/dictionarys")
+@Version(1)
+@RequestMapping("/{version:v\\d+}/system/dictionarys")
 public class DictionaryController extends BaseController {
     @Resource
     private IDictionaryService dictionaryService;

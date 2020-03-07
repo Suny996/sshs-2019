@@ -3,8 +3,10 @@ package com.sshs.system.role.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.message.Message;
+import com.sshs.core.version.Version;
 import com.sshs.system.role.model.Role;
 import com.sshs.system.role.service.IRoleService;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +21,10 @@ import java.util.List;
  * @author 61910
  * @date 2018/11/07
  */
+@Api(tags = "系统管理-角色管理")
 @RestController
-@RequestMapping("/system/roles")
+@Version(1)
+@RequestMapping("/{version:v\\d+}/system/roles")
 public class RoleController extends BaseController {
     @Resource
     private IRoleService roleService;

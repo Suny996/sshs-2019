@@ -3,8 +3,10 @@ package com.sshs.system.post.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.message.Message;
+import com.sshs.core.version.Version;
 import com.sshs.system.post.model.Post;
 import com.sshs.system.post.service.IPostService;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +21,10 @@ import java.util.List;
  * @author 61910
  * @date 2018/11/08
  */
+@Api(tags = "系统管理-岗位管理")
 @RestController
-@RequestMapping("/system/posts")
+@Version(1)
+@RequestMapping("/{version:v\\d+}/system/posts")
 public class PostController extends BaseController {
     @Resource
     private IPostService postService;

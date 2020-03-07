@@ -2,6 +2,7 @@ package com.sshs.system.org.controller;
 
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.message.Message;
+import com.sshs.core.version.Version;
 import com.sshs.system.org.model.Org;
 import com.sshs.system.org.service.IOrgService;
 import io.swagger.annotations.Api;
@@ -22,7 +23,8 @@ import java.util.List;
  */
 @Api(tags = "系统管理-机构管理")
 @RestController
-@RequestMapping("/v1/system/orgs")
+@Version(1)
+@RequestMapping("/{version:v\\d+}/system/orgs")
 public class OrgController extends BaseController {
     @Resource
     private IOrgService orgService;

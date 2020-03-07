@@ -2,8 +2,10 @@ package com.sshs.system.userrole.controller;
 
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.message.Message;
+import com.sshs.core.version.Version;
 import com.sshs.system.userrole.model.UserRole;
 import com.sshs.system.userrole.service.IUserRoleService;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +21,10 @@ import java.util.Map;
  * @author 61910
  * @date 2018/11/16
  */
+@Api(tags = "系统管理-用户角色管理")
 @RestController
-@RequestMapping("/system/userRoles")
+@Version(1)
+@RequestMapping("/{version:v\\d+}/system/userRoles")
 public class UserRoleController extends BaseController {
     @Resource
     private IUserRoleService userRoleService;
