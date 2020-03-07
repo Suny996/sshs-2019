@@ -1,7 +1,6 @@
 package com.sshs.system.userrole.mapper;
 
 import com.sshs.core.base.mapper.BaseMapper;
-import com.sshs.core.page.Page;
 import com.sshs.system.userrole.model.UserRole;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -14,7 +13,4 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface UserRoleMapper extends BaseMapper<UserRole> {
-    Page<UserRole> findForPageList();
-
-    int deleteByUserCode(String userCode);
 }

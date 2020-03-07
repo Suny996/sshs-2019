@@ -80,7 +80,7 @@ public class UserRoleController extends BaseController {
      * 查询系统管理->系统管理-用户角色对照表信息列表
      */
     @GetMapping
-    public Message<Map> queryList(@RequestParam UserRole params) {
+    public Message<Map> queryList(@ModelAttribute UserRole params) {
         logger.debug("开始查询系统管理->系统管理-用户角色对照表列表信息……");
         return userRoleService.queryForList(params);
     }

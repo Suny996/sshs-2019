@@ -6,12 +6,15 @@ import com.sshs.core.wrapper.QueryWrapper;
 import com.sshs.system.user.mapper.UserMapper;
 import com.sshs.system.user.model.User;
 import com.sshs.system.user.service.IUserService;
+import com.sshs.system.userrole.model.UserRole;
+import com.sshs.system.userrole.service.IUserRoleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 
 /**
@@ -25,6 +28,9 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     @Resource
     private UserMapper mapper;
+
+    @Resource
+    IUserRoleService uerRoleService;
     /**
      * 密码
      */
@@ -42,14 +48,34 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
     }
 
     /**
-     * 保存方法
+     * 保存用户角色信息
      *
-     * @param user
+     * @param userCode
+     * @param roles
+     */
+    @Override
+    public Message<User> auth(String userCode, List<String> roles) {
+        uerRoleService.deleteByUserCode(userCode);
+        for (String roleCode : roles) {
+            UserRole userRole = new UserRole();
+            userRole.setRoleCode(roleCode);
+            userRole.setUserCode(userCode);
+            uerRoleService.save(userRole);
+        }
+        return Message.success();
+    }
+
+    /**
+     * 重置密码
+     *
+     * @param userId
      * @return
      */
     @Override
-    public Message<User> save(User user) {
+    public Message<User> resetPassword(String userId) {
+        User user = new User();
+        user.setUserId(userId);
         user.setPassword(defaultPassword);
-        return super.save(user);
+        return update(user);
     }
 }

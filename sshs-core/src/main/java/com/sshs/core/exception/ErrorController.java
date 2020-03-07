@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
 
-@RequestMapping//("${server.error.path:${error.path:/error}}" )
+@RequestMapping("${server.error.path:${error.path:/error}}" )
 public class ErrorController extends AbstractErrorController {
     private static final Logger LOG = LoggerFactory.getLogger(ErrorController.class);
     private final ErrorProperties errorProperties;

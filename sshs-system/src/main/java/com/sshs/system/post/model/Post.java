@@ -2,11 +2,11 @@ package com.sshs.system.post.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import org.apache.ibatis.type.Alias;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,7 +16,7 @@ import java.util.Date;
  * @date 2018/11/08
  */
 @Alias("Post")
-@Table(name="SYS_POST")
+@TableName("SYS_POST")
 public class Post implements Serializable {
 
 private static final long serialVersionUID = 1L;

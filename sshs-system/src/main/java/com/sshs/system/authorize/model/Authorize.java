@@ -1,15 +1,15 @@
 package com.sshs.system.authorize.model;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.sshs.core.model.BaseEntity;
 import com.sshs.system.menu.model.Menu;
 import org.apache.ibatis.type.Alias;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
-import javax.persistence.Transient;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Alias("Authorize")
 @TableName("SYS_AUTHORIZE")
-public class Authorize implements Serializable {
+public class Authorize extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,9 +29,8 @@ public class Authorize implements Serializable {
      * 权限ID
      */
     @Id
-    @TableId(type= IdType.ID_WORKER_STR)
-    @Column(name = "AUTHORIZE_ID", length = 32)
-    private String id;
+    @TableId(type = IdType.ID_WORKER_STR)
+    private String authorizeId;
 
     /**
      * 创建日期
@@ -105,17 +104,9 @@ public class Authorize implements Serializable {
     @Column(name = "CRT_ORG_CODE")
     private String crtOrgCode;
 
-    @Transient
+    @TableField(exist = false)
     List<Menu> menus;
 
-
-    public String getId() {
-        return this.id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public Date getCrtDate() {
         return this.crtDate;
@@ -221,10 +212,18 @@ public class Authorize implements Serializable {
         this.menus = menus;
     }
 
+    public String getAuthorizeId() {
+        return authorizeId;
+    }
+
+    public void setAuthorizeId(String authorizeId) {
+        this.authorizeId = authorizeId;
+    }
+
     @Override
     public String toString() {
         return "Authorize{" +
-                "id='" + id + '\'' +
+                "id='" + authorizeId + '\'' +
                 ", crtDate=" + crtDate +
                 ", updUserCode='" + updUserCode + '\'' +
                 ", updOrgCode='" + updOrgCode + '\'' +

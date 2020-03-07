@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -84,8 +83,8 @@ public class AuthorizeController extends BaseController {
      * @return Message
      */
     @GetMapping
-    public Message<Map> queryList(@RequestParam Map<String, Object> params) {
+    public Message<List<Authorize>> queryList(Authorize params) {
         logger.debug("开始查询系统管理->系统管理-角色权限表列表信息……");
-        return authorizeService.queryAuthorizeList(params);
+        return authorizeService.findForList(params);
     }
 }

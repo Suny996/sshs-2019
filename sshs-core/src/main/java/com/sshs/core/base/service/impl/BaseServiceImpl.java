@@ -191,7 +191,7 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T> implements IBaseService
      * @return 查询结果
      */
     @Override
-    public List<T> findList(Object parameter) {
+    public List<T> findList(T parameter) {
         // Map<String, Object> params = new HashMap<String, Object>();
         return mapper.findForList(parameter);
     }

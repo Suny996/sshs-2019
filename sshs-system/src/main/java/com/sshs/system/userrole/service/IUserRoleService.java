@@ -2,7 +2,6 @@ package com.sshs.system.userrole.service;
 
 import com.sshs.core.base.service.IBaseService;
 import com.sshs.core.message.Message;
-import com.sshs.system.user.model.User;
 import com.sshs.system.userrole.model.UserRole;
 
 /**
@@ -12,7 +11,8 @@ import com.sshs.system.userrole.model.UserRole;
  * @date 2018/11/16
  */
 public interface IUserRoleService extends IBaseService<UserRole> {
-    Message save(User user);
 
     Message queryForList(UserRole params);
+
+    void deleteByUserCode(String userCode);
 }

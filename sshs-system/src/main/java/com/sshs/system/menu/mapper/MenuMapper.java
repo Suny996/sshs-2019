@@ -20,7 +20,7 @@ public interface MenuMapper extends BaseMapper<Menu> {
     /**
      * 根据menuName查询menu
      */
-    public Menu getMenuByMenuName(String menuName);
+    Menu getMenuByMenuName(String menuName);
 
     /**
      * 根据menuCode查询菜单记录，menuCode为null时返回跟节点（parentMenuCode为空的记录）
@@ -31,12 +31,12 @@ public interface MenuMapper extends BaseMapper<Menu> {
     //public Menu findMenuById(String menuCode);
 
     /**
-     * 根据menuCode查询最后一个子菜单
+     * 根据menuCode查询最大的子节点menuCode
      *
      * @param menuCode
      * @return
      */
-    public String findLastChildCodeById(String menuCode);
+    String findLastChildCodeById(@Param("menuCode") String menuCode);
 
     /**
      * 功能描述:通过父级菜单Code查询子级最大序列

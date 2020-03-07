@@ -108,4 +108,28 @@ public class UserController extends BaseController {
         logger.debug("开始查询用户列表信息……");
         return userService.findForList(user);
     }
+
+    /**
+     * 重置密码
+     */
+    @ApiOperation(value = "重置密码", nickname = "resetPassword")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "path", dataType = "String", name = "userId", value = "用户编号"),
+            @ApiImplicitParam(paramType = "query", dataType = "List", name = "roles", value = "角色列表")})
+    @PutMapping("/resetPassword/{userId}")
+    public Message<User> auth(@PathVariable("userId") String userId) {
+        logger.debug("开始重置密码……");
+        return userService.resetPassword(userId);
+    }
+
+    /**
+     * 分配角色给用户
+     */
+    @ApiOperation(value = "分配角色给用户", nickname = "auth")
+    @ApiImplicitParams({@ApiImplicitParam(paramType = "path", dataType = "String", name = "userCode", value = "用户编号"),
+            @ApiImplicitParam(paramType = "query", dataType = "List", name = "roles", value = "角色列表")})
+    @PostMapping("/auth/{userCode}")
+    public Message<User> auth(@PathVariable("userCode") String userCode, @RequestBody List<String> roles) {
+        logger.debug("开始保存用户角色信息……");
+        return userService.auth(userCode, roles);
+    }
 }

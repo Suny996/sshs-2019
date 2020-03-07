@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.sshs.core.base.controller.BaseController;
 import com.sshs.core.message.Message;
 import com.sshs.core.version.Version;
+import com.sshs.system.authorize.service.IAuthorizeService;
 import com.sshs.system.role.model.Role;
 import com.sshs.system.role.service.IRoleService;
 import io.swagger.annotations.Api;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -30,7 +32,8 @@ public class RoleController extends BaseController {
     private IRoleService roleService;
 
     Logger logger = LoggerFactory.getLogger(RoleController.class);
-
+    @Resource
+    private IAuthorizeService authorizeService;
     /**
      * 保存系统管理->系统管理-角色表
      */
@@ -88,5 +91,16 @@ public class RoleController extends BaseController {
         Message message = roleService.findForPageList(limit, offset, params);
         return message;
     }
-
+    /**
+     * 角色分配菜单查询功能
+     * 6191
+     *
+     * @param roleCode
+     * @return Message
+     */
+    @GetMapping("/auth/{roleCode}")
+    public Message<Map> queryList(@PathVariable("roleCode") String roleCode) {
+        logger.debug("开始查询系统管理->系统管理-角色权限表列表信息……");
+        return authorizeService.queryAuthorizeList(roleCode);
+    }
 }

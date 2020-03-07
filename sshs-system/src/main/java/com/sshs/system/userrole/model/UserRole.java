@@ -1,10 +1,11 @@
 package com.sshs.system.userrole.model;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import org.apache.ibatis.type.Alias;
 
 import javax.persistence.Column;
-import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,7 +15,7 @@ import java.util.Date;
  * @date 2018/11/16
  */
 @Alias("UserRole")
-@Table(name="SYS_USER_ROLE")
+@TableName("SYS_USER_ROLE")
 public class UserRole implements Serializable {
 
 private static final long serialVersionUID = 1L;
@@ -23,8 +24,7 @@ private static final long serialVersionUID = 1L;
     /**
     * ID
     */
-	//@GeneratedValue(generator = "UUID")
-	@TableId("USER_ROLE_ID")
+	@TableId(type = IdType.ID_WORKER_STR)
 	private String userRoleId;
 
     /**

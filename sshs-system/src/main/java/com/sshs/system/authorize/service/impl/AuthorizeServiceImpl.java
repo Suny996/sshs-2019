@@ -2,7 +2,6 @@ package com.sshs.system.authorize.service.impl;
 
 import com.sshs.core.base.service.impl.BaseServiceImpl;
 import com.sshs.core.message.Message;
-import com.sshs.core.util.UuidUtil;
 import com.sshs.core.wrapper.QueryWrapper;
 import com.sshs.system.authorize.mapper.AuthorizeMapper;
 import com.sshs.system.authorize.model.Authorize;
@@ -47,7 +46,6 @@ public class AuthorizeServiceImpl extends BaseServiceImpl<AuthorizeMapper, Autho
         mapper.delete(example);
         for (Menu menu : authorize.getMenus()) {
             Authorize auth = new Authorize();
-            authorize.setId(UuidUtil.get32UUID());
             authorize.setRoleCode(authorize.getRoleCode());
             authorize.setResourceId(menu.getMenuCode());
             authorize.setResourceName(menu.getMenuName());
@@ -65,15 +63,17 @@ public class AuthorizeServiceImpl extends BaseServiceImpl<AuthorizeMapper, Autho
      * 角色分配菜单查询功能
      * 6191
      *
-     * @param params
+     * @param roleCode
      * @return Message
      */
     @Override
-    public Message<Map> queryAuthorizeList(Map<String, Object> params) {
+    public Message<Map> queryAuthorizeList(String roleCode) {
         Map<String, Object> data = new HashMap<String, Object>();
         Message menus = menuService.getMenuTree("0");
         Menu menu = (Menu) menus.getData();
-        List<Authorize> authorizes = findList(params);
+        QueryWrapper<Authorize> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("roleCode", roleCode);
+        List<Authorize> authorizes = mapper.selectList(queryWrapper);
         initAuthData(menu, authorizes);
         data.put("menus", menu);
         data.put("authorizes", authorizes);

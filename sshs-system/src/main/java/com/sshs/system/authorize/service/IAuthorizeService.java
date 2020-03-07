@@ -17,8 +17,8 @@ public interface IAuthorizeService extends IBaseService<Authorize> {
      * 角色分配菜单查询功能
      * 6191
      *
-     * @param params
+     * @param roleCode
      * @return Message
      */
-    Message<Map> queryAuthorizeList(Map<String, Object> params);
+    Message<Map> queryAuthorizeList(String roleCode);
 }

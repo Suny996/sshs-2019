@@ -60,15 +60,15 @@
             </otherwise>
         </choose>
     </select>-->
-    <!-- 根据MENU_CODE查询最后一个子节点 -->
-    <!--<select id="findLastChildCodeById" parameterType="String"
+    <!-- 根据MENU_CODE查询最大的menuCode -->
+    <select id="findLastChildCodeById" parameterType="String"
             resultType="String">
         SELECT
         max(menu_code) as menu_code
         FROM
         <include refid="tableName"></include>
-        WHERE PARENT_CODE= #{_parameter}
-    </select>-->
+        WHERE PARENT_CODE= #{menuCode}
+    </select>
     <!-- 查询所有菜单记录 -->
    <!-- <select id="findMenuAll"
             resultType="Menu">

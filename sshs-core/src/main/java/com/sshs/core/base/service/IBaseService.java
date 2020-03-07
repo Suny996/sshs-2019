@@ -110,6 +110,6 @@ public interface IBaseService<T> {
      * @param parameter 查询条件
      * @return 查询结果
      */
-    List<T> findList(Object parameter);
+    List<T> findList(T parameter);
 
 }
