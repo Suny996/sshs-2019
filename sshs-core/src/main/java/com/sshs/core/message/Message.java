@@ -1,5 +1,6 @@
 package com.sshs.core.message;
 
+import com.alibaba.fastjson.JSON;
 import com.sshs.core.constant.Global;
 import com.sshs.core.exception.BaseErrorCode;
 import com.sshs.core.exception.CommonErrorCode;
@@ -134,7 +135,7 @@ public class Message<T> implements Serializable {
      * 根据码值与实体对象构造
      *
      * @param errorCode 码值
-     * @param data 实体对象
+     * @param data      实体对象
      */
     private Message(CommonErrorCode errorCode, T data) {
         this.code = errorCode.getCode();
@@ -326,12 +327,24 @@ public class Message<T> implements Serializable {
      * @param fullClzName 类全名
      * @return 类
      */
-    /*private static Class<?> loadClass(String fullClzName) {
+    private static Class<?> loadClass(String fullClzName) {
         try {
             return Thread.currentThread().getContextClassLoader().loadClass(fullClzName);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         return null;
-    }*/
+    }
+
+    @Override
+    public String toString() {
+        StringJoiner sj = new StringJoiner(", ", "{", "}")
+                .add("\"code\":" + code)
+                .add("\"msg\":\"" + msg + "\"");
+        if (data != null) {
+            sj.add("\"data\":" + JSON.toJSONString(data));
+        }
+
+        return sj.toString();
+    }
 }

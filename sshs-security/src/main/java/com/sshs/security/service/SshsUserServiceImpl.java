@@ -3,6 +3,7 @@ package com.sshs.security.service;
 import com.sshs.core.base.service.impl.BaseServiceImpl;
 import com.sshs.core.customise.mapper.CommonMapper;
 import com.sshs.core.exception.BusinessException;
+import com.sshs.core.message.Message;
 import com.sshs.core.util.SystemUtil;
 import com.sshs.security.error.SecurityErrorCode;
 import com.sshs.security.mapper.SecurityUserMapper;
@@ -41,12 +42,12 @@ public class SshsUserServiceImpl extends BaseServiceImpl<SecurityUserMapper, Sec
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if (StringUtils.isBlank(username)) {
-            throw new BusinessException(SecurityErrorCode.USERNAME_CAN_NOT_NULL);
+            throw new UsernameNotFoundException(Message.failure(SecurityErrorCode.USERNAME_CAN_NOT_NULL).toString());
         }
         SecurityUser userDetails;
         List<SecurityUser> list = SecurityUserMapper.findSecurityUserByUserName(username);
         if (list == null || list.isEmpty()) {
-            throw new BusinessException(SecurityErrorCode.USER_NOT_EXISTS);
+            throw new UsernameNotFoundException(Message.failure(SecurityErrorCode.USER_NOT_EXISTS).toString());
         }
         SecurityUser user = list.get(0);
         userDetails = new SecurityUser(user.getUsername(), user.getUserNameCn(), user.getPassword(), user.getOrgCode(), true, true, true, true,
