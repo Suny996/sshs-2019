@@ -29,11 +29,13 @@ buildscript {
 
 dependencies {
     compile project(":sshs-core")
-    compile project(":sshs-security")
+    //compile project(":sshs-security")
+    compile project(":sshs-shiro")
     compile project(":sshs-system")
     //compile project(":scais-develop")
     //compile project(":scais-report")
     compile project(":sshs-toolkit")
+
     //compile project(":scais-sigma")
     //compile project(":scais-screen")
 }
@@ -91,16 +93,16 @@ allprojects {
         // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
         compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 
+        compile group: 'org.projectlombok', name: 'lombok', version: '1.16.16'
         // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-eureka-client
         //compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-client', version: '2.1.0.RELEASE'
-
     }
     repositories {
-        mavenCentral()
-        jcenter()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
+        //mavenCentral()
+        //jcenter()
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter' }
+
     }
 }
 

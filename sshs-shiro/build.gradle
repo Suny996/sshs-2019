@@ -1,0 +1,21 @@
+apply plugin: 'application'
+group = "com.sshs"
+version '0.0.1-SNAPSHOT'
+description = "系统安全框架（不会独立运行）"
+archivesBaseName = 'sshs-shiro'
+
+dependencies{
+    compile project(":sshs-core")
+}
+
+sourceCompatibility = 1.8
+
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    compile group:'cn.hutool',name:'hutool-all',version:'4.5.11'
+
+    compile group:'org.apache.shiro',name:'shiro-spring-boot-starter',version:'1.4.0'
+
+}
