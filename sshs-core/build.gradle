@@ -8,6 +8,3 @@ archivesBaseName = 'sshs-core'
 dependencies {
 
 }
-dependencies {
-
-}

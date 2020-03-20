@@ -1,6 +1,5 @@
 package com.sshs.shiro.authc;
 
-import com.sshs.core.util.ContextUtil;
 import com.sshs.core.util.JwtUtil;
 import com.sshs.core.util.SystemUtil;
 import com.sshs.shiro.mapper.LoginUserMapper;
@@ -147,20 +146,21 @@ public class ShiroRealm extends AuthorizingRealm {
      * @return
      */
     public boolean jwtTokenRefresh(String token, String userName, String passWord) {
-        String cacheToken = null;
+       /* String cacheToken = null;
         try {
             cacheToken = (String) ContextUtil.getSession().getAttribute(JwtUtil.X_ACCESS_TOKEN);
         } catch (Exception e) {
 
-        }
-        if (StringUtils.isNotEmpty(cacheToken)) {
+        }*/
+        if (StringUtils.isNotEmpty(token)) {
             // 校验token有效性
-            if (!JwtUtil.validateToken(cacheToken, userName)) {
-                String newAuthorization = JwtUtil.createToken(userName, null, true);
+            if (JwtUtil.validateToken(token, userName)) {
+                //String newAuthorization = JwtUtil.createToken(userName, null, true);
                 // 设置超时时间
                 //redisUtil.set(CommonConstant.PREFIX_USER_TOKEN + token, newAuthorization);
                 //redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME * 2 / 1000);
-                log.info("——————————用户在线操作，更新token保证不掉线—————————jwtTokenRefresh——————— " + token);
+                //log.info("——————————用户在线操作，更新token保证不掉线—————————jwtTokenRefresh——————— " + token);
+                return true;
             }
             //update-begin--Author:scott  Date:20191005  for：解决每次请求，都重写redis中 token缓存问题
 //			else {
@@ -169,7 +169,7 @@ public class ShiroRealm extends AuthorizingRealm {
 //				redisUtil.expire(CommonConstant.PREFIX_USER_TOKEN + token, JwtUtil.EXPIRE_TIME / 1000);
 //			}
             //update-end--Author:scott  Date:20191005   for：解决每次请求，都重写redis中 token缓存问题
-            return true;
+            //return true;
         }
         return false;
     }

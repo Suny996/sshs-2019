@@ -1,7 +1,7 @@
 package com.sshs.shiro.mapper;
 
 import com.sshs.core.base.mapper.BaseMapper;
-import netscape.security.Privilege;
+import com.sshs.shiro.model.Privilege;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
